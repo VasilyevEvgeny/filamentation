@@ -1,17 +1,26 @@
 #include <iostream>
 #include <omp.h>
 
+#include "src/PulsedBeam.h"
+#include "src/Propagator.h"
+
 int main() {
-    std::cout << "Hello, World!" << std::endl;
+    PulsedBeam pulsed_beam(
+            1800e-9,
+            1,
+            1,
+            100e-6,
+            1024,
+            500e-15,
+            1024);
 
-    omp_set_num_threads(12);
-    int n = omp_get_num_threads();
-    std::cout << n << std::endl;
+    pulsed_beam.initialize_field();
+    std::cout << pulsed_beam.get_r_max() << std::endl;
 
-#pragma omp parallel for
-    for (int i = 0; i < 12; ++i) {
-        std::cout << "Hello, I am " << i << " thread!" << std::endl;
-    }
+
+    Propagator propagator(
+            pulsed_beam);
+
 
     return 0;
 }
