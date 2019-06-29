@@ -8,7 +8,9 @@
 #include <iostream>
 #include <vector>
 #include <complex>
+#include <algorithm>
 
+#include "MathConstants.h"
 
 class PulsedBeam {
 public:
@@ -27,6 +29,8 @@ public:
 
     void initialize_field();
 
+    void field_to_intensity();
+
 private:
     double lmbda;
 
@@ -43,6 +47,7 @@ private:
     double t_max;
     size_t n_t;
     double dt;
+    std::vector<double> ts;
 
     std::vector<std::vector<std::complex<double>>> field;
     std::vector<std::vector<double>> intensity;

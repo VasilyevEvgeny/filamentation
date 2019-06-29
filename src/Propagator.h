@@ -5,11 +5,16 @@
 #ifndef FILAMENTATION_PROPAGATOR_H
 #define FILAMENTATION_PROPAGATOR_H
 
+#include <map>
+#include <string>
+
 #include "PulsedBeam.h"
 
 class Propagator {
 public:
-    explicit Propagator(PulsedBeam &_pulsed_beam);
+    explicit Propagator(
+            PulsedBeam &_pulsed_beam,
+            std::map<std::string, std::string>& args);
     ~Propagator();
 
 

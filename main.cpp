@@ -1,10 +1,25 @@
 #include <iostream>
 #include <omp.h>
+#include <map>
+#include <string>
 
 #include "src/PulsedBeam.h"
 #include "src/Propagator.h"
 
-int main() {
+
+std::map<std::string, std::string> parse_args(char **argv) {
+     return  {{"global_root_dir", argv[1]},
+              {"global_results_dir_name", argv[2]}};
+}
+
+int main(int argc, char** argv) {
+
+    auto args = parse_args(argv);
+    for (const auto& pair: args) {
+        std::cout << pair.first << ": " << pair.second << std::endl;
+    }
+
+
     PulsedBeam pulsed_beam(
             1800e-9,
             1,
@@ -19,7 +34,8 @@ int main() {
 
 
     Propagator propagator(
-            pulsed_beam);
+            pulsed_beam,
+            args);
 
 
     return 0;
