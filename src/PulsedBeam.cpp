@@ -43,26 +43,16 @@ n_t(_n_t){
 
     // field
     field = std::vector<std::vector<std::complex<double>>>(n_r, std::vector<std::complex<double>>(n_t, 0.0));
-    intensity = std::vector<std::vector<double>>(n_r, std::vector<double>(n_t, 0.0));
 }
 
 PulsedBeam::~PulsedBeam() {
     field.erase(field.begin(), field.end());
-    intensity.erase(intensity.begin(), intensity.end());
 }
 
 void PulsedBeam::initialize_field() {
     for (size_t k = 0; k < n_r; ++k) {
         for (size_t s = 0; s < n_t; ++s) {
             field[k][s] = pow(rs[k] / r_0, M) * exp(-0.5 * pow(rs[k] / r_0, 2)) * exp(-0.5 * pow(ts[s] / t_0, 2));
-        }
-    }
-}
-
-void PulsedBeam::field_to_intensity() {
-    for (int k = 0; k < n_r; ++k) {
-        for (int s = 0; s < n_t; ++s) {
-            intensity[k][s] = norm(field[k][s]);
         }
     }
 }

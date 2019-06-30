@@ -29,8 +29,6 @@ public:
 
     void initialize_field();
 
-    void field_to_intensity();
-
 private:
     double lmbda;
 
@@ -50,9 +48,6 @@ private:
     std::vector<double> ts;
 
     std::vector<std::vector<std::complex<double>>> field;
-    std::vector<std::vector<double>> intensity;
-
-
 
 };
 

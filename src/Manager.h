@@ -16,7 +16,7 @@ public:
     ~Manager();
 
 private:
-    ;
+    std::string get_current_datetime() const;
 };
 
 
