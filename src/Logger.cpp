@@ -31,6 +31,12 @@ void Logger::save_initial_parameters(PulsedBeam& pulsed_beam, std::string& path,
         "\\begin{document}\n"
         "\\pagestyle{empty}\n"
         "\\begin{center}\n"
+        "\\begin{tabular}{M{5cm}M{5cm}M{5cm}}"
+        "\\multicolumn{3}{M{15cm}}{\\textbf{BEAM}} \\tabularnewline\n"
+        "\\midrule[2pt]\n"
+        //(std::ostringstream()).str()"distribution & %s & -- \\tabularnewline\n"
+        "\\hline"
+        "\\end{tabular}"
         "Hello, world!!\n"
         "\\end{center}\n"
         "\\end{document}\n";
