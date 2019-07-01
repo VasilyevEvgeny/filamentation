@@ -15,10 +15,6 @@ std::map<std::string, std::string> parse_args(char **argv) {
 int main(int argc, char** argv) {
 
     auto args = parse_args(argv);
-    for (const auto& pair: args) {
-        std::cout << pair.first << ": " << pair.second << std::endl;
-    }
-
 
     PulsedBeam pulsed_beam(
             1800e-9,
@@ -30,8 +26,6 @@ int main(int argc, char** argv) {
             1024);
 
     pulsed_beam.initialize_field();
-    std::cout << pulsed_beam.get_r_max() << std::endl;
-
 
     Propagator propagator(
             pulsed_beam,

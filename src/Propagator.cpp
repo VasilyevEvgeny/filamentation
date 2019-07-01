@@ -9,7 +9,10 @@ Propagator::Propagator(PulsedBeam &_pulsed_beam, std::map<std::string, std::stri
         pulsed_beam(_pulsed_beam) {
 
     Manager manager(args);
+    Logger logger;
+
+    logger.save_initial_parameters(pulsed_beam, manager.current_results_dir, true, true);
 
 }
 
-Propagator::~Propagator() {};
+Propagator::~Propagator() = default;

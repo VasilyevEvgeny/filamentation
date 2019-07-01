@@ -15,6 +15,17 @@ public:
     explicit Manager(std::map<std::string, std::string>& args);
     ~Manager();
 
+    std::string global_results_dir;
+
+    std::string current_results_dir_name;
+    std::string current_results_dir;
+
+    std::string field_dir_name;
+    std::string field_dir;
+
+    std::string track_dir_name;
+    std::string track_dir;
+
 private:
     std::string get_current_datetime() const;
 };

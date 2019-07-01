@@ -10,16 +10,16 @@
 
 
 Manager::Manager(std::map<std::string, std::string>& args) {
-    std::string global_results_dir = args["global_root_dir"] + "/" + args["global_results_dir_name"];
+    global_results_dir = args["global_root_dir"] + "/" + args["global_results_dir_name"];
 
-    std::string current_results_dir_name = get_current_datetime();
-    std::string current_results_dir = global_results_dir + "/" + current_results_dir_name;
+    current_results_dir_name = get_current_datetime();
+    current_results_dir = global_results_dir + "/" + current_results_dir_name;
 
-    std::string field_dir_name = "field";
-    std::string field_dir = current_results_dir + "/" + field_dir_name;
+    field_dir_name = "field";
+    field_dir = current_results_dir + "/" + field_dir_name;
 
-    std::string track_dir_name = "track";
-    std::string track_dir = current_results_dir + "/" + track_dir_name;
+    track_dir_name = "track";
+    track_dir = current_results_dir + "/" + track_dir_name;
 
     try {
         _mkdir(global_results_dir.c_str());
@@ -40,8 +40,6 @@ Manager::Manager(std::map<std::string, std::string>& args) {
         std::cerr << "Exception: " << e.what() << std::endl;
         exit(-1);
     }
-
-
 }
 
 Manager::~Manager() = default;

@@ -9,6 +9,7 @@
 #include <string>
 
 #include "PulsedBeam.h"
+#include "Logger.h"
 
 class Propagator {
 public:
