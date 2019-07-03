@@ -5,9 +5,9 @@
 #ifndef FILAMENTATION_LIF_H
 #define FILAMENTATION_LIF_H
 
-#include "medium.h"
+#include "base_medium.h"
 
-class LiF : public Medium {
+class LiF : public BaseMedium {
 public:
     explicit LiF(double _lambda_0);
     ~LiF() override;

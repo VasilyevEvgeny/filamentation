@@ -5,9 +5,9 @@
 #ifndef FILAMENTATION_SIO2_H
 #define FILAMENTATION_SIO2_H
 
-#include "medium.h"
+#include "base_medium.h"
 
-class SiO2 : public Medium {
+class SiO2 : public BaseMedium {
 public:
     explicit SiO2(double _lambda_0);
     ~SiO2() override;

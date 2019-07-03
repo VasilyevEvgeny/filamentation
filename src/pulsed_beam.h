@@ -10,15 +10,16 @@
 #include <complex>
 #include <algorithm>
 
-#include "MathConstants.h"
+#include "m_constants.h"
 #include "medium/SiO2.h"
 #include "medium/CaF2.h"
 #include "medium/LiF.h"
 
+template <typename Medium>
 class PulsedBeam {
 public:
-    explicit PulsedBeam(
-            std::string& _medium_name,
+    PulsedBeam(
+            Medium medium,
             double _lambda_0,
             size_t _M,
             size_t _m,
@@ -33,8 +34,11 @@ public:
 
     void initialize_field();
 
-private:
-    std::string medium_name;
+    std::string space_distribution;
+    std::string time_distribution;
+    std::string classify_space_distribution();
+
+    Medium medium;
 
     const double lambda_0;
 
@@ -53,7 +57,11 @@ private:
     double dt;
     std::vector<double> ts;
 
+    double z_diff;
+
     std::vector<std::vector<std::complex<double>>> field;
+
+private:
 
 };
 

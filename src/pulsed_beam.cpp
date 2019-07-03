@@ -2,18 +2,19 @@
 // Created by vasilyev on 28.06.2019.
 //
 
-#include "PulsedBeam.h"
+#include "pulsed_beam.h"
 
-PulsedBeam::PulsedBeam(
-        std::string& _medium_name,
+template <typename Medium>
+PulsedBeam<Medium>::PulsedBeam(
+        Medium _medium,
         const double _lambda_0,
         const size_t _M,
         const size_t _m,
         const double _r_0,
         const size_t _n_r,
         const double _t_0,
-        const size_t _n_t) :
-  medium_name(_medium_name)
+        const size_t _n_t):
+  medium(_medium)
 , lambda_0(_lambda_0)
 , M(_M)
 , m(_m)
@@ -23,37 +24,10 @@ PulsedBeam::PulsedBeam(
 , n_t(_n_t){
 
     // MathConstants
-    MathConstants math_constants;
+    // MathConstants math_constants;
 
-
-
-    // medium
-    CaF2 medium1(lambda_0);
-
-    std::cout << medium1.n_0 << std::endl;
-    std::cout << medium1.k_0 << std::endl;
-    std::cout << medium1.k_1 << std::endl;
-    std::cout << medium1.k_2 << std::endl;
-
-    std::cout << "\n";
-
-//    CaF2 medium2(lambda_0,
-//                 math_constants.c);
-//
-//    std::cout << medium2.n_0 << std::endl;
-//    std::cout << medium2.k_0 << std::endl;
-//    std::cout << medium2.k_1 << std::endl;
-//    std::cout << medium2.k_2 << std::endl;
-//
-//    std::cout << "\n";
-//
-//    LiF medium3(lambda_0,
-//                 math_constants.c);
-//
-//    std::cout << medium3.n_0 << std::endl;
-//    std::cout << medium3.k_0 << std::endl;
-//    std::cout << medium3.k_1 << std::endl;
-//    std::cout << medium3.k_2 << std::endl;
+    space_distribution = classify_space_distribution();
+    time_distribution = "Gaussian";
 
     // space
     r_max = 10.0 * r_0;
@@ -73,15 +47,47 @@ PulsedBeam::PulsedBeam(
         ts[s] = s * dt;
     }
 
+    // z_diff
+    z_diff = medium.k_0 * pow(r_0, 2);
+
     // field
     field = std::vector<std::vector<std::complex<double>>>(n_r, std::vector<std::complex<double>>(n_t, 0.0));
 }
 
-PulsedBeam::~PulsedBeam() {
+template<typename Medium>
+PulsedBeam<Medium>::~PulsedBeam() {
     field.erase(field.begin(), field.end());
 }
 
-void PulsedBeam::initialize_field() {
+template class PulsedBeam<SiO2>;
+template class PulsedBeam<CaF2>;
+template class PulsedBeam<LiF>;
+
+template <typename Medium>
+std::string PulsedBeam<Medium>::classify_space_distribution() {
+    try {
+        if (M == 0 && m == 0) {
+            return "Gaussian";
+        }
+        else if (M > 0 && m == 0) {
+            return "ring";
+        }
+        else if (M > 0 && m > 0) {
+            return "vortex";
+        }
+        else {
+            throw std::runtime_error("Wrong combination of M and m!");
+        }
+    }
+    catch (std::exception& e) {
+        std::cerr << "Exception: " << e.what() << std::endl;
+    }
+
+}
+
+
+template<typename Medium>
+void PulsedBeam<Medium>::initialize_field() {
     for (size_t k = 0; k < n_r; ++k) {
         for (size_t s = 0; s < n_t; ++s) {
             field[k][s] = pow(rs[k] / r_0, M) * exp(-0.5 * pow(rs[k] / r_0, 2)) * exp(-0.5 * pow(ts[s] / t_0, 2));
@@ -89,11 +95,13 @@ void PulsedBeam::initialize_field() {
     }
 }
 
-double PulsedBeam::get_r_max() const {
+template<typename Medium>
+double PulsedBeam<Medium>::get_r_max() const {
     return r_max;
 }
 
-void PulsedBeam::print_field() const {
+template<typename Medium>
+void PulsedBeam<Medium>::print_field() const {
     for (int k = 0; k < 1024; ++k) {
         for (int s = 0; s < 1024; ++s) {
             std::cout << field[k][s].real() << " -- " << field[k][s].imag() << std::endl;

@@ -4,23 +4,21 @@
 
 #include "CaF2.h"
 
-CaF2::CaF2(double _lambda_0) : Medium(_lambda_0) {
+CaF2::CaF2(double _lambda_0) : BaseMedium(_lambda_0) {
+
+    info = "CaF$_2$";
 
     lambda_1 = 0.0502636050e-6;
     lambda_2 = 0.1003909000e-6;
     lambda_3 = 34.649040000e-6;
 
-    Medium::initialize_omegas();
-
-    std::cout << omega_1 << " " << omega_2 << " " << omega_3 << std::endl;
+    BaseMedium::initialize_omegas();
 
     C_1 = 0.5675888000;
     C_2 = 0.4710914000;
     C_3 = 3.8484723000;
 
-    Medium::initialize_dispersion_parameters();
-
-
+    BaseMedium::initialize_dispersion_parameters();
 }
 
 CaF2::~CaF2() = default;

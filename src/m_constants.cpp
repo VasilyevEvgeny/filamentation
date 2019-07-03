@@ -2,7 +2,7 @@
 // Created by vasilyev on 29.06.2019.
 //
 
-#include "MathConstants.h"
+#include "m_constants.h"
 
 MathConstants::MathConstants() :
   h_bar(1.054571800e-34)

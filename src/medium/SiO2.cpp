@@ -6,21 +6,21 @@
 
 #include "SiO2.h"
 
-SiO2::SiO2(double _lambda_0) : Medium(_lambda_0) {
+SiO2::SiO2(double _lambda_0) : BaseMedium(_lambda_0) {
+
+    info = "SiO$_2$";
 
     lambda_1 = 0.0684043000e-6;
     lambda_2 = 0.1162414000e-6;
     lambda_3 = 9.8961610000e-6;
 
-    Medium::initialize_omegas();
-
-    std::cout << omega_1 << " " << omega_2 << " " << omega_3 << std::endl;
+    BaseMedium::initialize_omegas();
 
     C_1 = 0.6961663000;
     C_2 = 0.4079426000;
     C_3 = 0.8974794000;
 
-    Medium::initialize_dispersion_parameters();
+    BaseMedium::initialize_dispersion_parameters();
     SiO2::initialize_kerr_parameters();
     SiO2::initialize_ionization_parameters();
 }

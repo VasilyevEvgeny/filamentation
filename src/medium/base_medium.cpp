@@ -4,14 +4,16 @@
 
 #include <cmath>
 
-#include "medium.h"
-#include "../MathConstants.h"
+#include "base_medium.h"
+#include "../m_constants.h"
 
-Medium::Medium(double _lambda_0) :
+BaseMedium::BaseMedium(double _lambda_0) :
   lambda_0(_lambda_0) {
 
     // light speed
     c = math_constants.c;
+
+    info = "";
 
     // omega_0
     omega_0 = 2 * M_PI * c / lambda_0;
@@ -53,38 +55,17 @@ Medium::Medium(double _lambda_0) :
     v_i_const = 0;
     beta = 0;
     K = 0;
-
-
-//    try {
-//        if (name == "SiO2") {
-//            medium::initialize_dispersion_parameters_SiO2();
-//            n_2 = 3.40e-20;
-//        } else if (name == "CaF2") {
-//            medium::initialize_dispersion_parameters_CaF2();
-//            n_2 = 1.92e-20;
-//        } else if (name == "LiF") {
-//            medium::initialize_dispersion_parameters_LiF();
-//            n_2 = 1.00e-20;
-//        } else {
-//            throw std::runtime_error("Wrong medium name!");
-//        }
-//    }
-//    catch(std::exception& e) {
-//        std::cerr << "Exception: " << e.what() << std::endl;
-//        exit(-1);
-//    }
-
 }
 
-Medium::~Medium() = default;
+BaseMedium::~BaseMedium() = default;
 
-void Medium::initialize_omegas() {
-    Medium::omega_1 = 2. * M_PI * Medium::c / Medium::lambda_1;
-    Medium::omega_2 = 2. * M_PI * Medium::c / Medium::lambda_2;
-    Medium::omega_3 = 2. * M_PI * Medium::c / Medium::lambda_3;
+void BaseMedium::initialize_omegas() {
+    omega_1 = 2. * M_PI * c / lambda_1;
+    omega_2 = 2. * M_PI * c / lambda_2;
+    omega_3 = 2. * M_PI * c / lambda_3;
 }
 
-double Medium::calculate_n(double omega) {
+double BaseMedium::calculate_n(double omega) {
     /*
     Linear refractive index is calculated from the Sellmeier formula
     (//: https://refractiveindex.info/?shelf=glass&book=fused_silica&page=Malitson)
@@ -104,16 +85,16 @@ double Medium::calculate_n(double omega) {
                 C_3 / (1 - pow((omega / omega_3), 2)));
 }
 
-double Medium::calculate_k_0(double omega) {
+double BaseMedium::calculate_k_0(double omega) {
     /*
     Calculates wave vector
             k_0 = \omega * n(\omega) / c
     */
 
-    return omega / Medium::c * Medium::calculate_n(omega);
+    return omega / c * calculate_n(omega);
 }
 
-double Medium::calculate_k_1(double omega) {
+double BaseMedium::calculate_k_1(double omega) {
     /*
     Calculates k_1 = dk / dw |_w=\omega using the analytical expression of the first derivative
     of the Sellmeier formula
@@ -130,7 +111,7 @@ double Medium::calculate_k_1(double omega) {
                 C_3 / (-pow(omega, 2) / pow(omega_3, 2) + 1) + 1) / c;
 }
 
-double Medium::calculate_k_2(double omega) {
+double BaseMedium::calculate_k_2(double omega) {
     /*
     Calculates
     k_2 = d ^ 2k / dw ^ 2 | _w =\omega using the analytical expression of the second derivative of the Sellmeier formula
@@ -162,30 +143,30 @@ double Medium::calculate_k_2(double omega) {
                      C_3 / (-pow(omega, 2) / pow(omega_3, 2) + 1) + 1));
 }
 
-void Medium::initialize_dispersion_parameters() {
+void BaseMedium::initialize_dispersion_parameters() {
     /*
     Calculates all dispersion parameters in class
     */
 
-    n_0 = Medium::calculate_n(omega_0);
-    k_0 = Medium::calculate_k_0(omega_0);
-    k_1 = Medium::calculate_k_1(omega_0);
-    k_2 = Medium::calculate_k_2(omega_0);
+    n_0 = calculate_n(omega_0);
+    k_0 = calculate_k_0(omega_0);
+    k_1 = calculate_k_1(omega_0);
+    k_2 = calculate_k_2(omega_0);
 }
 
-double Medium::calculate_conv_kernel_const() {
+double BaseMedium::calculate_conv_kernel_const() {
     return (1 + pow(Omega_R * tau_k, 2)) / (Omega_R * pow(tau_k, 2));
 }
 
-double Medium::calculate_ItoA_const() {
+double BaseMedium::calculate_ItoA_const() {
     return 2.0 / (c * n_0 * math_constants.epsilon_0);
 }
 
-double Medium::calculate_v_i_const() {
+double BaseMedium::calculate_v_i_const() {
     return pow(math_constants.e, 2) * v_ei / (U_i * 2.0 * math_constants.m_e * (pow(omega_0, 2) + pow(v_ei, 2))) * ItoA_const;
 }
 
-double Medium::calculate_K() {
+double BaseMedium::calculate_K() {
     return (int)(U_i / (math_constants.h_bar * omega_0) + 1);
 }
 

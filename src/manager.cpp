@@ -5,7 +5,7 @@
 #include <stdexcept>
 #include <ctime>
 
-#include "Manager.h"
+#include "manager.h"
 
 
 

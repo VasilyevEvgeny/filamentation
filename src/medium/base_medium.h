@@ -7,15 +7,17 @@
 
 #include <iostream>
 
-#include "../MathConstants.h"
+#include "../m_constants.h"
 
-class Medium {
+class BaseMedium {
 
 public:
-    explicit Medium(double _lambda_0);
-    virtual ~Medium() = 0;
+    explicit BaseMedium(double _lambda_0);
+    virtual ~BaseMedium() = 0;
 
     MathConstants math_constants;
+
+    std::string info;
 
     // central wavelength
     const double lambda_0;

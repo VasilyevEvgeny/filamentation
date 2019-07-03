@@ -5,21 +5,21 @@
 #include "LiF.h"
 
 
-LiF::LiF(double _lambda_0) : Medium(_lambda_0) {
+LiF::LiF(double _lambda_0) : BaseMedium(_lambda_0) {
+
+    info = "LiF";
 
     lambda_1 = 0.0737600000e-6;
     lambda_2 = 32.790000000e-6;
     lambda_3 = 1e-10;
 
-    Medium::initialize_omegas();
-
-    std::cout << omega_1 << " " << omega_2 << " " << omega_3 << std::endl;
+    BaseMedium::initialize_omegas();
 
     C_1 = 0.9254900000;
     C_2 = 6.9674700000;
     C_3 = 0.0000000000;
 
-    Medium::initialize_dispersion_parameters();
+    BaseMedium::initialize_dispersion_parameters();
 
 
 }

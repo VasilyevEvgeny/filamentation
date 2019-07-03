@@ -5,9 +5,9 @@
 #ifndef FILAMENTATION_CAF2_H
 #define FILAMENTATION_CAF2_H
 
-#include "medium.h"
+#include "base_medium.h"
 
-class CaF2 : public Medium {
+class CaF2 : public BaseMedium {
 public:
     explicit CaF2(double _lambda_0);
     ~CaF2() override;
