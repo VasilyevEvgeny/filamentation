@@ -5,23 +5,55 @@
 #include "PulsedBeam.h"
 
 PulsedBeam::PulsedBeam(
-        double _lmbda,
-        size_t _M,
-        size_t _m,
-        double _r_0,
-        size_t _n_r,
-        double _t_0,
-        size_t _n_t) :
-lmbda(_lmbda),
-M(_M),
-m(_m),
-r_0(_r_0),
-n_r(_n_r),
-t_0(_t_0),
-n_t(_n_t){
+        std::string& _medium_name,
+        const double _lambda_0,
+        const size_t _M,
+        const size_t _m,
+        const double _r_0,
+        const size_t _n_r,
+        const double _t_0,
+        const size_t _n_t) :
+  medium_name(_medium_name)
+, lambda_0(_lambda_0)
+, M(_M)
+, m(_m)
+, r_0(_r_0)
+, n_r(_n_r)
+, t_0(_t_0)
+, n_t(_n_t){
 
     // MathConstants
     MathConstants math_constants;
+
+
+
+    // medium
+    CaF2 medium1(lambda_0);
+
+    std::cout << medium1.n_0 << std::endl;
+    std::cout << medium1.k_0 << std::endl;
+    std::cout << medium1.k_1 << std::endl;
+    std::cout << medium1.k_2 << std::endl;
+
+    std::cout << "\n";
+
+//    CaF2 medium2(lambda_0,
+//                 math_constants.c);
+//
+//    std::cout << medium2.n_0 << std::endl;
+//    std::cout << medium2.k_0 << std::endl;
+//    std::cout << medium2.k_1 << std::endl;
+//    std::cout << medium2.k_2 << std::endl;
+//
+//    std::cout << "\n";
+//
+//    LiF medium3(lambda_0,
+//                 math_constants.c);
+//
+//    std::cout << medium3.n_0 << std::endl;
+//    std::cout << medium3.k_0 << std::endl;
+//    std::cout << medium3.k_1 << std::endl;
+//    std::cout << medium3.k_2 << std::endl;
 
     // space
     r_max = 10.0 * r_0;

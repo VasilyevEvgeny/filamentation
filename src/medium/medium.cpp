@@ -1,0 +1,191 @@
+//
+// Created by vasilyev on 01.07.2019.
+//
+
+#include <cmath>
+
+#include "medium.h"
+#include "../MathConstants.h"
+
+Medium::Medium(double _lambda_0) :
+  lambda_0(_lambda_0) {
+
+    // light speed
+    c = math_constants.c;
+
+    // omega_0
+    omega_0 = 2 * M_PI * c / lambda_0;
+
+    // dispersion parameters
+    lambda_1 = 0;
+    lambda_2 = 0;
+    lambda_3 = 0;
+
+    omega_1 = 0;
+    omega_2 = 0;
+    omega_3 = 0;
+
+    C_1 = 0;
+    C_2 = 0;
+    C_3 = 0;
+
+    n_0 = 0;
+    k_0 = 0;
+    k_1 = 0;
+    k_2 = 0;
+
+
+    // kerr parameters
+    n_2 = 0;
+    g = 0;
+    Omega_R = 0;
+    tau_k = 0;
+    conv_kernel_const = 0;
+    conv_window = 0;
+
+
+    // ionization_parameters
+    N_0 = 0;
+    U_i_in_eV = 0;
+    U_i = 0;
+    ItoA_const = 0;
+    v_ei = 0;
+    v_i_const = 0;
+    beta = 0;
+    K = 0;
+
+
+//    try {
+//        if (name == "SiO2") {
+//            medium::initialize_dispersion_parameters_SiO2();
+//            n_2 = 3.40e-20;
+//        } else if (name == "CaF2") {
+//            medium::initialize_dispersion_parameters_CaF2();
+//            n_2 = 1.92e-20;
+//        } else if (name == "LiF") {
+//            medium::initialize_dispersion_parameters_LiF();
+//            n_2 = 1.00e-20;
+//        } else {
+//            throw std::runtime_error("Wrong medium name!");
+//        }
+//    }
+//    catch(std::exception& e) {
+//        std::cerr << "Exception: " << e.what() << std::endl;
+//        exit(-1);
+//    }
+
+}
+
+Medium::~Medium() = default;
+
+void Medium::initialize_omegas() {
+    Medium::omega_1 = 2. * M_PI * Medium::c / Medium::lambda_1;
+    Medium::omega_2 = 2. * M_PI * Medium::c / Medium::lambda_2;
+    Medium::omega_3 = 2. * M_PI * Medium::c / Medium::lambda_3;
+}
+
+double Medium::calculate_n(double omega) {
+    /*
+    Linear refractive index is calculated from the Sellmeier formula
+    (//: https://refractiveindex.info/?shelf=glass&book=fused_silica&page=Malitson)
+
+    :param omega: beam frequency, \omega = 2 \pi c / \lambda
+    :param C_1: parameter in Sellmeier formula
+    :param C_2: parameter in Sellmeier formula
+    :param C_3: parameter in Sellmeier formula
+    :param omega_1: resonance frequency
+    :param omega_2: resonance frequency
+    :param omega_3: resonance frequency
+    :return:
+    */
+    return sqrt(1 + \
+                C_1 / (1 - pow((omega / omega_1), 2)) + \
+                C_2 / (1 - pow((omega / omega_2), 2)) + \
+                C_3 / (1 - pow((omega / omega_3), 2)));
+}
+
+double Medium::calculate_k_0(double omega) {
+    /*
+    Calculates wave vector
+            k_0 = \omega * n(\omega) / c
+    */
+
+    return omega / Medium::c * Medium::calculate_n(omega);
+}
+
+double Medium::calculate_k_1(double omega) {
+    /*
+    Calculates k_1 = dk / dw |_w=\omega using the analytical expression of the first derivative
+    of the Sellmeier formula
+    */
+
+    return omega * (C_1 * omega / (pow(omega_1, 2) * pow(-pow(omega, 2) / pow(omega_1, 2) + 1, 2)) +
+                    C_2 * omega / (pow(omega_2, 2) * pow(-pow(omega, 2) / pow(omega_2, 2) + 1, 2)) +
+                    C_3 * omega / (pow(omega_3, 2) * pow(-pow(omega, 2) / pow(omega_3, 2) + 1, 2))) /
+                   (c * sqrt(C_1 / (-pow(omega, 2) / pow(omega_1, 2) + 1) +
+                             C_2 / (-pow(omega, 2) / pow(omega_2, 2) + 1) +
+                             C_3 / (-pow(omega, 2) / pow(omega_3, 2) + 1) + 1)) +
+           sqrt(C_1 / (-pow(omega, 2) / pow(omega_1, 2) + 1) +
+                C_2 / (-pow(omega, 2) / pow(omega_2, 2) + 1) +
+                C_3 / (-pow(omega, 2) / pow(omega_3, 2) + 1) + 1) / c;
+}
+
+double Medium::calculate_k_2(double omega) {
+    /*
+    Calculates
+    k_2 = d ^ 2k / dw ^ 2 | _w =\omega using the analytical expression of the second derivative of the Sellmeier formula
+    */
+
+    return omega * (-C_1 * omega / (pow(omega_1, 2) * pow(-pow(omega, 2) / pow(omega_1, 2) + 1, 2))
+                    -C_2 * omega / (pow(omega_2, 2) * pow(-pow(omega, 2) / pow(omega_2, 2) + 1, 2))
+                    -C_3 * omega / (pow(omega_3, 2) * pow(-pow(omega, 2) / pow(omega_3, 2) + 1, 2))) *
+           (C_1 * omega / (pow(omega_1, 2) * pow(-pow(omega, 2) / pow(omega_1, 2) + 1, 2)) +
+            C_2 * omega / (pow(omega_2, 2) * pow(-pow(omega, 2) / pow(omega_2, 2) + 1, 2)) +
+            C_3 * omega / (pow(omega_3, 2) * pow(-pow(omega, 2) / pow(omega_3, 2) + 1, 2))) /
+           (c * pow(C_1 / (-pow(omega, 2) / pow(omega_1, 2) + 1) +
+                    C_2 / (-pow(omega, 2) / pow(omega_2, 2) + 1) +
+                    C_3 / (-pow(omega, 2) / pow(omega_3, 2) + 1) + 1, 1.5)) +
+           omega * (4 * C_1 * pow(omega, 2) / (pow(omega_1, 4) * pow(-pow(omega, 2) / pow(omega_1, 2) + 1, 3)) +
+                    C_1 / (pow(omega_1, 2) * pow(-pow(omega, 2) / pow(omega_1, 2) + 1, 2)) +
+                    4 * C_2 * pow(omega, 2) / (pow(omega_2, 4) * pow(-pow(omega, 2) / pow(omega_2, 2) + 1, 3)) +
+                    C_2 / (pow(omega_2, 2) * pow(-pow(omega, 2) / pow(omega_2, 2) + 1, 2)) +
+                    4 * C_3 * pow(omega, 2) / (pow(omega_3, 4) * pow(-pow(omega, 2) / pow(omega_3, 2) + 1, 3)) +
+                    C_3 / (pow(omega_3, 2) * pow(-pow(omega, 2) / pow(omega_3, 2) + 1, 2))) /
+           (c * sqrt(C_1 / (-pow(omega, 2) / pow(omega_1, 2) + 1) +
+                     C_2 /(-pow(omega, 2) / pow(omega_2, 2) + 1) +
+                     C_3 / (-pow(omega, 2) / pow(omega_3, 2) + 1) + 1)) +
+           2 * (C_1 * omega / (pow(omega_1, 2) * pow(-pow(omega, 2) / pow(omega_1, 2) + 1, 2)) +
+                C_2 * omega / (pow(omega_2, 2) * pow(-pow(omega, 2) / pow(omega_2, 2) + 1, 2)) +
+                C_3 * omega / (pow(omega_3, 2) * pow(-pow(omega, 2) / pow(omega_3, 2) + 1, 2))) /
+           (c * sqrt(C_1 / (-pow(omega, 2) / pow(omega_1, 2) + 1) +
+                     C_2 / (-pow(omega, 2) / pow(omega_2, 2) + 1) +
+                     C_3 / (-pow(omega, 2) / pow(omega_3, 2) + 1) + 1));
+}
+
+void Medium::initialize_dispersion_parameters() {
+    /*
+    Calculates all dispersion parameters in class
+    */
+
+    n_0 = Medium::calculate_n(omega_0);
+    k_0 = Medium::calculate_k_0(omega_0);
+    k_1 = Medium::calculate_k_1(omega_0);
+    k_2 = Medium::calculate_k_2(omega_0);
+}
+
+double Medium::calculate_conv_kernel_const() {
+    return (1 + pow(Omega_R * tau_k, 2)) / (Omega_R * pow(tau_k, 2));
+}
+
+double Medium::calculate_ItoA_const() {
+    return 2.0 / (c * n_0 * math_constants.epsilon_0);
+}
+
+double Medium::calculate_v_i_const() {
+    return pow(math_constants.e, 2) * v_ei / (U_i * 2.0 * math_constants.m_e * (pow(omega_0, 2) + pow(v_ei, 2))) * ItoA_const;
+}
+
+double Medium::calculate_K() {
+    return (int)(U_i / (math_constants.h_bar * omega_0) + 1);
+}
+

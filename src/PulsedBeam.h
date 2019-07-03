@@ -11,17 +11,21 @@
 #include <algorithm>
 
 #include "MathConstants.h"
+#include "medium/SiO2.h"
+#include "medium/CaF2.h"
+#include "medium/LiF.h"
 
 class PulsedBeam {
 public:
     explicit PulsedBeam(
-            double lmbda,
-            size_t M,
-            size_t m,
-            double r_0,
-            size_t n_r,
-            double t_0,
-            size_t n_t);
+            std::string& _medium_name,
+            double _lambda_0,
+            size_t _M,
+            size_t _m,
+            double _r_0,
+            size_t _n_r,
+            double _t_0,
+            size_t _n_t);
     ~PulsedBeam();
 
     double get_r_max() const;
@@ -30,20 +34,22 @@ public:
     void initialize_field();
 
 private:
-    double lmbda;
+    std::string medium_name;
 
-    size_t M;
-    size_t m;
+    const double lambda_0;
 
-    double r_0;
+    const size_t M;
+    const size_t m;
+
+    const double r_0;
     double r_max;
-    size_t n_r;
+    const size_t n_r;
     double dr;
     std::vector<double> rs;
 
-    double t_0;
+    const double t_0;
     double t_max;
-    size_t n_t;
+    const size_t n_t;
     double dt;
     std::vector<double> ts;
 

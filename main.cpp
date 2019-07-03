@@ -16,7 +16,9 @@ int main(int argc, char** argv) {
 
     auto args = parse_args(argv);
 
+    std::string medium_name = "LiF";
     PulsedBeam pulsed_beam(
+            medium_name,
             1800e-9,
             1,
             1,
@@ -28,8 +30,9 @@ int main(int argc, char** argv) {
     pulsed_beam.initialize_field();
 
     Propagator propagator(
-            pulsed_beam,
-            args);
+            args,
+            pulsed_beam
+            );
 
 
     return 0;
