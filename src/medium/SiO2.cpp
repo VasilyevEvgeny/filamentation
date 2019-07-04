@@ -23,6 +23,8 @@ SiO2::SiO2(double _lambda_0) : BaseMedium(_lambda_0) {
     BaseMedium::initialize_dispersion_parameters();
     SiO2::initialize_kerr_parameters();
     SiO2::initialize_ionization_parameters();
+
+    delta = 0;
 }
 
 SiO2::~SiO2() = default;

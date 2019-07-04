@@ -3,8 +3,10 @@
 #include <map>
 #include <string>
 
-#include "src/pulsed_beam.h"
+#include "src/pulsed_beam/base_pulsed_beam.h"
 #include "src/propagator.h"
+
+
 
 
 std::map<std::string, std::string> parse_args(char **argv) {
@@ -19,19 +21,18 @@ int main(int argc, char** argv) {
     double lambda_0 = 1800e-9;
 
     SiO2 medium(lambda_0);
-    PulsedBeam<SiO2> pulsed_beam(
+    Gauss<SiO2> pulsed_beam(
             medium,
             lambda_0,
-            1,
-            1,
             100e-6,
             1024,
             500e-15,
-            1024);
+            1024,
+            5);
 
     pulsed_beam.initialize_field();
 
-    Propagator<SiO2> propagator(
+    Propagator<Gauss<SiO2>> propagator(
             args,
             pulsed_beam
             );

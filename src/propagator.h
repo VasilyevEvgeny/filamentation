@@ -8,18 +8,23 @@
 #include <map>
 #include <string>
 
-#include "pulsed_beam.h"
-#include "logger.h"
+#include "pulsed_beam/base_pulsed_beam.h"
+#include "logger/logger.h"
 #include "medium/base_medium.h"
 
-template <typename Medium> class Propagator {
+template<typename T> class Propagator;
+
+template<template<typename, typename...> class PulsedBeam, typename Medium>
+class Propagator<PulsedBeam<Medium>> {
 public:
-    Propagator(std::map<std::string, std::string>& args, PulsedBeam<Medium> &_pulsed_beam);
+    Propagator(std::map<std::string, std::string>& args, PulsedBeam<Medium>&_pulsed_beam);
     ~Propagator();
 
 
-private:
     PulsedBeam<Medium> pulsed_beam;
+
+
+private:
 
 };
 

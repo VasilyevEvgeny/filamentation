@@ -10,40 +10,39 @@
 #include <complex>
 #include <algorithm>
 
-#include "m_constants.h"
-#include "medium/SiO2.h"
-#include "medium/CaF2.h"
-#include "medium/LiF.h"
+#include "../m_constants.h"
+#include "../medium/SiO2.h"
+#include "../medium/CaF2.h"
+#include "../medium/LiF.h"
+
+#include "../../lib/alglib/src/specialfunctions.h"
 
 template <typename Medium>
-class PulsedBeam {
+class BasePulsedBeam {
 public:
-    PulsedBeam(
+    BasePulsedBeam(
             Medium medium,
             double _lambda_0,
-            size_t _M,
-            size_t _m,
             double _r_0,
             size_t _n_r,
             double _t_0,
-            size_t _n_t);
-    ~PulsedBeam();
+            size_t _n_t,
+            double _p_rel);
+    virtual ~BasePulsedBeam();
 
     double get_r_max() const;
     void print_field() const;
 
     void initialize_field();
 
-    std::string space_distribution;
-    std::string time_distribution;
-    std::string classify_space_distribution();
+    std::string info;
 
     Medium medium;
 
     const double lambda_0;
 
-    const size_t M;
-    const size_t m;
+    size_t M;
+    size_t m;
 
     const double r_0;
     double r_max;
@@ -58,6 +57,13 @@ public:
     std::vector<double> ts;
 
     double z_diff;
+
+    double p_rel;
+    double p_0;
+    double i_0;
+
+    double calculate_p_g();
+    virtual double calculate_p_0();
 
     std::vector<std::vector<std::complex<double>>> field;
 

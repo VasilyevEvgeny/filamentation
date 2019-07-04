@@ -5,11 +5,16 @@
 #ifndef FILAMENTATION_LOGGER_H
 #define FILAMENTATION_LOGGER_H
 
-#include "pulsed_beam.h"
+#include "../pulsed_beam/gauss.h"
+#include "../pulsed_beam/ring.h"
+#include "../pulsed_beam/vortex.h"
 
-template<typename Medium> class Logger {
+template<typename T> class Logger;
+
+template<template<typename, typename...> class PulsedBeam, typename Medium>
+class Logger <PulsedBeam<Medium>> {
 public:
-    explicit Logger(PulsedBeam<Medium>& _pulsed_beam);
+    explicit Logger(PulsedBeam<Medium>& pulsed_beam);
     ~Logger();
 
     PulsedBeam<Medium> pulsed_beam;
@@ -26,7 +31,10 @@ public:
     void save_initial_parameters(std::string& path, bool delete_tmp_files, bool delete_tex_file);
 
 private:
+
 };
+
+
 
 
 #endif //FILAMENTATION_LOGGER_H

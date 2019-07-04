@@ -65,6 +65,8 @@ public:
     double beta;
     double K;
 
+    //extinction
+    double delta;
 
     void initialize_omegas();
     void initialize_dispersion_parameters();

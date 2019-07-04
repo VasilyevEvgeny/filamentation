@@ -20,7 +20,10 @@ LiF::LiF(double _lambda_0) : BaseMedium(_lambda_0) {
     C_3 = 0.0000000000;
 
     BaseMedium::initialize_dispersion_parameters();
+    LiF::initialize_kerr_parameters();
+    LiF::initialize_ionization_parameters();
 
+    delta = 0;
 
 }
 

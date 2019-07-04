@@ -5,14 +5,13 @@
 #include "propagator.h"
 #include "manager.h"
 
-template <typename Medium>
-Propagator<Medium>::Propagator(std::map<std::string, std::string>& args, PulsedBeam<Medium> &_pulsed_beam):
+template<template<typename, typename...> class PulsedBeam, typename Medium>
+Propagator<PulsedBeam<Medium>>::Propagator(std::map<std::string, std::string>& args, PulsedBeam<Medium>& _pulsed_beam):
           pulsed_beam(_pulsed_beam)
         {
 
-
     Manager manager(args);
-    Logger<Medium> logger(pulsed_beam);
+    Logger<PulsedBeam<Medium>> logger(pulsed_beam);
 
 
 
@@ -20,10 +19,16 @@ Propagator<Medium>::Propagator(std::map<std::string, std::string>& args, PulsedB
 
 }
 
-template <typename Medium>
-Propagator<Medium>::~Propagator() = default;
+template<template<typename, typename...> class PulsedBeam, typename Medium>
+Propagator<PulsedBeam<Medium>>::~Propagator() = default;
 
 
-template class Propagator<SiO2>;
-template class Propagator<CaF2>;
-template class Propagator<LiF>;
+template class Propagator<Gauss<SiO2>>;
+template class Propagator<Gauss<CaF2>>;
+template class Propagator<Gauss<LiF>>;
+template class Propagator<Ring<SiO2>>;
+template class Propagator<Ring<CaF2>>;
+template class Propagator<Ring<LiF>>;
+template class Propagator<Vortex<SiO2>>;
+template class Propagator<Vortex<CaF2>>;
+template class Propagator<Vortex<LiF>>;

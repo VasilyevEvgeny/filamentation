@@ -19,6 +19,10 @@ CaF2::CaF2(double _lambda_0) : BaseMedium(_lambda_0) {
     C_3 = 3.8484723000;
 
     BaseMedium::initialize_dispersion_parameters();
+    CaF2::initialize_kerr_parameters();
+    CaF2::initialize_ionization_parameters();
+
+    delta = 0;
 }
 
 CaF2::~CaF2() = default;
