@@ -27,7 +27,7 @@ public:
             size_t _n_r,
             double _t_0,
             size_t _n_t,
-            double _p_rel);
+            double _p_0_to_p_cr);
     virtual ~BasePulsedBeam();
 
     double get_r_max() const;
@@ -58,12 +58,19 @@ public:
 
     double z_diff;
 
-    double p_rel;
+    double p_0_to_p_cr;
+    double p_cr_to_p_g;
+    double p_g;
     double p_0;
     double i_0;
 
     double calculate_p_g();
-    virtual double calculate_p_0();
+    virtual double calculate_p_cr_to_p_g() = 0;
+    double calculate_p_0();
+
+    double calculate_i_0();
+
+    double max_intensity(double normalized_to);
 
     std::vector<std::vector<std::complex<double>>> field;
 

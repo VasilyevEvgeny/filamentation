@@ -63,7 +63,7 @@ public:
     double v_ei;
     double v_i_const;
     double beta;
-    double K;
+    int K;
 
     //extinction
     double delta;
@@ -81,7 +81,7 @@ public:
     double calculate_conv_kernel_const();
     double calculate_ItoA_const();
     double calculate_v_i_const();
-    double calculate_K();
+    int calculate_K();
 
 private:
 

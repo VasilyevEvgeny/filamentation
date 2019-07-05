@@ -16,21 +16,26 @@ Vortex<Medium>::Vortex(Medium _medium,
                        size_t _n_r,
                        double _t_0,
                        size_t _n_t,
-                       double _p_rel) : BasePulsedBeam<Medium>(_medium,
+                       double _p0_to_p_cr) : BasePulsedBeam<Medium>(_medium,
                                                                _lambda_0,
                                                                _r_0,
                                                                _n_r,
                                                                _t_0,
                                                                _n_t,
-                                                               _p_rel) {
+                                                               _p0_to_p_cr) {
 
     Vortex<Medium>::info = "vortex";
 
     Vortex<Medium>::M = _M;
     Vortex<Medium>::m = _m;
 
-    Vortex<Medium>::p_0 = Vortex<Medium>::calculate_p_0();
 
+    Vortex<Medium>::p_cr_to_p_g = Vortex<Medium>::calculate_p_cr_to_p_g();
+    Vortex<Medium>::p_0 = BasePulsedBeam<Medium>::calculate_p_0();
+
+    Vortex<Medium>::i_0 = BasePulsedBeam<Medium>::calculate_i_0();
+
+    BasePulsedBeam<Medium>::initialize_field();
 }
 
 template<typename Medium>
@@ -42,9 +47,10 @@ template class Vortex<LiF>;
 
 
 template<typename Medium>
-double Vortex<Medium>::calculate_p_0() {
-    return Vortex<Medium>::p_rel * pow(2, 2 * Vortex<Medium>::m + 1) * alglib::gammafunction(Vortex<Medium>::m + 1) *
-    alglib::gammafunction(Vortex<Medium>::m + 2) / (2 * alglib::gammafunction(2 * Vortex<Medium>::m + 1)) *
-    Vortex<Medium>::calculate_p_g();
+double Vortex<Medium>::calculate_p_cr_to_p_g() {
+    return pow(2, 2 * Vortex<Medium>::M + 1) * alglib::gammafunction(Vortex<Medium>::M + 1) *
+           alglib::gammafunction(Vortex<Medium>::M + 2) / (2 * alglib::gammafunction(2 * Vortex<Medium>::M + 1));
 }
+
+
 

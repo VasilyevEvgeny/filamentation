@@ -55,6 +55,8 @@ BaseMedium::BaseMedium(double _lambda_0) :
     v_i_const = 0;
     beta = 0;
     K = 0;
+
+    delta = 0;
 }
 
 BaseMedium::~BaseMedium() = default;
@@ -166,7 +168,7 @@ double BaseMedium::calculate_v_i_const() {
     return pow(math_constants.e, 2) * v_ei / (U_i * 2.0 * math_constants.m_e * (pow(omega_0, 2) + pow(v_ei, 2))) * ItoA_const;
 }
 
-double BaseMedium::calculate_K() {
+int BaseMedium::calculate_K() {
     return (int)(U_i / (math_constants.h_bar * omega_0) + 1);
 }
 

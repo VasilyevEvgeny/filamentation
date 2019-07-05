@@ -20,19 +20,18 @@ int main(int argc, char** argv) {
 
     double lambda_0 = 1800e-9;
 
-    SiO2 medium(lambda_0);
-    Gauss<SiO2> pulsed_beam(
-            medium,
+    Vortex<LiF> pulsed_beam(
+            LiF(lambda_0),
             lambda_0,
+            1,
+            1,
             100e-6,
             1024,
             500e-15,
             1024,
             5);
 
-    pulsed_beam.initialize_field();
-
-    Propagator<Gauss<SiO2>> propagator(
+    Propagator<Vortex<LiF>> propagator(
             args,
             pulsed_beam
             );

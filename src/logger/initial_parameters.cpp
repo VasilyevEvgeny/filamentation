@@ -65,6 +65,10 @@ void Logger<PulsedBeam<Medium>>::add_to_tex_file_data(std::string& str, std::vec
     else if (params.size() == 6) {
         sprintf(buffer, str.c_str(), params[0], params[1], params[2], params[3], params[4], params[5]);
     }
+    else if (params.size() == 9) {
+        sprintf(buffer, str.c_str(), params[0], params[1], params[2], params[3], params[4], params[5], params[6],
+                params[7], params[8]);
+    }
     else if (params.size() == 15) {
         sprintf(buffer, str.c_str(), params[0], params[1], params[2], params[3],
                 params[4], params[5], params[6], params[7],
@@ -204,7 +208,7 @@ $\beta$ & %.1f & THz \tabularnewline
 \hline
 $U_i$ & %3.1f & eV \tabularnewline
 \hline
-$K$ & %.1f & -- \tabularnewline
+$K$ & %.0f & -- \tabularnewline
 \hline
 $\delta$ & %.1f & cm$^{-1}$ \tabularnewline
 \midrule[2pt]
@@ -222,7 +226,7 @@ $\delta$ & %.1f & cm$^{-1}$ \tabularnewline
                                            pulsed_beam.medium.v_ei * 1e-12,
                                            pulsed_beam.medium.beta * 1e-12,
                                            pulsed_beam.medium.U_i_in_eV,
-                                           pulsed_beam.medium.K,
+                                           (double)pulsed_beam.medium.K,
                                            pulsed_beam.medium.delta * 1e2};
 
     Logger::add_to_tex_file_data(medium_data_2, medium_params_2);
@@ -261,12 +265,30 @@ $r_0$ & %.1f & $\mu$m \tabularnewline
 \hline
 $\lambda$ & %.1f & nm \tabularnewline
 \hline
-$z_{diff}$ & %.1f & cm \tabularnewline
+$z_{diff}$ & %.2f & cm \tabularnewline
+\hline
+$P_0 / P_{cr}$ & %.2f & -- \tabularnewline
+\hline
+$P_{cr} / P_G$ & %.2f & -- \tabularnewline
+\hline
+$P_G$ & %.2f & MW \tabularnewline
+\hline
+$P_0$ & %.2f & MW \tabularnewline
+\hline
+$I_{max}(z=0) / I_0$ & %.2f & -- \tabularnewline
+\hline
+$I_0$ & %.4f & TW/cm$^2$ \tabularnewline
 \midrule[2pt]
 )";
     std::vector<double> pulsed_beam_params_3 = {pulsed_beam.r_0 * 1e6,
                                                 pulsed_beam.lambda_0 * 1e9,
-                                                pulsed_beam.z_diff * 1e2};
+                                                pulsed_beam.z_diff * 1e2,
+                                                pulsed_beam.p_0_to_p_cr,
+                                                pulsed_beam.p_cr_to_p_g,
+                                                pulsed_beam.p_g * 1e-6,
+                                                pulsed_beam.p_0 * 1e-6,
+                                                pulsed_beam.max_intensity(pulsed_beam.i_0),
+                                                pulsed_beam.i_0 * 1e-16};
 
     Logger::add_to_tex_file_data(pulsed_beam_data_3, pulsed_beam_params_3);
 

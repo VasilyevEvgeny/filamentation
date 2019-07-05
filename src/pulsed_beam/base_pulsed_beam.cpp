@@ -13,14 +13,14 @@ BasePulsedBeam<Medium>::BasePulsedBeam(
         const size_t _n_r,
         const double _t_0,
         const size_t _n_t,
-        double _p_rel):
+        double _p_0_to_p_cr):
   medium(_medium)
 , lambda_0(_lambda_0)
 , r_0(_r_0)
 , n_r(_n_r)
 , t_0(_t_0)
 , n_t(_n_t)
-, p_rel(_p_rel) {
+, p_0_to_p_cr(_p_0_to_p_cr) {
 
     M = 0;
     m = 0;
@@ -46,6 +46,8 @@ BasePulsedBeam<Medium>::BasePulsedBeam(
     // z_diff
     z_diff = medium.k_0 * pow(r_0, 2);
 
+    p_cr_to_p_g = 0;
+    p_g = calculate_p_g();
     p_0 = 0;
     i_0 = 0;
 
@@ -64,6 +66,22 @@ template class BasePulsedBeam<LiF>;
 
 
 template<typename Medium>
+double BasePulsedBeam<Medium>::max_intensity(double normalized_to) {
+    double max_intensity = 0.0;
+    for (size_t k = 0; k < n_r; ++k) {
+        for (size_t s = 0; s < n_t; ++s) {
+            double current_intensity = norm(field[k][s]);
+            if (max_intensity < current_intensity) {
+                max_intensity = current_intensity;
+            }
+        }
+    }
+
+    return max_intensity * i_0 / normalized_to;
+
+}
+
+template<typename Medium>
 void BasePulsedBeam<Medium>::initialize_field() {
     for (size_t k = 0; k < n_r; ++k) {
         for (size_t s = 0; s < n_t; ++s) {
@@ -79,7 +97,13 @@ double BasePulsedBeam<Medium>::calculate_p_g() {
 
 template<typename Medium>
 double BasePulsedBeam<Medium>::calculate_p_0() {
-    return p_rel * calculate_p_g();
+    return BasePulsedBeam<Medium>::p_0_to_p_cr * BasePulsedBeam<Medium>::p_cr_to_p_g * BasePulsedBeam<Medium>::p_g;
+}
+
+template<typename Medium>
+double BasePulsedBeam<Medium>::calculate_i_0() {
+    return BasePulsedBeam<Medium>::p_0 / (M_PI * pow(BasePulsedBeam<Medium>::r_0, 2) *
+           alglib::gammafunction(BasePulsedBeam<Medium>::M + 1));
 }
 
 

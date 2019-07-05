@@ -18,12 +18,11 @@ public:
            size_t _n_r,
            double _t_0,
            size_t _n_t,
-           double _p_rel);
+           double _p0_to_p_cr);
 
     ~Vortex() override;
 
-
-    double calculate_p_0() override;
+    double calculate_p_cr_to_p_g() override;
 
 };
 
