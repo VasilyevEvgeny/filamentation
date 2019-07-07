@@ -12,12 +12,12 @@ Gauss<Medium>::Gauss(Medium medium,
                      double _t_0,
                      size_t _n_t,
                      double _p0_to_p_cr) : BasePulsedBeam<Medium>(medium,
-                                                             _lambda_0,
-                                                             _r_0,
-                                                             _n_r,
-                                                             _t_0,
-                                                             _n_t,
-                                                             _p0_to_p_cr) {
+                                                                 _lambda_0,
+                                                                 _r_0,
+                                                                 _n_r,
+                                                                 _t_0,
+                                                                 _n_t,
+                                                                 _p0_to_p_cr) {
 
     Gauss<Medium>::info = "gauss";
 
@@ -29,7 +29,7 @@ Gauss<Medium>::Gauss(Medium medium,
 
     BasePulsedBeam<Medium>::initialize_field();
 
-
+    Gauss<Medium>::e_0 = BasePulsedBeam<Medium>::calculate_e_0();
 
 }
 

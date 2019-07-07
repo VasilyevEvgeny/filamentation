@@ -2,8 +2,12 @@
 // Created by vasilyev on 28.06.2019.
 //
 
+#include <fstream>
+#include <sstream>
+#include <iomanip>
+
 #include "base_pulsed_beam.h"
-#include "../../lib/alglib/src/specialfunctions.h"
+#include "../../../lib/alglib/src/specialfunctions.h"
 
 template <typename Medium>
 BasePulsedBeam<Medium>::BasePulsedBeam(
@@ -40,7 +44,7 @@ BasePulsedBeam<Medium>::BasePulsedBeam(
 
     ts = std::vector<double>(n_t, 0.0);
     for (size_t s = 0; s < n_t; ++s) {
-        ts[s] = s * dt;
+        ts[s] = s * dt - 0.5 * t_max;
     }
 
     // z_diff
@@ -50,6 +54,7 @@ BasePulsedBeam<Medium>::BasePulsedBeam(
     p_g = calculate_p_g();
     p_0 = 0;
     i_0 = 0;
+    e_0 = 0;
 
     // field
     field = std::vector<std::vector<std::complex<double>>>(n_r, std::vector<std::complex<double>>(n_t, 0.0));
@@ -66,44 +71,27 @@ template class BasePulsedBeam<LiF>;
 
 
 template<typename Medium>
-double BasePulsedBeam<Medium>::max_intensity(double normalized_to) {
-    double max_intensity = 0.0;
-    for (size_t k = 0; k < n_r; ++k) {
-        for (size_t s = 0; s < n_t; ++s) {
-            double current_intensity = norm(field[k][s]);
-            if (max_intensity < current_intensity) {
-                max_intensity = current_intensity;
+void BasePulsedBeam<Medium>::save_field(int step, std::string& path_to_save) {
+    std::stringstream ss;
+    ss << std::setw(5) << std::setfill('0') << step;
+    std::string filename = path_to_save + "/" + ss.str();
+
+    std::ofstream f(filename);
+    f << std::scientific;
+    std::string space = "    ";
+    for (int k = 0; k < n_r; ++k) {
+        for (int s = 0; s < n_t; ++s) {
+            if (s) {
+                f << space;
             }
+            f << field[k][s].real() << space << field[k][s].imag();
+        }
+        if (k != n_r - 1) {
+            f << "\n";
         }
     }
 
-    return max_intensity * i_0 / normalized_to;
-
-}
-
-template<typename Medium>
-void BasePulsedBeam<Medium>::initialize_field() {
-    for (size_t k = 0; k < n_r; ++k) {
-        for (size_t s = 0; s < n_t; ++s) {
-            field[k][s] = pow(rs[k] / r_0, M) * exp(-0.5 * pow(rs[k] / r_0, 2)) * exp(-0.5 * pow(ts[s] / t_0, 2));
-        }
-    }
-}
-
-template<typename Medium>
-double BasePulsedBeam<Medium>::calculate_p_g() {
-    return 3.77 * pow(lambda_0, 2) / (8 * M_PI * medium.n_0 * medium.n_2);
-}
-
-template<typename Medium>
-double BasePulsedBeam<Medium>::calculate_p_0() {
-    return BasePulsedBeam<Medium>::p_0_to_p_cr * BasePulsedBeam<Medium>::p_cr_to_p_g * BasePulsedBeam<Medium>::p_g;
-}
-
-template<typename Medium>
-double BasePulsedBeam<Medium>::calculate_i_0() {
-    return BasePulsedBeam<Medium>::p_0 / (M_PI * pow(BasePulsedBeam<Medium>::r_0, 2) *
-           alglib::gammafunction(BasePulsedBeam<Medium>::M + 1));
+    f.close();
 }
 
 

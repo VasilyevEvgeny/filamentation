@@ -10,12 +10,12 @@
 #include <complex>
 #include <algorithm>
 
-#include "../m_constants.h"
-#include "../medium/SiO2.h"
-#include "../medium/CaF2.h"
-#include "../medium/LiF.h"
+#include "../../m_constants.h"
+#include "../../medium/SiO2.h"
+#include "../../medium/CaF2.h"
+#include "../../medium/LiF.h"
 
-#include "../../lib/alglib/src/specialfunctions.h"
+#include "../../../lib/alglib/src/specialfunctions.h"
 
 template <typename Medium>
 class BasePulsedBeam {
@@ -63,14 +63,18 @@ public:
     double p_g;
     double p_0;
     double i_0;
+    double e_0;
 
     double calculate_p_g();
     virtual double calculate_p_cr_to_p_g() = 0;
     double calculate_p_0();
-
     double calculate_i_0();
+    double calculate_e_0();
 
-    double max_intensity(double normalized_to);
+    double max_intensity(double normalize_to);
+    double energy(double normalize_to);
+
+    void save_field(int step, std::string& path_to_save);
 
     std::vector<std::vector<std::complex<double>>> field;
 

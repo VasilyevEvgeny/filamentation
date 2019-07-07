@@ -32,6 +32,7 @@ Ring<Medium>::Ring(Medium medium,
 
     BasePulsedBeam<Medium>::initialize_field();
 
+    Ring<Medium>::e_0 = BasePulsedBeam<Medium>::calculate_e_0();
 }
 
 template<typename Medium>

@@ -5,7 +5,7 @@
 #ifndef FILAMENTATION_VORTEX_H
 #define FILAMENTATION_VORTEX_H
 
-#include "base_pulsed_beam.h"
+#include "base_pulsed_beam/base_pulsed_beam.h"
 
 template<typename Medium>
 class Vortex : public BasePulsedBeam<Medium> {

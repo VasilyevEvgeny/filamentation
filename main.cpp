@@ -3,7 +3,7 @@
 #include <map>
 #include <string>
 
-#include "src/pulsed_beam/base_pulsed_beam.h"
+#include "src/pulsed_beam/base_pulsed_beam/base_pulsed_beam.h"
 #include "src/propagator.h"
 
 
@@ -25,15 +25,17 @@ int main(int argc, char** argv) {
             lambda_0,
             1,
             1,
-            100e-6,
+            92e-6,
             1024,
-            500e-15,
+            40e-15,
             1024,
             5);
 
     Propagator<Vortex<LiF>> propagator(
             args,
-            pulsed_beam
+            pulsed_beam,
+            10,
+            1e-5
             );
 
 

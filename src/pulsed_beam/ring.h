@@ -6,7 +6,7 @@
 #define FILAMENTATION_RING_H
 
 
-#include "base_pulsed_beam.h"
+#include "base_pulsed_beam/base_pulsed_beam.h"
 
 template<typename Medium>
 class Ring : public BasePulsedBeam<Medium> {

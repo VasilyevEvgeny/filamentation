@@ -5,10 +5,11 @@
 #include "logger.h"
 
 template<template<typename, typename...> class PulsedBeam, typename Medium>
-Logger<PulsedBeam<Medium>>::Logger(PulsedBeam<Medium>& _pulsed_beam) :
-  pulsed_beam(_pulsed_beam) {
+Logger<PulsedBeam<Medium>>::Logger(PulsedBeam<Medium>& _pulsed_beam, std::map<std::string, double>& _track_info) :
+  pulsed_beam(_pulsed_beam)
+  , track_info(_track_info) {
 
-   tex_file_data = "";
+
 }
 
 template<template<typename, typename...> class PulsedBeam, typename Medium>

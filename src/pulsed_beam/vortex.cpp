@@ -36,6 +36,8 @@ Vortex<Medium>::Vortex(Medium _medium,
     Vortex<Medium>::i_0 = BasePulsedBeam<Medium>::calculate_i_0();
 
     BasePulsedBeam<Medium>::initialize_field();
+
+    Vortex<Medium>::e_0 = BasePulsedBeam<Medium>::calculate_e_0();
 }
 
 template<typename Medium>

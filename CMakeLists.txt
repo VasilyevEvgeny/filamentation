@@ -11,8 +11,8 @@ add_executable(
         filamentation
         main.cpp
 
-        src/pulsed_beam/base_pulsed_beam.cpp
-        src/pulsed_beam/base_pulsed_beam.h
+        src/pulsed_beam/base_pulsed_beam/base_pulsed_beam.cpp
+        src/pulsed_beam/base_pulsed_beam/base_pulsed_beam.h
         src/pulsed_beam/gauss.cpp
         src/pulsed_beam/gauss.h
         src/pulsed_beam/ring.cpp
@@ -31,7 +31,7 @@ add_executable(
 
         src/logger/logger.cpp
         src/logger/logger.h
-        src/logger/initial_parameters.cpp
+        src/logger/initial_parameters_pdf.cpp
 
         src/medium/base_medium.cpp
         src/medium/base_medium.h
@@ -58,4 +58,4 @@ add_executable(
         lib/alglib/src/specialfunctions.cpp
         lib/alglib/src/statistics.cpp
 
-        )
+        src/pulsed_beam/base_pulsed_beam/parameters.cpp src/logger/initial_parameters_yml.cpp)

@@ -5,7 +5,7 @@
 #ifndef FILAMENTATION_GAUSS_H
 #define FILAMENTATION_GAUSS_H
 
-#include "base_pulsed_beam.h"
+#include "base_pulsed_beam/base_pulsed_beam.h"
 
 template<typename Medium>
 class Gauss : public BasePulsedBeam<Medium> {
