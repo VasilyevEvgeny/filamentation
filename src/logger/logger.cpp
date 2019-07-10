@@ -22,14 +22,15 @@ Logger<PulsedBeam<Medium>>::Logger(
     manager = Manager(_args);
 
     states_columns = {"step", "z, [m]", "h_z, [m]", "i_max, [W/m^2]"};
-    states = std::vector<std::vector<double>>(track_info["n_z"],
+    states = std::vector<std::vector<double>>(track_info["n_z"] + 1,
             std::vector<double>(states_columns.size(), 0.0));
 
 }
 
 template<template<typename, typename...> class PulsedBeam, typename Medium>
-Logger<PulsedBeam<Medium>>::~Logger() = default;
-
+Logger<PulsedBeam<Medium>>::~Logger() {
+    states.erase(states.begin(), states.end());
+}
 
 template<template<typename, typename...> class PulsedBeam, typename Medium>
 void Logger<PulsedBeam<Medium>>::print_current_state(size_t step, double z) {
