@@ -10,6 +10,7 @@
 template<typename Medium>
 class Gauss : public BasePulsedBeam<Medium> {
 public:
+    Gauss();
     Gauss(Medium medium,
           double _lambda_0,
           double _r_0,

@@ -35,8 +35,12 @@ int main(int argc, char** argv) {
             args,
             pulsed_beam,
             10,
-            1e-5
+            1e-5,
+            1,
+            2
             );
+
+    propagator.propagate();
 
 
     return 0;

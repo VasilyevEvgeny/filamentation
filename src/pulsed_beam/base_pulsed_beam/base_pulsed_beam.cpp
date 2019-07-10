@@ -9,14 +9,17 @@
 #include "base_pulsed_beam.h"
 #include "../../../lib/alglib/src/specialfunctions.h"
 
+template<typename Medium>
+BasePulsedBeam<Medium>::BasePulsedBeam() = default;
+
 template <typename Medium>
 BasePulsedBeam<Medium>::BasePulsedBeam(
         Medium _medium,
-        const double _lambda_0,
-        const double _r_0,
-        const size_t _n_r,
-        const double _t_0,
-        const size_t _n_t,
+        double _lambda_0,
+        double _r_0,
+        size_t _n_r,
+        double _t_0,
+        size_t _n_t,
         double _p_0_to_p_cr):
   medium(_medium)
 , lambda_0(_lambda_0)
@@ -70,29 +73,6 @@ template class BasePulsedBeam<CaF2>;
 template class BasePulsedBeam<LiF>;
 
 
-template<typename Medium>
-void BasePulsedBeam<Medium>::save_field(int step, std::string& path_to_save) {
-    std::stringstream ss;
-    ss << std::setw(5) << std::setfill('0') << step;
-    std::string filename = path_to_save + "/" + ss.str();
-
-    std::ofstream f(filename);
-    f << std::scientific;
-    std::string space = "    ";
-    for (int k = 0; k < n_r; ++k) {
-        for (int s = 0; s < n_t; ++s) {
-            if (s) {
-                f << space;
-            }
-            f << field[k][s].real() << space << field[k][s].imag();
-        }
-        if (k != n_r - 1) {
-            f << "\n";
-        }
-    }
-
-    f.close();
-}
 
 
 template<typename Medium>

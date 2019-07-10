@@ -12,6 +12,7 @@
 
 class Manager {
 public:
+    Manager() = default;
     explicit Manager(std::map<std::string, std::string>& args);
     ~Manager();
 

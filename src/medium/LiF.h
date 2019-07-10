@@ -9,6 +9,7 @@
 
 class LiF : public BaseMedium {
 public:
+    LiF();
     explicit LiF(double _lambda_0);
     ~LiF() override;
 

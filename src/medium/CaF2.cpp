@@ -4,6 +4,8 @@
 
 #include "CaF2.h"
 
+CaF2::CaF2() = default;
+
 CaF2::CaF2(double _lambda_0) : BaseMedium(_lambda_0) {
 
     info = "CaF$_2$";

@@ -6,6 +6,8 @@
 
 #include "SiO2.h"
 
+SiO2::SiO2() = default;
+
 SiO2::SiO2(double _lambda_0) : BaseMedium(_lambda_0) {
 
     info = "SiO$_2$";

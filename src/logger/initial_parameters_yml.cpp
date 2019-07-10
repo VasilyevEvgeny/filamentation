@@ -38,11 +38,12 @@ void Logger<PulsedBeam<Medium>>::add_to_yml_file_data(std::string& yml_file_data
 }
 
 template<template<typename, typename...> class PulsedBeam, typename Medium>
-void Logger<PulsedBeam<Medium>>::save_initial_parameters_to_yml(std::string& path) {
+void Logger<PulsedBeam<Medium>>::save_initial_parameters_to_yml() {
 
     std::string yml_file_data;
 
     std::string yml_file_name = "parameters";
+    std::string path = manager.current_results_dir;
     std::string yml_file_path = path + "/" + yml_file_name + ".yml";
 
     /*

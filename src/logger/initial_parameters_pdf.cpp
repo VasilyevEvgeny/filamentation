@@ -93,11 +93,12 @@ void Logger<PulsedBeam<Medium>>::add_to_tex_file_data(std::string& tex_file_data
 }
 
 template<template<typename, typename...> class PulsedBeam, typename Medium>
-void Logger<PulsedBeam<Medium>>::save_initial_parameters_to_pdf(std::string& path, bool delete_tmp_files, bool delete_tex_file) {
+void Logger<PulsedBeam<Medium>>::save_initial_parameters_to_pdf(bool delete_tmp_files, bool delete_tex_file) {
 
     std::string tex_file_data;
 
     std::string tex_file_name = "parameters";
+    std::string path = manager.current_results_dir;
     std::string tex_file_path = path + "/" + tex_file_name + ".tex";
 
 

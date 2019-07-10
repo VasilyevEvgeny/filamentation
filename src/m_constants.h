@@ -11,11 +11,11 @@ public:
     MathConstants();
     ~MathConstants();
 
-    const double h_bar;
-    const double c;
-    const double e;
-    const double m_e;
-    const double epsilon_0;
+    double h_bar;
+    double c;
+    double e;
+    double m_e;
+    double epsilon_0;
 };
 
 

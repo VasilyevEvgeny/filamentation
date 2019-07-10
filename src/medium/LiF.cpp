@@ -4,6 +4,7 @@
 
 #include "LiF.h"
 
+LiF::LiF() = default;
 
 LiF::LiF(double _lambda_0) : BaseMedium(_lambda_0) {
 

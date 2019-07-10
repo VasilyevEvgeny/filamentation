@@ -5,6 +5,8 @@
 #include "vortex.h"
 
 
+template<typename Medium>
+Vortex<Medium>::Vortex() = default;
 
 
 template<typename Medium>

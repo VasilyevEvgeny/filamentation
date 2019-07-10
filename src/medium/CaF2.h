@@ -9,6 +9,7 @@
 
 class CaF2 : public BaseMedium {
 public:
+    CaF2();
     explicit CaF2(double _lambda_0);
     ~CaF2() override;
 

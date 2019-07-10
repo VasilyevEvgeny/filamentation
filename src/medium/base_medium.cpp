@@ -7,6 +7,53 @@
 #include "base_medium.h"
 #include "../m_constants.h"
 
+BaseMedium::BaseMedium() {
+
+    lambda_0 = 0;
+    omega_0 = 0;
+    c = 0;
+
+    // dispersion parameters
+    lambda_1 = 0;
+    lambda_2 = 0;
+    lambda_3 = 0;
+
+    omega_1 = 0;
+    omega_2 = 0;
+    omega_3 = 0;
+
+    C_1 = 0;
+    C_2 = 0;
+    C_3 = 0;
+
+    n_0 = 0;
+    k_0 = 0;
+    k_1 = 0;
+    k_2 = 0;
+
+
+    // kerr parameters
+    n_2 = 0;
+    g = 0;
+    Omega_R = 0;
+    tau_k = 0;
+    conv_kernel_const = 0;
+    conv_window = 0;
+
+
+    // ionization_parameters
+    N_0 = 0;
+    U_i_in_eV = 0;
+    U_i = 0;
+    ItoA_const = 0;
+    v_ei = 0;
+    v_i_const = 0;
+    beta = 0;
+    K = 0;
+
+    delta = 0;
+}
+
 BaseMedium::BaseMedium(double _lambda_0) :
   lambda_0(_lambda_0) {
 
@@ -57,6 +104,7 @@ BaseMedium::BaseMedium(double _lambda_0) :
     K = 0;
 
     delta = 0;
+
 }
 
 BaseMedium::~BaseMedium() = default;

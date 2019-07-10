@@ -11,6 +11,7 @@
 template<typename Medium>
 class Ring : public BasePulsedBeam<Medium> {
 public:
+    Ring();
     Ring(Medium medium,
           double _lambda_0,
           size_t _M,

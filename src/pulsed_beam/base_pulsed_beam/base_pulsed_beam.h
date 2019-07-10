@@ -17,9 +17,11 @@
 
 #include "../../../lib/alglib/src/specialfunctions.h"
 
+
 template <typename Medium>
 class BasePulsedBeam {
 public:
+    BasePulsedBeam();
     BasePulsedBeam(
             Medium medium,
             double _lambda_0,
@@ -39,20 +41,20 @@ public:
 
     Medium medium;
 
-    const double lambda_0;
+    double lambda_0;
 
     size_t M;
     size_t m;
 
-    const double r_0;
+    double r_0;
     double r_max;
-    const size_t n_r;
+    size_t n_r;
     double dr;
     std::vector<double> rs;
 
-    const double t_0;
+    double t_0;
     double t_max;
-    const size_t n_t;
+    size_t n_t;
     double dt;
     std::vector<double> ts;
 

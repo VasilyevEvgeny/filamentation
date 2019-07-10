@@ -12,6 +12,7 @@
 class BaseMedium {
 
 public:
+    BaseMedium();
     explicit BaseMedium(double _lambda_0);
     virtual ~BaseMedium() = 0;
 
@@ -20,7 +21,7 @@ public:
     std::string info;
 
     // central wavelength
-    const double lambda_0;
+    double lambda_0;
 
     double omega_0;
 

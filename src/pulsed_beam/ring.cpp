@@ -5,6 +5,9 @@
 #include "ring.h"
 
 template<typename Medium>
+Ring<Medium>::Ring() = default;
+
+template<typename Medium>
 Ring<Medium>::Ring(Medium medium,
                      double _lambda_0,
                      size_t _M,

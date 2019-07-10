@@ -9,6 +9,7 @@
 
 class SiO2 : public BaseMedium {
 public:
+    SiO2();
     explicit SiO2(double _lambda_0);
     ~SiO2() override;
 

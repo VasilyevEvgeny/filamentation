@@ -10,6 +10,7 @@
 template<typename Medium>
 class Vortex : public BasePulsedBeam<Medium> {
 public:
+    Vortex();
     Vortex(Medium medium,
            double _lambda_0,
            size_t _M,

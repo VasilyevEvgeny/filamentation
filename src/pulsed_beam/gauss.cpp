@@ -5,6 +5,10 @@
 #include "gauss.h"
 
 template<typename Medium>
+Gauss<Medium>::Gauss() = default;
+
+
+template<typename Medium>
 Gauss<Medium>::Gauss(Medium medium,
                      double _lambda_0,
                      double _r_0,
