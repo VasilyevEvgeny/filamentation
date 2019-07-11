@@ -12,6 +12,7 @@
 #include "../pulsed_beam/ring.h"
 #include "../pulsed_beam/vortex.h"
 #include "../manager.h"
+#include "../processor.h"
 
 template<typename T> class Logger;
 
@@ -28,6 +29,8 @@ public:
     Manager manager;
     PulsedBeam<Medium> pulsed_beam;
     std::map<std::string, double> track_info;
+
+    Processor processor;
 
     std::vector<std::string> states_columns;
     std::vector<std::vector<double>> states;

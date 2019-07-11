@@ -88,7 +88,7 @@ medium:
     N_0: %g
     v_ei: %g
     beta: %g
-    U_i: %g
+    U_i_in_eV: %g
     K: %g
     delta: %g
 )";
@@ -131,19 +131,19 @@ pulsed_beam:
     p_g: %g
     p_0: %g
     i_max_to_i_0: %g
-    i_0: %g,
+    i_0: %g
     e_0: %g
 
 grid:
-    r_max: %g,
-    n_r: %.0f,
-    h_r: %g,
+    r_max: %g
+    n_r: %.0f
+    h_r: %g
     t_max: %g
-    n_t: %.0f,
+    n_t: %.0f
     h_t: %g
 
 track:
-    n_z: %0.f,
+    n_z: %0.f
     h_z_0: %g)";
     std::vector<double> data_5_params = {(double)pulsed_beam.M,
                                          (double)pulsed_beam.m,

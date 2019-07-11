@@ -38,6 +38,7 @@ public:
     Logger<PulsedBeam<Medium>> logger;
 
     void propagate();
+    void process();
 
 private:
 

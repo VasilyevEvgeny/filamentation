@@ -24,9 +24,6 @@ public:
     std::string field_dir_name;
     std::string field_dir;
 
-    std::string track_dir_name;
-    std::string track_dir;
-
 private:
     std::string get_current_datetime() const;
 };

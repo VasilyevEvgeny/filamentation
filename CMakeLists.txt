@@ -58,4 +58,4 @@ add_executable(
         lib/alglib/src/specialfunctions.cpp
         lib/alglib/src/statistics.cpp
 
-        src/pulsed_beam/base_pulsed_beam/parameters.cpp src/logger/initial_parameters_to_yml.cpp)
+        src/pulsed_beam/base_pulsed_beam/parameters.cpp src/logger/initial_parameters_to_yml.cpp src/processor.cpp src/processor.h)

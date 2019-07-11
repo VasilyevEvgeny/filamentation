@@ -28,8 +28,6 @@ Propagator<PulsedBeam<Medium>>::Propagator(
     logger.save_initial_parameters_to_yml();
 
 
-
-
 }
 
 template<template<typename, typename...> class PulsedBeam, typename Medium>
@@ -45,6 +43,14 @@ void Propagator<PulsedBeam<Medium>>::propagate() {
     double z = 0.0;
     for (int step = 0; step < n_z + 1; ++step) {
         if (step) {
+
+            /*
+             * effects
+             */
+
+            
+
+
             z += dz;
         }
 
@@ -57,7 +63,6 @@ void Propagator<PulsedBeam<Medium>>::propagate() {
             }
         }
 
-
         logger.flush_current_state(step, z);
 
         if (print_current_state_every) {
@@ -69,8 +74,16 @@ void Propagator<PulsedBeam<Medium>>::propagate() {
 
     }
 
-    //logger.save_states_to_csv();
+    logger.save_states_to_csv();
+
+
+    logger.processor.go();
 }
+
+
+
+
+
 
 template class Propagator<Gauss<SiO2>>;
 template class Propagator<Gauss<CaF2>>;

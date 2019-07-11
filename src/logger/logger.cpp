@@ -20,6 +20,7 @@ Logger<PulsedBeam<Medium>>::Logger(
   , track_info(_track_info) {
 
     manager = Manager(_args);
+    processor = Processor(_args, manager);
 
     states_columns = {"step", "z, [m]", "h_z, [m]", "i_max, [W/m^2]"};
     states = std::vector<std::vector<double>>(track_info["n_z"] + 1,
@@ -45,7 +46,7 @@ void Logger<PulsedBeam<Medium>>::print_current_state(size_t step, double z) {
         std::cout << std::setw(w2) << "z, [m]";
         std::cout << std::setw(w3) << "dz, [m]";
         std::cout << std::setw(w4) << "i_max / i_0";
-        std::cout << std::setw(w5) << "i_max, [TW/m^2]";
+        std::cout << std::setw(w5) << "i_max, [W/m^2]";
         std::cout << std::endl;
     }
 
@@ -53,7 +54,7 @@ void Logger<PulsedBeam<Medium>>::print_current_state(size_t step, double z) {
     std::cout << std::setw(w2) << std::setfill(' ') << std::scientific << std::setprecision(5) << z;
     std::cout << std::setw(w3) << std::setfill(' ') << std::scientific << std::setprecision(5) << track_info["dz"];
     std::cout << std::setw(w4) << std::setfill(' ') << std::scientific << std::setprecision(5) << pulsed_beam.max_intensity(pulsed_beam.i_0);
-    std::cout << std::setw(w5) << std::setfill(' ') << std::scientific << std::setprecision(5) << pulsed_beam.max_intensity(1e16);
+    std::cout << std::setw(w5) << std::setfill(' ') << std::scientific << std::setprecision(5) << pulsed_beam.max_intensity(1);
     std::cout << std::endl;
 }
 
@@ -99,18 +100,19 @@ void Logger<PulsedBeam<Medium>>::save_states_to_csv() {
     size_t w2 = 20;
     size_t w3 = 20;
     size_t w4 = 20;
+    std::string sep = "|";
 
-    f << std::setw(w1) << std::setfill(' ') << states_columns[0];
-    f << std::setw(w2) << std::setfill(' ') << states_columns[1];
-    f << std::setw(w3) << std::setfill(' ') << states_columns[2];
-    f << std::setw(w4) << std::setfill(' ') << states_columns[3];
+    f << std::setw(w1) << std::setfill(' ') << states_columns[0] << sep;
+    f << std::setw(w2) << std::setfill(' ') << states_columns[1] << sep;
+    f << std::setw(w3) << std::setfill(' ') << states_columns[2] << sep;
+    f << std::setw(w4) << std::setfill(' ') << states_columns[3] << std::endl;
 
-    f << "\n";
+    //f << "\n";
 
     for (size_t step = 0; step < track_info["n_z"]; ++step) {
-        f << std::setw(w1) << std::setfill('0') << std::fixed << std::setprecision(0) << states[step][0];
-        f << std::setw(w2) << std::setfill(' ') << std::scientific << std::setprecision(5) << states[step][1];
-        f << std::setw(w3) << std::setfill(' ') << std::scientific << std::setprecision(5) << states[step][2];
+        f << std::setw(w1) << std::setfill('0') << std::fixed << std::setprecision(0) << states[step][0] << sep;
+        f << std::setw(w2) << std::setfill(' ') << std::scientific << std::setprecision(5) << states[step][1] << sep;
+        f << std::setw(w3) << std::setfill(' ') << std::scientific << std::setprecision(5) << states[step][2] << sep;
         f << std::setw(w4) << std::setfill(' ') << std::scientific << std::setprecision(5) << states[step][3] << std::endl;
     }
 
