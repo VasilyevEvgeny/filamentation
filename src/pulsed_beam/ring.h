@@ -12,7 +12,7 @@ template<typename Medium>
 class Ring : public BasePulsedBeam<Medium> {
 public:
     Ring();
-    Ring(Medium medium,
+    Ring(Medium& medium,
           double _lambda_0,
           size_t _M,
           double _r_0,
@@ -26,5 +26,8 @@ public:
 
     double calculate_p_cr_to_p_g() override;
 };
+
+
+
 
 #endif //FILAMENTATION_RING_H

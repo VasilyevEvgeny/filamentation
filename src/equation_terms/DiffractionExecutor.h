@@ -1,0 +1,14 @@
+//
+// Created by vasilyev on 16.07.2019.
+//
+
+#ifndef FILAMENTATION_DIFFRACTIONEXECUTOR_H
+#define FILAMENTATION_DIFFRACTIONEXECUTOR_H
+
+
+class DiffractionExecutor {
+
+};
+
+
+#endif //FILAMENTATION_DIFFRACTIONEXECUTOR_H

@@ -17,20 +17,20 @@
 template<typename T> class Logger;
 
 template<template<typename, typename...> class PulsedBeam, typename Medium>
-class Logger <PulsedBeam<Medium>> {
+class Logger<PulsedBeam<Medium>> {
 public:
     Logger();
     explicit Logger(
             std::map<std::string, std::string>& _args,
-            PulsedBeam<Medium>& pulsed_beam,
+            PulsedBeam<Medium>* _pulsed_beam,
             std::map<std::string, double>& _track_info);
     ~Logger();
 
     Manager manager;
-    PulsedBeam<Medium> pulsed_beam;
-    std::map<std::string, double> track_info;
-
     Processor processor;
+
+    PulsedBeam<Medium>* pulsed_beam;
+    std::map<std::string, double> track_info;
 
     std::vector<std::string> states_columns;
     std::vector<std::vector<double>> states;

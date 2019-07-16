@@ -5,16 +5,13 @@
 #ifndef FILAMENTATION_PULSEDBEAM_H
 #define FILAMENTATION_PULSEDBEAM_H
 
-#include <iostream>
 #include <vector>
 #include <complex>
-#include <algorithm>
 
 #include "../../m_constants.h"
 #include "../../medium/SiO2.h"
 #include "../../medium/CaF2.h"
 #include "../../medium/LiF.h"
-
 #include "../../../lib/alglib/src/specialfunctions.h"
 
 
@@ -23,7 +20,7 @@ class BasePulsedBeam {
 public:
     BasePulsedBeam();
     BasePulsedBeam(
-            Medium medium,
+            Medium& _medium,
             double _lambda_0,
             double _r_0,
             size_t _n_r,
@@ -32,14 +29,11 @@ public:
             double _p_0_to_p_cr);
     virtual ~BasePulsedBeam();
 
-    double get_r_max() const;
-    void print_field() const;
-
     void initialize_field();
 
     std::string info;
 
-    Medium medium;
+    Medium* medium;
 
     double lambda_0;
 
@@ -76,13 +70,15 @@ public:
     double max_intensity(double normalize_to);
     double energy(double normalize_to);
 
-    void save_field(int step, std::string& path_to_save);
-
     std::vector<std::vector<std::complex<double>>> field;
+    std::vector<std::vector<std::complex<double>>> spectrum;
+
 
 private:
 
 };
+
+
 
 
 #endif //FILAMENTATION_PULSEDBEAM_H

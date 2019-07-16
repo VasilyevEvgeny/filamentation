@@ -161,12 +161,12 @@ void Logger<PulsedBeam<Medium>>::save_initial_parameters_to_pdf(bool delete_tmp_
 \midrule[2pt]
 \end{tabular}
 )";
-    std::vector<double> sellmeyer_params = {pulsed_beam.medium.C_1,
-                                            pulsed_beam.medium.lambda_1 * 1e6,
-                                            pulsed_beam.medium.C_2,
-                                            pulsed_beam.medium.lambda_2 * 1e6,
-                                            pulsed_beam.medium.C_3,
-                                            pulsed_beam.medium.lambda_3 * 1e6};
+    std::vector<double> sellmeyer_params = {pulsed_beam->medium->C_1,
+                                            pulsed_beam->medium->lambda_1 * 1e6,
+                                            pulsed_beam->medium->C_2,
+                                            pulsed_beam->medium->lambda_2 * 1e6,
+                                            pulsed_beam->medium->C_3,
+                                            pulsed_beam->medium->lambda_3 * 1e6};
 
     Logger::add_to_tex_file_data(tex_file_data, sellmeyer_data, sellmeyer_params);
 
@@ -182,7 +182,7 @@ void Logger<PulsedBeam<Medium>>::save_initial_parameters_to_pdf(bool delete_tmp_
 material & %s & -- \tabularnewline
 \hline
 )";
-    std::vector<std::string> medium_params_1 = {pulsed_beam.medium.info};
+    std::vector<std::string> medium_params_1 = {pulsed_beam->medium->info};
     Logger::add_to_tex_file_data(tex_file_data, medium_data_1, medium_params_1);
 
 
@@ -218,21 +218,21 @@ $K$ & %.0f & -- \tabularnewline
 $\delta$ & %.1f & cm$^{-1}$ \tabularnewline
 \midrule[2pt]
 )";
-    std::vector<double> medium_params_2 = {pulsed_beam.medium.n_0,
-                                           pulsed_beam.medium.k_0 * 1e-3,
-                                           pulsed_beam.medium.k_1 * 1e12,
-                                           pulsed_beam.medium.k_2 * 1e27,
-                                           pulsed_beam.medium.n_2 * 1e20,
-                                           pulsed_beam.medium.g,
-                                           pulsed_beam.medium.Omega_R * 1e-12,
-                                           pulsed_beam.medium.tau_k * 1e15,
-                                           pulsed_beam.medium.conv_window * 1e15,
-                                           pulsed_beam.medium.N_0 * 1e-28,
-                                           pulsed_beam.medium.v_ei * 1e-12,
-                                           pulsed_beam.medium.beta * 1e-12,
-                                           pulsed_beam.medium.U_i_in_eV,
-                                           (double)pulsed_beam.medium.K,
-                                           pulsed_beam.medium.delta * 1e2};
+    std::vector<double> medium_params_2 = {pulsed_beam->medium->n_0,
+                                           pulsed_beam->medium->k_0 * 1e-3,
+                                           pulsed_beam->medium->k_1 * 1e12,
+                                           pulsed_beam->medium->k_2 * 1e27,
+                                           pulsed_beam->medium->n_2 * 1e20,
+                                           pulsed_beam->medium->g,
+                                           pulsed_beam->medium->Omega_R * 1e-12,
+                                           pulsed_beam->medium->tau_k * 1e15,
+                                           pulsed_beam->medium->conv_window * 1e15,
+                                           pulsed_beam->medium->N_0 * 1e-28,
+                                           pulsed_beam->medium->v_ei * 1e-12,
+                                           pulsed_beam->medium->beta * 1e-12,
+                                           pulsed_beam->medium->U_i_in_eV,
+                                           (double)pulsed_beam->medium->K,
+                                           pulsed_beam->medium->delta * 1e2};
 
     Logger::add_to_tex_file_data(tex_file_data, medium_data_2, medium_params_2);
 
@@ -247,7 +247,7 @@ $\delta$ & %.1f & cm$^{-1}$ \tabularnewline
 space distribution & %s & -- \tabularnewline
 \hline
 )";
-    std::vector<std::string> pulsed_beam_params_1 = {pulsed_beam.info};
+    std::vector<std::string> pulsed_beam_params_1 = {pulsed_beam->info};
 
     Logger::add_to_tex_file_data(tex_file_data, pulsed_beam_data_1, pulsed_beam_params_1);
 
@@ -258,8 +258,8 @@ $M$ & %d & -- \tabularnewline
 $m$ & %d & -- \tabularnewline
 \hline
 )";
-    std::vector<std::size_t> pulsed_beam_params_2 = {pulsed_beam.M,
-                                                     pulsed_beam.m};
+    std::vector<std::size_t> pulsed_beam_params_2 = {pulsed_beam->M,
+                                                     pulsed_beam->m};
 
     Logger::add_to_tex_file_data(tex_file_data, pulsed_beam_data_2, pulsed_beam_params_2);
 
@@ -287,16 +287,16 @@ $I_0$ & %.4f & TW/cm$^2$ \tabularnewline
 $E_0$ & %.2f & $\mu$J \tabularnewline
 \midrule[2pt]
 )";
-    std::vector<double> pulsed_beam_params_3 = {pulsed_beam.r_0 * 1e6,
-                                                pulsed_beam.lambda_0 * 1e9,
-                                                pulsed_beam.z_diff * 1e2,
-                                                pulsed_beam.p_0_to_p_cr,
-                                                pulsed_beam.p_cr_to_p_g,
-                                                pulsed_beam.p_g * 1e-6,
-                                                pulsed_beam.p_0 * 1e-6,
-                                                pulsed_beam.max_intensity(pulsed_beam.i_0),
-                                                pulsed_beam.i_0 * 1e-16,
-                                                pulsed_beam.e_0 * 1e6};
+    std::vector<double> pulsed_beam_params_3 = {pulsed_beam->r_0 * 1e6,
+                                                pulsed_beam->lambda_0 * 1e9,
+                                                pulsed_beam->z_diff * 1e2,
+                                                pulsed_beam->p_0_to_p_cr,
+                                                pulsed_beam->p_cr_to_p_g,
+                                                pulsed_beam->p_g * 1e-6,
+                                                pulsed_beam->p_0 * 1e-6,
+                                                pulsed_beam->max_intensity(pulsed_beam->i_0),
+                                                pulsed_beam->i_0 * 1e-16,
+                                                pulsed_beam->e_0 * 1e6};
 
     Logger::add_to_tex_file_data(tex_file_data, pulsed_beam_data_3, pulsed_beam_params_3);
 
@@ -310,7 +310,7 @@ $E_0$ & %.2f & $\mu$J \tabularnewline
 $r_{max}$ & %.1f & $\mu$m \tabularnewline
 \hline
 )";
-    std::vector<double> grid_params_1 = {pulsed_beam.r_max * 1e6};
+    std::vector<double> grid_params_1 = {pulsed_beam->r_max * 1e6};
 
     Logger::add_to_tex_file_data(tex_file_data, grid_data_1, grid_params_1);
 
@@ -319,7 +319,7 @@ $r_{max}$ & %.1f & $\mu$m \tabularnewline
 $n_{r}$ & %d & -- \tabularnewline
 \hline
 )";
-    std::vector<size_t> grid_params_2 = {pulsed_beam.n_r};
+    std::vector<size_t> grid_params_2 = {pulsed_beam->n_r};
 
     Logger::add_to_tex_file_data(tex_file_data, grid_data_2, grid_params_2);
 
@@ -330,8 +330,8 @@ $h_r$ & %.1f & $\mu$m \tabularnewline
 $t_{max}$ & %.1f & fs \tabularnewline
 \hline
 )";
-    std::vector<double> grid_params_3 = {pulsed_beam.dr * 1e6,
-                                         pulsed_beam.t_max * 1e15};
+    std::vector<double> grid_params_3 = {pulsed_beam->dr * 1e6,
+                                         pulsed_beam->t_max * 1e15};
 
     Logger::add_to_tex_file_data(tex_file_data, grid_data_3, grid_params_3);
 
@@ -340,7 +340,7 @@ $t_{max}$ & %.1f & fs \tabularnewline
 $n_t$ & %d & -- \tabularnewline
 \hline
 )";
-    std::vector<size_t> grid_params_4 = {pulsed_beam.n_t};
+    std::vector<size_t> grid_params_4 = {pulsed_beam->n_t};
 
     Logger::add_to_tex_file_data(tex_file_data, grid_data_4, grid_params_4);
 
@@ -349,7 +349,7 @@ $n_t$ & %d & -- \tabularnewline
 $h_t$ & %.1f & fs \tabularnewline
 \midrule[2pt]
 )";
-    std::vector<double> grid_params_5 = {pulsed_beam.dt * 1e15};
+    std::vector<double> grid_params_5 = {pulsed_beam->dt * 1e15};
 
     Logger::add_to_tex_file_data(tex_file_data, grid_data_5, grid_params_5);
 

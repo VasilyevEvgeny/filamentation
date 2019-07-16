@@ -1,27 +1,29 @@
 //
 // Created by vasilyev on 04.07.2019.
 //
-
+//
 #include "gauss.h"
+
+
 
 template<typename Medium>
 Gauss<Medium>::Gauss() = default;
 
 
 template<typename Medium>
-Gauss<Medium>::Gauss(Medium medium,
+Gauss<Medium>::Gauss(Medium& _medium,
                      double _lambda_0,
                      double _r_0,
                      size_t _n_r,
                      double _t_0,
                      size_t _n_t,
-                     double _p0_to_p_cr) : BasePulsedBeam<Medium>(medium,
-                                                                 _lambda_0,
-                                                                 _r_0,
-                                                                 _n_r,
-                                                                 _t_0,
-                                                                 _n_t,
-                                                                 _p0_to_p_cr) {
+                     double _p0_to_p_cr) : BasePulsedBeam<Medium>(_medium,
+                                                                  _lambda_0,
+                                                                  _r_0,
+                                                                  _n_r,
+                                                                  _t_0,
+                                                                  _n_t,
+                                                                  _p0_to_p_cr) {
 
     Gauss<Medium>::info = "gauss";
 
@@ -45,6 +47,7 @@ template<typename Medium>
 double Gauss<Medium>::calculate_p_cr_to_p_g() {
     return 1.0;
 }
+
 
 
 

@@ -11,7 +11,7 @@ template<typename Medium>
 class Vortex : public BasePulsedBeam<Medium> {
 public:
     Vortex();
-    Vortex(Medium medium,
+    Vortex(Medium& _medium,
            double _lambda_0,
            size_t _M,
            size_t _m,
@@ -26,5 +26,8 @@ public:
     double calculate_p_cr_to_p_g() override;
 
 };
+
+
+
 
 #endif //FILAMENTATION_VORTEX_H

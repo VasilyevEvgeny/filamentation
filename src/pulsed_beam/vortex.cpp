@@ -10,7 +10,7 @@ Vortex<Medium>::Vortex() = default;
 
 
 template<typename Medium>
-Vortex<Medium>::Vortex(Medium _medium,
+Vortex<Medium>::Vortex(Medium& _medium,
                        double _lambda_0,
                        size_t _M,
                        size_t _m,
@@ -19,12 +19,12 @@ Vortex<Medium>::Vortex(Medium _medium,
                        double _t_0,
                        size_t _n_t,
                        double _p0_to_p_cr) : BasePulsedBeam<Medium>(_medium,
-                                                               _lambda_0,
-                                                               _r_0,
-                                                               _n_r,
-                                                               _t_0,
-                                                               _n_t,
-                                                               _p0_to_p_cr) {
+                                                                    _lambda_0,
+                                                                    _r_0,
+                                                                    _n_r,
+                                                                    _t_0,
+                                                                    _n_t,
+                                                                    _p0_to_p_cr) {
 
     Vortex<Medium>::info = "vortex";
 
@@ -55,6 +55,7 @@ double Vortex<Medium>::calculate_p_cr_to_p_g() {
     return pow(2, 2 * Vortex<Medium>::M + 1) * alglib::gammafunction(Vortex<Medium>::M + 1) *
            alglib::gammafunction(Vortex<Medium>::M + 2) / (2 * alglib::gammafunction(2 * Vortex<Medium>::M + 1));
 }
+
 
 
 

@@ -6,6 +6,14 @@ set(CMAKE_CXX_STANDARD 14)
 # added -fopenmp
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fopenmp -Werror")
 
+#SET(CMAKE_CXX_COMPILER g++)
+#SET(CMAKE_CXX_FLAGS "-lm -lfftw3")
+
+#include_directories(reqg3g34)
+#find_library(fftw lib/fftw/libfftw3-3)
+
+
+
 add_executable(
         # filamentation
         filamentation
@@ -13,6 +21,7 @@ add_executable(
 
         src/pulsed_beam/base_pulsed_beam/base_pulsed_beam.cpp
         src/pulsed_beam/base_pulsed_beam/base_pulsed_beam.h
+        src/pulsed_beam/base_pulsed_beam/parameters.cpp
         src/pulsed_beam/gauss.cpp
         src/pulsed_beam/gauss.h
         src/pulsed_beam/ring.cpp
@@ -32,6 +41,7 @@ add_executable(
         src/logger/logger.cpp
         src/logger/logger.h
         src/logger/initial_parameters_to_pdf.cpp
+        src/logger/initial_parameters_to_yml.cpp
 
         src/medium/base_medium.cpp
         src/medium/base_medium.h
@@ -41,6 +51,15 @@ add_executable(
         src/medium/CaF2.h
         src/medium/LiF.cpp
         src/medium/LiF.h
+
+        src/processor.cpp
+        src/processor.h
+
+        src/equation_terms/fourier_executor.cpp
+        src/equation_terms/fourier_executor.h
+
+        src/equation_terms/base_term.cpp
+        src/equation_terms/base_term.h
 
 
         # alglib
@@ -57,5 +76,10 @@ add_executable(
         lib/alglib/src/solvers.cpp
         lib/alglib/src/specialfunctions.cpp
         lib/alglib/src/statistics.cpp
+        src/equation_terms/DiffractionExecutor.cpp src/equation_terms/DiffractionExecutor.h)
 
-        src/pulsed_beam/base_pulsed_beam/parameters.cpp src/logger/initial_parameters_to_yml.cpp src/processor.cpp src/processor.h)
+#find_library(lib/fftw/libfftw3-3.dll fftw)
+#target_link_libraries(filamentation fftw3)
+#target_link_libraries(mylib lib/fftw/libfftw3-3.dll)
+
+#target_link_libraries(${PROJECT_NAME} lib/fftw/fftw)

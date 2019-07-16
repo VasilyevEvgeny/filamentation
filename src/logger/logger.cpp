@@ -14,10 +14,12 @@ Logger<PulsedBeam<Medium>>::Logger() = default;
 template<template<typename, typename...> class PulsedBeam, typename Medium>
 Logger<PulsedBeam<Medium>>::Logger(
         std::map<std::string, std::string>& _args,
-        PulsedBeam<Medium>& _pulsed_beam,
+        PulsedBeam<Medium>* _pulsed_beam,
         std::map<std::string, double>& _track_info) :
     pulsed_beam(_pulsed_beam)
   , track_info(_track_info) {
+
+    std::cout << "PULSED BEAM ADRESS IN LOGGER: " << &(*pulsed_beam) << std::endl;
 
     manager = Manager(_args);
     processor = Processor(_args, manager);
@@ -53,8 +55,8 @@ void Logger<PulsedBeam<Medium>>::print_current_state(size_t step, double z) {
     std::cout << std::setw(w1) << std::setfill('0') << std::fixed << std::setprecision(0) << step;
     std::cout << std::setw(w2) << std::setfill(' ') << std::scientific << std::setprecision(5) << z;
     std::cout << std::setw(w3) << std::setfill(' ') << std::scientific << std::setprecision(5) << track_info["dz"];
-    std::cout << std::setw(w4) << std::setfill(' ') << std::scientific << std::setprecision(5) << pulsed_beam.max_intensity(pulsed_beam.i_0);
-    std::cout << std::setw(w5) << std::setfill(' ') << std::scientific << std::setprecision(5) << pulsed_beam.max_intensity(1);
+    std::cout << std::setw(w4) << std::setfill(' ') << std::scientific << std::setprecision(5) << pulsed_beam->max_intensity(pulsed_beam->i_0);
+    std::cout << std::setw(w5) << std::setfill(' ') << std::scientific << std::setprecision(5) << pulsed_beam->max_intensity(1);
     std::cout << std::endl;
 }
 
@@ -63,7 +65,7 @@ void Logger<PulsedBeam<Medium>>::flush_current_state(size_t step, double z) {
     states[step][0] = (double)step;
     states[step][1] = z;
     states[step][2] = track_info["dz"];
-    states[step][3] = pulsed_beam.max_intensity(1);
+    states[step][3] = pulsed_beam->max_intensity(1);
 }
 
 
@@ -76,12 +78,12 @@ void Logger<PulsedBeam<Medium>>::save_field(int step) {
     std::ofstream f(filename);
     f << std::scientific;
     std::string space = "    ";
-    for (int k = 0; k < pulsed_beam.n_r; ++k) {
-        for (int s = 0; s < pulsed_beam.n_t; ++s) {
+    for (int k = 0; k < pulsed_beam->n_r; ++k) {
+        for (int s = 0; s < pulsed_beam->n_t; ++s) {
             if (s) {
                 f << space;
             }
-            f << pulsed_beam.field[k][s].real() << space << pulsed_beam.field[k][s].imag();
+            f << pulsed_beam->field[k][s].real() << space << pulsed_beam->field[k][s].imag();
         }
         f << "\n";
     }

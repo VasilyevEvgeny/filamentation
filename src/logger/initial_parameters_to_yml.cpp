@@ -59,12 +59,12 @@ sellmeyer:
     lambda_2: %g
     lambda_3: %g
 )";
-    std::vector<double> data_1_params = {pulsed_beam.medium.C_1,
-                                         pulsed_beam.medium.C_2,
-                                         pulsed_beam.medium.C_3,
-                                         pulsed_beam.medium.lambda_1,
-                                         pulsed_beam.medium.lambda_2,
-                                         pulsed_beam.medium.lambda_3};
+    std::vector<double> data_1_params = {pulsed_beam->medium->C_1,
+                                         pulsed_beam->medium->C_2,
+                                         pulsed_beam->medium->C_3,
+                                         pulsed_beam->medium->lambda_1,
+                                         pulsed_beam->medium->lambda_2,
+                                         pulsed_beam->medium->lambda_3};
 
     Logger::add_to_yml_file_data(yml_file_data, data_1, data_1_params);
 
@@ -72,7 +72,7 @@ sellmeyer:
     std::string data_2 = R"(
 medium:
     material: %s)";
-    std::vector<std::string> data_2_params = {pulsed_beam.medium.info};
+    std::vector<std::string> data_2_params = {pulsed_beam->medium->info};
     Logger::add_to_yml_file_data(yml_file_data, data_2, data_2_params);
 
     std::string data_3 = R"(
@@ -93,21 +93,21 @@ medium:
     delta: %g
 )";
 
-    std::vector<double> data_3_params = {pulsed_beam.medium.n_0,
-                                         pulsed_beam.medium.k_0,
-                                         pulsed_beam.medium.k_1,
-                                         pulsed_beam.medium.k_2,
-                                         pulsed_beam.medium.n_2,
-                                         pulsed_beam.medium.g,
-                                         pulsed_beam.medium.Omega_R,
-                                         pulsed_beam.medium.tau_k,
-                                         pulsed_beam.medium.conv_window,
-                                         pulsed_beam.medium.N_0,
-                                         pulsed_beam.medium.v_ei,
-                                         pulsed_beam.medium.beta,
-                                         pulsed_beam.medium.U_i_in_eV,
-                                         (double) pulsed_beam.medium.K,
-                                         pulsed_beam.medium.delta
+    std::vector<double> data_3_params = {pulsed_beam->medium->n_0,
+                                         pulsed_beam->medium->k_0,
+                                         pulsed_beam->medium->k_1,
+                                         pulsed_beam->medium->k_2,
+                                         pulsed_beam->medium->n_2,
+                                         pulsed_beam->medium->g,
+                                         pulsed_beam->medium->Omega_R,
+                                         pulsed_beam->medium->tau_k,
+                                         pulsed_beam->medium->conv_window,
+                                         pulsed_beam->medium->N_0,
+                                         pulsed_beam->medium->v_ei,
+                                         pulsed_beam->medium->beta,
+                                         pulsed_beam->medium->U_i_in_eV,
+                                         (double) pulsed_beam->medium->K,
+                                         pulsed_beam->medium->delta
     };
 
     Logger::add_to_yml_file_data(yml_file_data, data_3, data_3_params);
@@ -116,7 +116,7 @@ medium:
     std::string data_4 = R"(
 pulsed_beam:
     space_distribution : %s)";
-    std::vector<std::string> data_4_params = {pulsed_beam.info};
+    std::vector<std::string> data_4_params = {pulsed_beam->info};
     Logger::add_to_yml_file_data(yml_file_data, data_4, data_4_params);
 
 
@@ -145,24 +145,24 @@ grid:
 track:
     n_z: %0.f
     h_z_0: %g)";
-    std::vector<double> data_5_params = {(double)pulsed_beam.M,
-                                         (double)pulsed_beam.m,
-                                         pulsed_beam.r_0,
-                                         pulsed_beam.lambda_0,
-                                         pulsed_beam.z_diff,
-                                         pulsed_beam.p_0_to_p_cr,
-                                         pulsed_beam.p_cr_to_p_g,
-                                         pulsed_beam.p_g,
-                                         pulsed_beam.p_0,
-                                         pulsed_beam.max_intensity(pulsed_beam.i_0),
-                                         pulsed_beam.i_0,
-                                         pulsed_beam.e_0,
-                                         pulsed_beam.r_max,
-                                         (double)pulsed_beam.n_r,
-                                         pulsed_beam.dr,
-                                         pulsed_beam.t_max,
-                                         (double)pulsed_beam.n_t,
-                                         pulsed_beam.dt,
+    std::vector<double> data_5_params = {(double)pulsed_beam->M,
+                                         (double)pulsed_beam->m,
+                                         pulsed_beam->r_0,
+                                         pulsed_beam->lambda_0,
+                                         pulsed_beam->z_diff,
+                                         pulsed_beam->p_0_to_p_cr,
+                                         pulsed_beam->p_cr_to_p_g,
+                                         pulsed_beam->p_g,
+                                         pulsed_beam->p_0,
+                                         pulsed_beam->max_intensity(pulsed_beam->i_0),
+                                         pulsed_beam->i_0,
+                                         pulsed_beam->e_0,
+                                         pulsed_beam->r_max,
+                                         (double)pulsed_beam->n_r,
+                                         pulsed_beam->dr,
+                                         pulsed_beam->t_max,
+                                         (double)pulsed_beam->n_t,
+                                         pulsed_beam->dt,
                                          track_info["n_z"],
                                          track_info["dz"]};
     Logger::add_to_yml_file_data(yml_file_data, data_5, data_5_params);

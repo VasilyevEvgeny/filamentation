@@ -11,7 +11,7 @@ template<typename Medium>
 class Gauss : public BasePulsedBeam<Medium> {
 public:
     Gauss();
-    Gauss(Medium medium,
+    Gauss(Medium& _medium,
           double _lambda_0,
           double _r_0,
           size_t _n_r,
@@ -25,6 +25,10 @@ public:
 
 
 };
+
+
+
+
 
 
 #endif //FILAMENTATION_GAUSS_H
