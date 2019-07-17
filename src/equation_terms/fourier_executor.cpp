@@ -20,6 +20,11 @@ FourierExecutor<PulsedBeam<Medium>>::FourierExecutor(PulsedBeam<Medium>* _pulsed
 
 
 template<template<typename, typename...> class PulsedBeam, typename Medium>
+FourierExecutor<PulsedBeam<Medium>>::~FourierExecutor() = default;
+
+
+
+template<template<typename, typename...> class PulsedBeam, typename Medium>
 void FourierExecutor<PulsedBeam<Medium>>::forward() {
 
     alglib::complex_1d_array slice;

@@ -50,11 +50,11 @@ int main(int argc, char** argv) {
 
     std::cout << "Address of medium in main: " << &medium << std::endl;
 
-    Gauss<LiF> pulsed_beam(
+    Vortex<LiF> pulsed_beam(
             medium,
             lambda_0,
-//            1,
-//            1,
+            1,
+            1,
             100e-6,
             512,
             40e-15,
@@ -63,18 +63,16 @@ int main(int argc, char** argv) {
 
     std::cout << "PULSED BEAM ADRESS IN MAIN: " << &pulsed_beam << std::endl;
 
-    Propagator<Gauss<LiF>> propagator(
+    Propagator<Vortex<LiF>> propagator(
             args,
             pulsed_beam,
-            100,
-            1e-4,
-            1,
+            1000,
+            pulsed_beam.z_diff / 1000,
+            10,
             0
             );
 
     propagator.propagate();
-
-
 
 
     return 0;

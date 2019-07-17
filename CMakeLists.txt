@@ -13,10 +13,13 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fopenmp -Werror")
 #find_library(fftw lib/fftw/libfftw3-3)
 
 
+add_subdirectory(lib/googletest-master)
+include_directories(lib/googletest-master/googletest/include)
+include_directories(lib/googletest-master/googlemock/include)
 
-add_executable(
+
+add_executable(filamentation
         # filamentation
-        filamentation
         main.cpp
 
         src/pulsed_beam/base_pulsed_beam/base_pulsed_beam.cpp
@@ -55,11 +58,14 @@ add_executable(
         src/processor.cpp
         src/processor.h
 
+        src/equation_terms/base_term.cpp
+        src/equation_terms/base_term.h
+
         src/equation_terms/fourier_executor.cpp
         src/equation_terms/fourier_executor.h
 
-        src/equation_terms/base_term.cpp
-        src/equation_terms/base_term.h
+        src/equation_terms/diffraction_executor.cpp
+        src/equation_terms/diffraction_executor.h
 
 
         # alglib
@@ -76,7 +82,23 @@ add_executable(
         lib/alglib/src/solvers.cpp
         lib/alglib/src/specialfunctions.cpp
         lib/alglib/src/statistics.cpp
-        src/equation_terms/DiffractionExecutor.cpp src/equation_terms/DiffractionExecutor.h)
+        )
+
+target_link_libraries(filamentation gtest gtest_main)
+target_link_libraries(filamentation gmock gmock_main)
+
+
+add_executable(test_diffraction
+
+        test/diffraction/main.cpp
+        test/diffraction/test_diffraction.cpp
+        test/diffraction/test_diffraction.h)
+
+
+target_link_libraries(test_diffraction gtest gtest_main)
+target_link_libraries(test_diffraction gmock gmock_main)
+
+
 
 #find_library(lib/fftw/libfftw3-3.dll fftw)
 #target_link_libraries(filamentation fftw3)

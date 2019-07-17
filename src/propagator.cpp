@@ -35,6 +35,7 @@ Propagator<PulsedBeam<Medium>>::Propagator(
 
 
     fourier_executor = FourierExecutor<PulsedBeam<Medium>>(pulsed_beam);
+    diffraction_executor = DiffractionExecutor<PulsedBeam<Medium>>(pulsed_beam);
 
 }
 
@@ -60,6 +61,8 @@ void Propagator<PulsedBeam<Medium>>::propagate() {
              */
 
             fourier_executor.forward();
+
+            diffraction_executor.process(dz);
 
             fourier_executor.backward();
 

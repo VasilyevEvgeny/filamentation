@@ -16,7 +16,7 @@ public:
     FourierExecutor();
     explicit FourierExecutor(PulsedBeam<Medium>* _pulsed_beam);
 
-
+    ~FourierExecutor();
 
     void forward();
     void backward();

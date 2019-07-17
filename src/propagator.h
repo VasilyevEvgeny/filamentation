@@ -14,6 +14,7 @@
 #include "medium/base_medium.h"
 #include "manager.h"
 #include "equation_terms/fourier_executor.h"
+#include "equation_terms/diffraction_executor.h"
 
 template<typename T> class Propagator;
 
@@ -32,6 +33,7 @@ public:
 
     PulsedBeam<Medium>* pulsed_beam;
     FourierExecutor<PulsedBeam<Medium>> fourier_executor;
+    DiffractionExecutor<PulsedBeam<Medium>> diffraction_executor;
 
     size_t n_z;
     double dz;
