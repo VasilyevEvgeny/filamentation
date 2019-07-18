@@ -7,8 +7,8 @@
 #include "logger.h"
 
 
-template<template<typename, typename...> class PulsedBeam, typename Medium>
-void Logger<PulsedBeam<Medium>>::add_to_yml_file_data(std::string& yml_file_data, std::string& str, std::vector<std::string>& params) {
+template<template<typename, typename...> class PulsedBeam, typename Medium, typename Processor>
+void Logger<PulsedBeam<Medium>, Processor>::add_to_yml_file_data(std::string& yml_file_data, std::string& str, std::vector<std::string>& params) {
     char buffer [10000];
     if (params.size() == 1) {
         sprintf(buffer, str.c_str(), params[0].c_str());
@@ -17,8 +17,8 @@ void Logger<PulsedBeam<Medium>>::add_to_yml_file_data(std::string& yml_file_data
     yml_file_data += std::string(buffer);
 }
 
-template<template<typename, typename...> class PulsedBeam, typename Medium>
-void Logger<PulsedBeam<Medium>>::add_to_yml_file_data(std::string& yml_file_data, std::string& str, std::vector<double>& params) {
+template<template<typename, typename...> class PulsedBeam, typename Medium, typename Processor>
+void Logger<PulsedBeam<Medium>, Processor>::add_to_yml_file_data(std::string& yml_file_data, std::string& str, std::vector<double>& params) {
     char buffer [10000];
     if (params.size() == 6) {
         sprintf(buffer, str.c_str(), params[0], params[1], params[2], params[3], params[4], params[5]);
@@ -37,8 +37,8 @@ void Logger<PulsedBeam<Medium>>::add_to_yml_file_data(std::string& yml_file_data
     yml_file_data += std::string(buffer);
 }
 
-template<template<typename, typename...> class PulsedBeam, typename Medium>
-void Logger<PulsedBeam<Medium>>::save_initial_parameters_to_yml() {
+template<template<typename, typename...> class PulsedBeam, typename Medium, typename Processor>
+void Logger<PulsedBeam<Medium>, Processor>::save_initial_parameters_to_yml() {
 
     std::string yml_file_data;
 
@@ -176,12 +176,22 @@ track:
 }
 
 
-template class Logger<Gauss<SiO2>>;
-template class Logger<Gauss<CaF2>>;
-template class Logger<Gauss<LiF>>;
-template class Logger<Ring<SiO2>>;
-template class Logger<Ring<CaF2>>;
-template class Logger<Ring<LiF>>;
-template class Logger<Vortex<SiO2>>;
-template class Logger<Vortex<CaF2>>;
-template class Logger<Vortex<LiF>>;
+template class Logger<Gauss<SiO2>, Processor>;
+template class Logger<Gauss<CaF2>, Processor>;
+template class Logger<Gauss<LiF>, Processor>;
+template class Logger<Ring<SiO2>, Processor>;
+template class Logger<Ring<CaF2>, Processor>;
+template class Logger<Ring<LiF>, Processor>;
+template class Logger<Vortex<SiO2>, Processor>;
+template class Logger<Vortex<CaF2>, Processor>;
+template class Logger<Vortex<LiF>, Processor>;
+
+template class Logger<Gauss<SiO2>, ProcessorDiffraction>;
+template class Logger<Gauss<CaF2>, ProcessorDiffraction>;
+template class Logger<Gauss<LiF>, ProcessorDiffraction>;
+template class Logger<Ring<SiO2>, ProcessorDiffraction>;
+template class Logger<Ring<CaF2>, ProcessorDiffraction>;
+template class Logger<Ring<LiF>, ProcessorDiffraction>;
+template class Logger<Vortex<SiO2>, ProcessorDiffraction>;
+template class Logger<Vortex<CaF2>, ProcessorDiffraction>;
+template class Logger<Vortex<LiF>, ProcessorDiffraction>;

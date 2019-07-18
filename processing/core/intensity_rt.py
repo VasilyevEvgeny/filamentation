@@ -1,4 +1,3 @@
-
 from datetime import datetime
 from numpy import loadtxt, transpose, append, where, log10
 from matplotlib import pyplot as plt
@@ -7,7 +6,7 @@ from pylab import contourf
 import sys
 sys.path.insert(0, '/'.join((sys.path[0].replace('\\', '/')).split('/')[:-2]))
 
-from processing.core import parse_args, BaseReadout
+from processing.core import BaseReadout
 
 
 class IntensityRT(BaseReadout):
@@ -162,12 +161,3 @@ class IntensityRT(BaseReadout):
         pass
 
 
-# parse args from command line
-args = parse_args()
-plot_intensity_rt = IntensityRT(args=args,
-                                mode='flat',
-                                language='russian',
-                                t_left=150 * 10**-15,
-                                t_right=-150 * 10**-15,
-                                r_right=200 * 10**-6)
-plot_intensity_rt.process()

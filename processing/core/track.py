@@ -4,7 +4,7 @@ from matplotlib import pyplot as plt
 import sys
 sys.path.insert(0, '/'.join((sys.path[0].replace('\\', '/')).split('/')[:-1]))
 
-from processing.core import parse_args, BaseReadout
+from processing.core import BaseReadout
 
 
 class Track(BaseReadout):
@@ -77,10 +77,3 @@ class Track(BaseReadout):
     def process(self):
         self.__plot_track()
 
-
-# parse args from command line
-args = parse_args()
-plot_track = Track(args=args,
-                   language='english',
-                   intensity=True)
-plot_track.process()

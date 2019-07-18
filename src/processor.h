@@ -24,7 +24,7 @@ public:
     Manager manager;
 
     std::string get_cwd();
-    void go();
+    virtual void go();
 };
 
 

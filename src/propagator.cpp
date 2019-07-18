@@ -13,7 +13,7 @@ Propagator<PulsedBeam<Medium>>::Propagator() = default;
 
 template<template<typename, typename...> class PulsedBeam, typename Medium>
 Propagator<PulsedBeam<Medium>>::Propagator(
-        std::map<std::string, std::string>& args,
+        std::map<std::string, std::string>& _args,
         PulsedBeam<Medium>& _pulsed_beam,
         size_t _n_z,
         double _dz,
@@ -30,7 +30,9 @@ Propagator<PulsedBeam<Medium>>::Propagator(
 
     track_info = {{"n_z", (double)n_z},
                   {"dz", dz}};
-    logger = Logger<PulsedBeam<Medium>>(args, pulsed_beam, track_info);
+    manager = Manager(_args);
+    processor = Processor(_args, manager);
+    logger = Logger<PulsedBeam<Medium>, Processor>(_args, pulsed_beam, manager, processor, track_info);
 
     logger.save_initial_parameters_to_pdf(true, true);
     logger.save_initial_parameters_to_yml();

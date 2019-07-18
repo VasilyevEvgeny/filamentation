@@ -42,7 +42,10 @@ public:
     size_t save_field_every;
 
     std::map<std::string, double> track_info;
-    Logger<PulsedBeam<Medium>> logger;
+
+    Manager manager;
+    Processor processor;
+    Logger<PulsedBeam<Medium>, Processor> logger;
 
     void propagate();
 

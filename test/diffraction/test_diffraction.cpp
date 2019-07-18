@@ -41,12 +41,15 @@ TestDiffraction::TestDiffraction() {
     track_info = {{"n_z", n_z},
                   {"dz", dz}};
 
-    logger = Logger<Vortex<LiF>>(args, &pulsed_beam, track_info);
+    manager = Manager(args);
+    processor_diffraction = ProcessorDiffraction(args, manager);
+
+    logger = Logger<Vortex<LiF>, ProcessorDiffraction>(args, &pulsed_beam, manager, processor_diffraction, track_info);
 
     logger.save_initial_parameters_to_pdf(true, true);
     logger.save_initial_parameters_to_yml();
 
-    save_field_every = 0;
+    save_field_every = 10;
     print_current_state_every = 10;
 
 
@@ -114,3 +117,13 @@ void TestDiffraction::test() {
 
 TestDiffraction::~TestDiffraction() = default;
 
+
+template class Logger<Gauss<SiO2>, ProcessorDiffraction>;
+template class Logger<Gauss<CaF2>, ProcessorDiffraction>;
+template class Logger<Gauss<LiF>, ProcessorDiffraction>;
+template class Logger<Ring<SiO2>, ProcessorDiffraction>;
+template class Logger<Ring<CaF2>, ProcessorDiffraction>;
+template class Logger<Ring<LiF>, ProcessorDiffraction>;
+template class Logger<Vortex<SiO2>, ProcessorDiffraction>;
+template class Logger<Vortex<CaF2>, ProcessorDiffraction>;
+template class Logger<Vortex<LiF>, ProcessorDiffraction>;

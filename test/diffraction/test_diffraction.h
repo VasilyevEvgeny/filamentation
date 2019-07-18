@@ -6,7 +6,6 @@
 #define FILAMENTATION_TESTDIFFRACTION_H
 
 
-//#include "../../src/propagator.h"
 #include "medium/base_medium.h"
 #include "medium/LiF.h"
 
@@ -20,6 +19,7 @@
 #include "equation_terms/diffraction_executor.h"
 #include "logger/logger.h"
 
+#include "processor_diffraction.h"
 
 class TestDiffraction {
 public:
@@ -28,8 +28,10 @@ public:
 
     LiF medium;
     Vortex<LiF> pulsed_beam;
-
-    Logger<Vortex<LiF>> logger;
+    
+    Manager manager;
+    ProcessorDiffraction processor_diffraction;
+    Logger<Vortex<LiF>, ProcessorDiffraction> logger;
 
     std::map<std::string, double> track_info;
 

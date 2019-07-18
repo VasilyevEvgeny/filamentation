@@ -14,15 +14,19 @@
 #include "../manager.h"
 #include "../processor.h"
 
-template<typename T> class Logger;
+#include "diffraction/processor_diffraction.h"
 
-template<template<typename, typename...> class PulsedBeam, typename Medium>
-class Logger<PulsedBeam<Medium>> {
+template<typename PB, typename P> class Logger;
+
+template<template<typename, typename...> class PulsedBeam, typename Medium, typename Processor>
+class Logger<PulsedBeam<Medium>, Processor> {
 public:
     Logger();
     explicit Logger(
             std::map<std::string, std::string>& _args,
             PulsedBeam<Medium>* _pulsed_beam,
+            Manager& _manager,
+            Processor& _processor,
             std::map<std::string, double>& _track_info);
     ~Logger();
 
@@ -58,4 +62,8 @@ private:
 
 
 
+
+
 #endif //FILAMENTATION_LOGGER_H
+
+

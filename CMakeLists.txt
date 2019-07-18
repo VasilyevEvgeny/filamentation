@@ -19,6 +19,7 @@ include_directories(lib/googletest-master/googlemock/include)
 
 
 include_directories(src)
+include_directories(test)
 
 add_executable(filamentation
         # filamentation
@@ -95,6 +96,8 @@ add_executable(test_diffraction
         test/diffraction/main.cpp
         test/diffraction/test_diffraction.cpp
         test/diffraction/test_diffraction.h
+        test/diffraction/processor_diffraction.cpp
+        test/diffraction/processor_diffraction.h
 
         src/pulsed_beam/base_pulsed_beam/base_pulsed_beam.cpp
         src/pulsed_beam/base_pulsed_beam/base_pulsed_beam.h
@@ -155,7 +158,7 @@ add_executable(test_diffraction
         lib/alglib/src/optimization.cpp
         lib/alglib/src/solvers.cpp
         lib/alglib/src/specialfunctions.cpp
-        lib/alglib/src/statistics.cpp)
+        lib/alglib/src/statistics.cpp )
 
 
 target_link_libraries(test_diffraction gtest gtest_main)

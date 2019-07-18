@@ -69,8 +69,8 @@ int main(int argc, char** argv) {
     Propagator<Vortex<LiF>> propagator(
             args,
             pulsed_beam,
-            1000,
-            pulsed_beam.z_diff / 1000,
+            100,
+            pulsed_beam.z_diff / 100,
             10,
             0
             );

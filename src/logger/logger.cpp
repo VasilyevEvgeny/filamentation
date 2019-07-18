@@ -7,22 +7,26 @@
 
 #include "logger.h"
 
-template<template<typename, typename...> class PulsedBeam, typename Medium>
-Logger<PulsedBeam<Medium>>::Logger() = default;
+template<template<typename, typename...> class PulsedBeam, typename Medium, typename Processor>
+Logger<PulsedBeam<Medium>, Processor>::Logger() = default;
 
 
-template<template<typename, typename...> class PulsedBeam, typename Medium>
-Logger<PulsedBeam<Medium>>::Logger(
+template<template<typename, typename...> class PulsedBeam, typename Medium, typename Processor>
+Logger<PulsedBeam<Medium>, Processor>::Logger(
         std::map<std::string, std::string>& _args,
         PulsedBeam<Medium>* _pulsed_beam,
+        Manager& _manager,
+        Processor& _processor,
         std::map<std::string, double>& _track_info) :
     pulsed_beam(_pulsed_beam)
+  , manager(_manager)
+  , processor(_processor)
   , track_info(_track_info) {
 
     std::cout << "PULSED BEAM ADRESS IN LOGGER: " << &(*pulsed_beam) << std::endl;
 
-    manager = Manager(_args);
-    processor = Processor(_args, manager);
+
+
 
     states_columns = {"step", "z, [m]", "h_z, [m]", "i_max, [W/m^2]"};
     states = std::vector<std::vector<double>>(track_info["n_z"] + 1,
@@ -30,13 +34,13 @@ Logger<PulsedBeam<Medium>>::Logger(
 
 }
 
-template<template<typename, typename...> class PulsedBeam, typename Medium>
-Logger<PulsedBeam<Medium>>::~Logger() {
+template<template<typename, typename...> class PulsedBeam, typename Medium, typename Processor>
+Logger<PulsedBeam<Medium>, Processor>::~Logger() {
     states.erase(states.begin(), states.end());
 }
 
-template<template<typename, typename...> class PulsedBeam, typename Medium>
-void Logger<PulsedBeam<Medium>>::print_current_state(size_t step, double z) {
+template<template<typename, typename...> class PulsedBeam, typename Medium, typename Processor>
+void Logger<PulsedBeam<Medium>, Processor>::print_current_state(size_t step, double z) {
     size_t w1 = 7;
     size_t w2 = 20;
     size_t w3 = 20;
@@ -60,8 +64,8 @@ void Logger<PulsedBeam<Medium>>::print_current_state(size_t step, double z) {
     std::cout << std::endl;
 }
 
-template<template<typename, typename...> class PulsedBeam, typename Medium>
-void Logger<PulsedBeam<Medium>>::flush_current_state(size_t step, double z) {
+template<template<typename, typename...> class PulsedBeam, typename Medium, typename Processor>
+void Logger<PulsedBeam<Medium>, Processor>::flush_current_state(size_t step, double z) {
     states[step][0] = (double)step;
     states[step][1] = z;
     states[step][2] = track_info["dz"];
@@ -69,8 +73,8 @@ void Logger<PulsedBeam<Medium>>::flush_current_state(size_t step, double z) {
 }
 
 
-template<template<typename, typename...> class PulsedBeam, typename Medium>
-void Logger<PulsedBeam<Medium>>::save_field(int step) {
+template<template<typename, typename...> class PulsedBeam, typename Medium, typename Processor>
+void Logger<PulsedBeam<Medium>, Processor>::save_field(int step) {
     std::stringstream ss;
     ss << std::setw(5) << std::setfill('0') << step;
     std::string filename = manager.field_dir + "/" + ss.str();
@@ -91,8 +95,8 @@ void Logger<PulsedBeam<Medium>>::save_field(int step) {
     f.close();
 }
 
-template<template<typename, typename...> class PulsedBeam, typename Medium>
-void Logger<PulsedBeam<Medium>>::save_states_to_csv() {
+template<template<typename, typename...> class PulsedBeam, typename Medium, typename Processor>
+void Logger<PulsedBeam<Medium>, Processor>::save_states_to_csv() {
 
     std::string filename = "propagation.csv";
     std::string path_to_save = manager.current_results_dir + "/" + filename;
@@ -121,12 +125,22 @@ void Logger<PulsedBeam<Medium>>::save_states_to_csv() {
     f.close();
 }
 
-template class Logger<Gauss<SiO2>>;
-template class Logger<Gauss<CaF2>>;
-template class Logger<Gauss<LiF>>;
-template class Logger<Ring<SiO2>>;
-template class Logger<Ring<CaF2>>;
-template class Logger<Ring<LiF>>;
-template class Logger<Vortex<SiO2>>;
-template class Logger<Vortex<CaF2>>;
-template class Logger<Vortex<LiF>>;
+template class Logger<Gauss<SiO2>, Processor>;
+template class Logger<Gauss<CaF2>, Processor>;
+template class Logger<Gauss<LiF>, Processor>;
+template class Logger<Ring<SiO2>, Processor>;
+template class Logger<Ring<CaF2>, Processor>;
+template class Logger<Ring<LiF>, Processor>;
+template class Logger<Vortex<SiO2>, Processor>;
+template class Logger<Vortex<CaF2>, Processor>;
+template class Logger<Vortex<LiF>, Processor>;
+
+template class Logger<Gauss<SiO2>, ProcessorDiffraction>;
+template class Logger<Gauss<CaF2>, ProcessorDiffraction>;
+template class Logger<Gauss<LiF>, ProcessorDiffraction>;
+template class Logger<Ring<SiO2>, ProcessorDiffraction>;
+template class Logger<Ring<CaF2>, ProcessorDiffraction>;
+template class Logger<Ring<LiF>, ProcessorDiffraction>;
+template class Logger<Vortex<SiO2>, ProcessorDiffraction>;
+template class Logger<Vortex<CaF2>, ProcessorDiffraction>;
+template class Logger<Vortex<LiF>, ProcessorDiffraction>;
