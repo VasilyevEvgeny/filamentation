@@ -16,6 +16,7 @@ public:
     Processor();
     explicit Processor(std::map<std::string, std::string>& _args, Manager& _manager);
 
+    std::string path_to_project;
     std::string path_to_python_interpreter;
     std::string intensity_rt;
     std::string track;

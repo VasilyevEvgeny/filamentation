@@ -7,7 +7,7 @@
 
 #include <iostream>
 
-#include "../m_constants.h"
+#include "m_constants.h"
 
 class BaseMedium {
 

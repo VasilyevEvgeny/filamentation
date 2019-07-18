@@ -7,6 +7,8 @@
 #include "propagator.h"
 
 
+template<template<typename, typename...> class PulsedBeam, typename Medium>
+Propagator<PulsedBeam<Medium>>::Propagator() = default;
 
 
 template<template<typename, typename...> class PulsedBeam, typename Medium>

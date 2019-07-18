@@ -1,12 +1,11 @@
-import os
-import sys
+
 from datetime import datetime
 from numpy import loadtxt, transpose, append, where, log10
 from matplotlib import pyplot as plt
 from pylab import contourf
 
-# right relative path
-sys.path.insert(0, os.getcwd().replace('\\', '/'))
+import sys
+sys.path.insert(0, '/'.join((sys.path[0].replace('\\', '/')).split('/')[:-2]))
 
 from processing.core import parse_args, BaseReadout
 

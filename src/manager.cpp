@@ -12,7 +12,7 @@
 Manager::Manager(std::map<std::string, std::string>& args) {
     global_results_dir = args["global_root_dir"] + "/" + args["global_results_dir_name"];
 
-    current_results_dir_name = get_current_datetime();
+    current_results_dir_name = args["prefix"] + "_" + get_current_datetime();
     current_results_dir = global_results_dir + "/" + current_results_dir_name;
 
     field_dir_name = "field";

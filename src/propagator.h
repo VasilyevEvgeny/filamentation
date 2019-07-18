@@ -21,6 +21,7 @@ template<typename T> class Propagator;
 template<template<typename, typename...> class PulsedBeam, typename Medium>
 class Propagator<PulsedBeam<Medium>> {
 public:
+    Propagator();
     Propagator(
             std::map<std::string, std::string>& args,
             PulsedBeam<Medium>& _pulsed_beam,

@@ -11,12 +11,10 @@
 Processor::Processor() = default;
 
 Processor::Processor(std::map<std::string, std::string>& args, Manager& _manager) : manager(_manager) {
-
+    path_to_project = args["path_to_project"];
     path_to_python_interpreter = args["python_interpreter"];
     intensity_rt = args["intensity_rt"];
     track = args["track"];
-
-
 }
 
 std::string Processor::get_cwd() {
@@ -27,6 +25,7 @@ std::string Processor::get_cwd() {
     cCurrentPath[sizeof(cCurrentPath) - 1] = '\0';
     std::string res = std::string(cCurrentPath);
     std::replace(res.begin(), res.end(), '\\', '/');
+
     return res;
 //        }
 //        else {
@@ -40,13 +39,13 @@ std::string Processor::get_cwd() {
 
 void Processor::go() {
     if (intensity_rt == "True") {
-        std::string execute = path_to_python_interpreter + " " + get_cwd() + "/processing/scripts/intensity_rt.py " +
+        std::string execute = path_to_python_interpreter + " " + path_to_project + "/processing/scripts/intensity_rt.py " +
                               "--current_results_dir=" + manager.current_results_dir;
         std::cout << execute << std::endl;
         std::system(execute.c_str());
     }
     if (track == "True") {
-        std::string execute = path_to_python_interpreter + " " + get_cwd() + "/processing/scripts/track.py " +
+        std::string execute = path_to_python_interpreter + " " + path_to_project + "/processing/scripts/track.py " +
                               "--current_results_dir=" + manager.current_results_dir;
         std::cout << execute << std::endl;
         std::system(execute.c_str());

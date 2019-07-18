@@ -5,7 +5,7 @@
 #ifndef FILAMENTATION_LIF_H
 #define FILAMENTATION_LIF_H
 
-#include "base_medium.h"
+#include "medium/base_medium.h"
 
 class LiF : public BaseMedium {
 public:

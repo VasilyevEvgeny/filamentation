@@ -4,8 +4,8 @@
 
 #include <cmath>
 
-#include "base_medium.h"
-#include "../m_constants.h"
+#include "medium/base_medium.h"
+
 
 BaseMedium::BaseMedium() {
 

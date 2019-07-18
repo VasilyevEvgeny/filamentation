@@ -1,10 +1,8 @@
-import os
-import sys
 from datetime import datetime
 from matplotlib import pyplot as plt
 
-# right relative path
-sys.path.insert(0, os.getcwd().replace('\\', '/'))
+import sys
+sys.path.insert(0, '/'.join((sys.path[0].replace('\\', '/')).split('/')[:-1]))
 
 from processing.core import parse_args, BaseReadout
 

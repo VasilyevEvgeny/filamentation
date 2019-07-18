@@ -8,12 +8,15 @@
 #include "src/propagator.h"
 
 
+
 std::map<std::string, std::string> parse_args(char **argv) {
-     return  {{"global_root_dir", argv[1]},
-              {"global_results_dir_name", argv[2]},
-              {"python_interpreter", argv[3]},
-              {"intensity_rt", argv[4]},
-              {"track", argv[5]}};
+     return  {{"prefix", argv[1]},
+              {"path_to_project", argv[2]},
+              {"global_root_dir", argv[3]},
+              {"global_results_dir_name", argv[4]},
+              {"python_interpreter", argv[5]},
+              {"intensity_rt", argv[6]},
+              {"track", argv[7]}};
 }
 
 //class MyClass {
