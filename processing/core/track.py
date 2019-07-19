@@ -60,8 +60,8 @@ class Track(BaseReadout):
                 plt.plot(self._df_propagation[info['z']], self._df_propagation[info['i']], color=color,
                          linewidth=linewidth, alpha=alpha, linestyle=linestyle)
 
-                xlabel = self._initialize_label(self._language, info['xlabel_rus'], info['xlabel_eng'])
-                ylabel = self._initialize_label(self._language, info['ylabel_rus'], info['ylabel_eng'])
+                xlabel = self._initialize_label(info['xlabel_rus'], info['xlabel_eng'])
+                ylabel = self._initialize_label(info['ylabel_rus'], info['ylabel_eng'])
 
                 plt.xlabel(xlabel, fontsize=font_sizes['plot_labels'], fontweight=font_weights['plot_labels'])
                 plt.ylabel(ylabel, fontsize=font_sizes['plot_labels'], fontweight=font_weights['plot_labels'])

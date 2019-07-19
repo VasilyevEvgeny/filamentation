@@ -1,5 +1,6 @@
 from datetime import datetime
 from numpy import loadtxt, transpose, append, where, log10
+from numpy import max as maximum
 from matplotlib import pyplot as plt
 from pylab import contourf
 
@@ -13,28 +14,60 @@ class IntensityRT(BaseReadout):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
+        # res_dir
+        self.__res_dir = self.__create_res_dir()
+
+        # readout
+        self._readout_field_paths()
+        self._readout_parameters()
+        self._readout_propagation()
+
+        # parameters
+        self.__n_t = self._parameters['grid']['n_t']
+        self.__h_t = self._parameters['grid']['h_t']
+        self.__n_r = self._parameters['grid']['n_r']
+        self.__h_r = self._parameters['grid']['h_r']
+        self.__i_0 = self._parameters['pulsed_beam']['i_0']
+
+        # mode -> flat or volume
         self.__mode = kwargs['mode']
         if self.__mode not in ('flat', 'volume'):
             raise Exception('Wrong plot mode!')
 
-        self.__res_dir = self.__create_res_dir()
+        # logarithmization
+        self.__log = kwargs.get('log', True)
+        if not self.__log:
+            self.__maximum_intensity = kwargs['maximum_intensity']
+            if isinstance(self.__maximum_intensity, str):
+                if self.__maximum_intensity != 'local':
+                    raise Exception('Wrong maximum intensty!')
 
-        self._readout_field_paths()
-        self._readout_parameters()
+            self.__normalize_to = kwargs['normalize_to']
+            if self.__normalize_to not in (1, 'i_0'):
+                raise Exception('Wrong normalize value!')
 
-        self.__n_t = self._parameters['grid']['n_t']
-        self.__h_t = self._parameters['grid']['h_t']
+        # processing
         self.__ts = [(self.__n_t / 2 - s) * self.__h_t for s in range(self.__n_t)]
-
-        self.__n_r = self._parameters['grid']['n_r']
-        self.__h_r = self._parameters['grid']['h_r']
         self.__rs = [k * self.__h_r for k in range(self.__n_r)]
-
         self.__ts_cropped, self.__rs_cropped = None, None
-
         self.__t_left = kwargs['t_left']
         self.__t_right = kwargs['t_right']
         self.__r_right = kwargs['r_right']
+
+        # plot
+        self.__fig_size = (9, 7)
+        self.__font_size = {'title': 40,  'plot_ticks': 40, 'plot_labels': 50, 'colorbar_ticks': 40, 'colorbar_label': 50}
+        self.__font_weight = {'title': 'bold', 'plot_ticks': 'normal', 'plot_labels': 'bold', 'colorbar_ticks': 'bold', 'colorbar_label': 'bold'}
+        self.__cmap = plt.get_cmap('jet')
+        self.__t_labels = kwargs['t_labels']
+        self.__r_labels = kwargs['r_labels']
+        self.__t_label = self._initialize_label('t, фс', 't, fs')
+        self.__r_label = self._initialize_label('r, мкм', 'r, $\mathbf{\mu}$m')
+        self.__bbox_width, self.__bbox_height = 10.3, 10.0
+        self.__title = True
+        self.__default_title_string = self._initialize_label('z = %05.2f см\nI$_{макс}$ = %05.2f ТВт/см$^2$\n',
+                                                             'z = %05.2f cm\nI$_{max}$ = %05.2f TW/cm$^2$\n')
+        self.__dpi = 50
 
     def __create_res_dir(self):
         datetime_string = datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
@@ -112,49 +145,103 @@ class IntensityRT(BaseReadout):
                 arr = arr[:k_max, :]
 
             arr = self._reflect(arr)
-            arr = self.__filter_and_log_arr(arr)
+
+            if self.__log:
+                arr = self.__filter_and_log_arr(arr)
 
             if self.__mode == 'flat':
                 self.__plot_flat(arr, filename)
 
+    def __calculate_max_intensity(self, arr):
+        if isinstance(self.__maximum_intensity, int) or isinstance(self.__maximum_intensity, float):
+            max_intensity = self.__maximum_intensity
+        else:
+            max_intensity = maximum(arr) * self.__i_0
+
+        if self.__normalize_to == 'i_0':
+            max_intensity /= self.__i_0
+        else:
+            arr *= self.__i_0 / 10**16
+            max_intensity /= 10**16
+
+        return max_intensity
+
+    def __calculate_levels_plot_and_max_intensity(self, arr):
+        n_plot_levels = 100
+
+        max_intensity = None
+        if self.__log:
+            levels_plot = [-1. + i * 0.05 for i in range(50)]
+        else:
+            max_intensity = self.__calculate_max_intensity(arr)
+
+            di = max_intensity / n_plot_levels
+            levels_plot = [i * di for i in range(n_plot_levels + 1)]
+
+        return levels_plot, max_intensity
+
     def __plot_flat(self, arr, filename):
-        font_sizes = {'plot_ticks': 35, 'plot_labels': 40, 'colorbar_ticks': 40, 'colorbar_label': 40}
-        font_weights = {'plot_ticks': 'normal', 'plot_labels': 'bold', 'colorbar_ticks': 'normal', 'colorbar_label': 'bold'}
-        cmap = plt.get_cmap('jet')
-        levels_plot = [-1. + i * 0.05 for i in range(50)]
-        title = True
+        levels_plot, max_intensity = self.__calculate_levels_plot_and_max_intensity(arr)
 
-        fig, ax = plt.subplots(figsize=(22, 15))
-        plot = contourf(arr, cmap=cmap, levels=levels_plot)
-        x_labels = ['+100', '+50', '0', '-50', '-100']
-        x_ticks = self.__calc_ticks_t(x_labels)
-        y_labels = ['-150', '-100', '-50', '0', '+50', '+100', '+150']
-        y_ticks = self.__calc_ticks_r(y_labels)
+        fig, ax = plt.subplots(figsize=self.__fig_size)
+        plot = contourf(arr, cmap=self.__cmap, levels=levels_plot)
 
-        plt.xticks(x_ticks, x_labels, fontsize=font_sizes['plot_ticks'])
-        plt.yticks(y_ticks, y_labels, fontsize=font_sizes['plot_ticks'])
+        t_ticks = self.__calc_ticks_t(self.__t_labels)
+        r_ticks = self.__calc_ticks_r(self.__r_labels)
 
-        xlabel = self._initialize_label(self._language, 't, фс', 't, fs')
-        ylabel = self._initialize_label(self._language, 'r, мкм', 'r, $\mu$m')
-        plt.xlabel(xlabel, fontsize=font_sizes['plot_labels'], fontweight=font_weights['plot_labels'])
-        plt.ylabel(ylabel, fontsize=font_sizes['plot_labels'], fontweight=font_weights['plot_labels'])
+        plt.xticks(t_ticks, self.__t_labels, fontsize=self.__font_size['plot_ticks'])
+        plt.yticks(r_ticks, self.__r_labels, fontsize=self.__font_size['plot_ticks'])
 
-        #if title:
-        #   title_string = 'z = ' + str(round(z * 10**2, 3)) + ' cm\nI$_{max}$ = ' + '%.2E' % I_max + ' W/m$^2$'
+        plt.xlabel(self.__t_label, fontsize=self.__font_size['plot_labels'], fontweight=self.__font_weight['plot_labels'])
+        plt.ylabel(self.__r_label, fontsize=self.__font_size['plot_labels'], fontweight=self.__font_weight['plot_labels'],
+                   labelpad=-30)
 
         plt.grid(color='white', linestyle=':', linewidth=3, alpha=0.5)
 
-        # colorbar
-        ticklevels_colorbar = [-1.0, 0, +1.0]
-        colorbar = fig.colorbar(plot, ticks=ticklevels_colorbar, orientation='vertical', aspect=10, pad=0.05)
-        colorbar.set_label('lg(I/I$\mathbf{_0}$)', labelpad=-110, y=1.1, rotation=0,
-                           fontsize=font_sizes['colorbar_label'], fontweight=font_weights['colorbar_label'])
-        ticks_cbar = ['+' + str(round(e)) if e > 0 else '$-$' + str(abs(round(e))) if e != 0 else '  0'
-                      for e in ticklevels_colorbar]
-        colorbar.ax.set_yticklabels(ticks_cbar)
-        colorbar.ax.tick_params(labelsize=font_sizes['colorbar_ticks'])
+        # title
+        if self.__title:
+            z = self._find_z(filename)
+            i_max = self._find_i_max(filename)
+            plt.title((self.__default_title_string + '\n') % (z, i_max), fontsize=self.__font_size['title'])
 
-        plt.savefig(self.__res_dir + '/' + filename + '.png', bbox_inches='tight')
+        # colorbar
+        colorbar = True
+        if self.__log:
+            ticklevels_colorbar = [-1.0, 0, +1.0]
+            colorbar = fig.colorbar(plot, ticks=ticklevels_colorbar, orientation='vertical', aspect=10, pad=0.05)
+            colorbar.set_label('lg(I/I$\mathbf{_0}$)', labelpad=-90, y=1.2, rotation=0,
+                               fontsize=self.__font_size['colorbar_label'], fontweight=self.__font_weight['colorbar_label'])
+            ticks_cbar = ['+' + str(round(e)) if e > 0 else '$-$' + str(abs(round(e))) if e != 0 else '  0'
+                          for e in ticklevels_colorbar]
+            colorbar.ax.set_yticklabels(ticks_cbar)
+            colorbar.ax.tick_params(labelsize=self.__font_size['colorbar_ticks'])
+        else:
+            if colorbar:
+                n_ticks_colorbar_levels = 4
+                dcb = max_intensity / n_ticks_colorbar_levels
+                levels_ticks_colorbar = [i * dcb for i in range(n_ticks_colorbar_levels + 1)]
+                colorbar = fig.colorbar(plot, ticks=levels_ticks_colorbar, orientation='vertical', aspect=10, pad=0.05)
+                if self.__normalize_to == 'i_0':
+                    colorbar_label = 'I/I$\mathbf{_0}$'
+                    colorbar.set_label(colorbar_label, labelpad=-60, y=1.25, rotation=0,
+                                       fontsize=self.__font_size['colorbar_label'],
+                                       fontweight=self.__font_weight['colorbar_label'])
+                else:
+                    colorbar_label = self._initialize_label('I,\nТВт/см$\mathbf{^2}$',
+                                                            'I,\nTW/cm$\mathbf{^2}$')
+                    colorbar.set_label(colorbar_label, labelpad=-100, y=1.4, rotation=0,
+                                       fontsize=self.__font_size['colorbar_label'],
+                                       fontweight=self.__font_weight['colorbar_label'])
+
+                ticks_cbar = ['%05.2f' % e if e != 0 else '00.00' for e in levels_ticks_colorbar]
+
+                colorbar.ax.set_yticklabels(ticks_cbar)
+                colorbar.ax.tick_params(labelsize=self.__font_size['colorbar_ticks'])
+
+        # bbox
+        bbox = fig.bbox_inches.from_bounds(-0.8, -1.0, self.__bbox_width, self.__bbox_height)
+
+        plt.savefig(self.__res_dir + '/' + filename + '.png', bbox_inches=bbox, dpi=self.__dpi)
         plt.close()
 
     def plot_volume(self):

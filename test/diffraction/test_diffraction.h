@@ -27,17 +27,17 @@ public:
     ~TestDiffraction();
 
     LiF medium;
-    Vortex<LiF> pulsed_beam;
+    Gauss<LiF> pulsed_beam;
     
     Manager manager;
     ProcessorDiffraction processor_diffraction;
-    Logger<Vortex<LiF>, ProcessorDiffraction> logger;
+    Logger<Gauss<LiF>, ProcessorDiffraction> logger;
 
     std::map<std::string, double> track_info;
 
 
-    FourierExecutor<Vortex<LiF>> fourier_executor;
-    DiffractionExecutor<Vortex<LiF>> diffraction_executor;
+    FourierExecutor<Gauss<LiF>> fourier_executor;
+    DiffractionExecutor<Gauss<LiF>> diffraction_executor;
 
     size_t n_z;
     double dz;

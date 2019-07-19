@@ -28,7 +28,7 @@ Propagator<PulsedBeam<Medium>>::Propagator(
 
     std::cout << "PULSED BEAM ADDRESS IN PROPAGATOR: " << &(*pulsed_beam) << std::endl;
 
-    track_info = {{"n_z", (double)n_z},
+    track_info = {{"n_z", (double)(n_z + 1)},
                   {"dz", dz}};
     manager = Manager(_args);
     processor = Processor(_args, manager);

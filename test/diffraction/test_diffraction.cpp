@@ -25,11 +25,11 @@ TestDiffraction::TestDiffraction() {
 
     medium = LiF(lambda_0);
 
-    pulsed_beam = Vortex<LiF>(
+    pulsed_beam = Gauss<LiF>(
             medium,
             lambda_0,
-            1,
-            1,
+//            1,
+//            1,
             100e-6,
             512,
             40e-15,
@@ -38,13 +38,13 @@ TestDiffraction::TestDiffraction() {
 
     n_z = 100;
     dz = pulsed_beam.z_diff / n_z;
-    track_info = {{"n_z", n_z},
+    track_info = {{"n_z", (double)(n_z + 1)},
                   {"dz", dz}};
 
     manager = Manager(args);
     processor_diffraction = ProcessorDiffraction(args, manager);
 
-    logger = Logger<Vortex<LiF>, ProcessorDiffraction>(args, &pulsed_beam, manager, processor_diffraction, track_info);
+    logger = Logger<Gauss<LiF>, ProcessorDiffraction>(args, &pulsed_beam, manager, processor_diffraction, track_info);
 
     logger.save_initial_parameters_to_pdf(true, true);
     logger.save_initial_parameters_to_yml();
@@ -53,8 +53,8 @@ TestDiffraction::TestDiffraction() {
     print_current_state_every = 10;
 
 
-    fourier_executor = FourierExecutor<Vortex<LiF>>(&pulsed_beam);
-    diffraction_executor = DiffractionExecutor<Vortex<LiF>>(&pulsed_beam);
+    fourier_executor = FourierExecutor<Gauss<LiF>>(&pulsed_beam);
+    diffraction_executor = DiffractionExecutor<Gauss<LiF>>(&pulsed_beam);
 
 
 }

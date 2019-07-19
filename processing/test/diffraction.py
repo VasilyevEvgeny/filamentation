@@ -11,10 +11,15 @@ args = parse_args()
 
 plot_intensity_rt = IntensityRT(args=args,
                                 mode='flat',
-                                language='russian',
+                                log=False,
+                                maximum_intensity='local',
+                                normalize_to=1,
+                                language='english',
                                 t_left=150 * 10**-15,
                                 t_right=-150 * 10**-15,
-                                r_right=200 * 10**-6)
+                                t_labels=['+100', '0', '-100'],
+                                r_right=200 * 10**-6,
+                                r_labels=['-150', '0', '+150'])
 plot_intensity_rt.process()
 
 

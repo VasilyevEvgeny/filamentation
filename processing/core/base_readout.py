@@ -33,6 +33,14 @@ class BaseReadout:
         if self._language not in ('russian', 'english'):
             raise Exception('Wrong language!')
 
+    def _find_z(self, filename):
+        step = int(filename)
+        return self._df_propagation['z, [cm]'][step]
+
+    def _find_i_max(self, filename):
+        step = int(filename)
+        return self._df_propagation['i_max, [TW/cm^2]'][step]
+
     def _create_dir(self, **kwargs):
         """Creates dir with default name dir_name deleting the existing directory"""
 
@@ -77,9 +85,8 @@ class BaseReadout:
         res = copy(arr)
         return append(res[::-1, :], res[1:]).reshape((2 * arr.shape[0]-1, arr.shape[1]))
 
-    @staticmethod
-    def _initialize_label(language, russian, english):
-        if language == 'russian':
+    def _initialize_label(self, russian, english):
+        if self._language == 'russian':
             return russian
         else:
             return english
