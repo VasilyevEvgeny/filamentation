@@ -64,10 +64,11 @@ class IntensityRT(BaseReadout):
         self.__cmap = plt.get_cmap('jet')
         self.__t_labels = kwargs['t_labels']
         self.__r_labels = kwargs['r_labels']
-        self.__t_label = self._initialize_label('t, фс', 't, fs')
-        self.__r_label = self._initialize_label('r, мкм', 'r, $\mathbf{\mu}$m')
+        self.__t_label = self._initialize_label(self._language, 't, фс', 't, fs')
+        self.__r_label = self._initialize_label(self._language, 'r, мкм', 'r, $\mathbf{\mu}$m')
         self.__bbox_width, self.__bbox_height = 10.3, 10.0
-        self.__default_title_string = self._initialize_label('z = %05.2f см\nI$_{макс}$ = %05.2f ТВт/см$^2$\n',
+        self.__default_title_string = self._initialize_label(self._language,
+                                                             'z = %05.2f см\nI$_{макс}$ = %05.2f ТВт/см$^2$\n',
                                                              'z = %05.2f cm\nI$_{max}$ = %05.2f TW/cm$^2$\n')
         self.__log_ticks = [-1.0, 0.0, +1.0]
         self.__log_ticklabels = ['+' + str(round(e)) if e > 0 else '$-$' + str(abs(round(e))) if e != 0 else '  0'
@@ -219,7 +220,8 @@ class IntensityRT(BaseReadout):
                                        fontsize=self.__font_size['colorbar_label'],
                                        fontweight=self.__font_weight['colorbar_label'])
                 else:
-                    colorbar_label = self._initialize_label('I,\nТВт/см$\mathbf{^2}$',
+                    colorbar_label = self._initialize_label(self._language,
+                                                            'I,\nТВт/см$\mathbf{^2}$',
                                                             'I,\nTW/cm$\mathbf{^2}$')
                     colorbar.set_label(colorbar_label, labelpad=-100, y=1.4, rotation=0,
                                        fontsize=self.__font_size['colorbar_label'],
@@ -290,7 +292,8 @@ class IntensityRT(BaseReadout):
                 if self.__normalize_to == 'i_0':
                     z_label = '$\qquad\qquad\quad$ I/I$\mathbf{_0}$'
                 else:
-                    z_label = self._initialize_label('$\qquad\qquad\qquad\mathbf{I}$\n$\qquad\qquad\quad$ТВт/\n$\quad\qquad\qquad$см$\mathbf{^2}$',
+                    z_label = self._initialize_label(self._language,
+                                                     '$\qquad\qquad\qquad\mathbf{I}$\n$\qquad\qquad\quad$ТВт/\n$\quad\qquad\qquad$см$\mathbf{^2}$',
                                                      '$\qquad\qquad\qquad\mathbf{I}$\n$\qquad\qquad\quad$TW/\n$\quad\qquad\qquad$cm$\mathbf{^2}$')
             ax.text(0, 0, levels_plot[-1] * 0.8, s=z_label, fontsize=self.__font_size['plot_labels'],
                     fontweight=self.__font_weight['plot_labels'])

@@ -85,7 +85,8 @@ add_executable(filamentation
         lib/alglib/src/solvers.cpp
         lib/alglib/src/specialfunctions.cpp
         lib/alglib/src/statistics.cpp
-        )
+        src/functions.cpp
+        src/functions.h)
 
 target_link_libraries(filamentation gtest gtest_main)
 target_link_libraries(filamentation gmock gmock_main)
@@ -144,6 +145,9 @@ add_executable(test_diffraction
         src/equation_terms/diffraction_executor.cpp
         src/equation_terms/diffraction_executor.h
 
+        src/functions.cpp
+        src/functions.h
+
 
         # alglib
         lib/alglib/src/alglibinternal.cpp
@@ -158,7 +162,7 @@ add_executable(test_diffraction
         lib/alglib/src/optimization.cpp
         lib/alglib/src/solvers.cpp
         lib/alglib/src/specialfunctions.cpp
-        lib/alglib/src/statistics.cpp )
+        lib/alglib/src/statistics.cpp)
 
 
 target_link_libraries(test_diffraction gtest gtest_main)

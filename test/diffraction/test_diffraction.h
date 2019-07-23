@@ -5,8 +5,11 @@
 #ifndef FILAMENTATION_TESTDIFFRACTION_H
 #define FILAMENTATION_TESTDIFFRACTION_H
 
+#include <memory>
 
 #include "medium/base_medium.h"
+#include "medium/SiO2.h"
+#include "medium/CaF2.h"
 #include "medium/LiF.h"
 
 #include "pulsed_beam/base_pulsed_beam/base_pulsed_beam.h"
@@ -18,32 +21,38 @@
 #include "equation_terms/fourier_executor.h"
 #include "equation_terms/diffraction_executor.h"
 #include "logger/logger.h"
+#include "functions.h"
 
 #include "processor_diffraction.h"
 
-class TestDiffraction {
+
+
+template<typename T> class TestDiffraction;
+
+template<template<typename, typename...> class PulsedBeam, typename Medium>
+class TestDiffraction<PulsedBeam<Medium>> {
 public:
-    TestDiffraction();
+    explicit TestDiffraction(PulsedBeam<Medium>& _pulsed_beam);
     ~TestDiffraction();
 
-    LiF medium;
-    Gauss<LiF> pulsed_beam;
-    
     Manager manager;
     ProcessorDiffraction processor_diffraction;
-    Logger<Gauss<LiF>, ProcessorDiffraction> logger;
-
-    std::map<std::string, double> track_info;
-
-
-    FourierExecutor<Gauss<LiF>> fourier_executor;
-    DiffractionExecutor<Gauss<LiF>> diffraction_executor;
 
     size_t n_z;
     double dz;
+    std::map<std::string, double> track_info;
 
     size_t save_field_every;
     size_t print_current_state_every;
+
+    PulsedBeam<Medium>* pulsed_beam;
+    FourierExecutor<PulsedBeam<Medium>> fourier_executor;
+    DiffractionExecutor<PulsedBeam<Medium>> diffraction_executor;
+
+    Logger<PulsedBeam<Medium>, ProcessorDiffraction> logger;
+
+    std::map<std::string, std::string> initialize_args(std::string& _info);
+
 
     void test();
 };

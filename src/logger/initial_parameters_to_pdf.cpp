@@ -268,7 +268,7 @@ $m$ & %d & -- \tabularnewline
     std::string pulsed_beam_data_3 = R"(
 $r_0$ & %.1f & $\mu$m \tabularnewline
 \hline
-$\lambda$ & %.1f & nm \tabularnewline
+$\lambda_0$ & %.1f & nm \tabularnewline
 \hline
 $z_{diff}$ & %.2f & cm \tabularnewline
 \hline

@@ -85,8 +85,9 @@ class BaseReadout:
         res = copy(arr)
         return append(res[::-1, :], res[1:]).reshape((2 * arr.shape[0]-1, arr.shape[1]))
 
-    def _initialize_label(self, russian, english):
-        if self._language == 'russian':
+    @staticmethod
+    def _initialize_label(language, russian, english):
+        if language == 'russian':
             return russian
         else:
             return english

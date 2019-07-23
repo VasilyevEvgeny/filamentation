@@ -6,70 +6,58 @@
 #include <string>
 #include <map>
 #include <chrono>
+#include <thread>
 
 #include "test_diffraction.h"
 
 
-TestDiffraction::TestDiffraction() {
+template<template<typename, typename...> class PulsedBeam, typename Medium>
+TestDiffraction<PulsedBeam<Medium>>::TestDiffraction(PulsedBeam<Medium>& _pulsed_beam) :
+pulsed_beam(&_pulsed_beam) {
 
-    std::map<std::string, std::string> args = {
-            {"prefix", "test_diffraction"},
-            {"path_to_project", "C:/Users/vasilyev/Documents/CLion/filamentation"},
-            {"global_root_dir", "L:/Vasilyev"},
-            {"global_results_dir_name", "Filamentation_results"},
-            {"python_interpreter", "C:/Users/vasilyev/Documents/venvs/filamentation/Scripts/python.exe"},
-            {"intensity_rt", "True"},
-            {"track", "True"}};
+    auto args = initialize_args(pulsed_beam->info);
 
-    double lambda_0 = 1800e-9;
+    n_z = 1000;
 
-    medium = LiF(lambda_0);
+    save_field_every = 100;
+    print_current_state_every = 10;
 
-    pulsed_beam = Gauss<LiF>(
-            medium,
-            lambda_0,
-//            1,
-//            1,
-            100e-6,
-            512,
-            40e-15,
-            1024,
-            5);
-
-    n_z = 100;
-    dz = pulsed_beam.z_diff / n_z;
+    dz = pulsed_beam->z_diff / n_z;
     track_info = {{"n_z", (double)(n_z + 1)},
                   {"dz", dz}};
-
     manager = Manager(args);
     processor_diffraction = ProcessorDiffraction(args, manager);
 
-    logger = Logger<Gauss<LiF>, ProcessorDiffraction>(args, &pulsed_beam, manager, processor_diffraction, track_info);
-
+    logger = Logger<PulsedBeam<Medium>, ProcessorDiffraction>(args, pulsed_beam, manager,
+                                                               processor_diffraction, track_info);
     logger.save_initial_parameters_to_pdf(true, true);
     logger.save_initial_parameters_to_yml();
 
-    save_field_every = 10;
-    print_current_state_every = 10;
-
-
-    fourier_executor = FourierExecutor<Gauss<LiF>>(&pulsed_beam);
-    diffraction_executor = DiffractionExecutor<Gauss<LiF>>(&pulsed_beam);
-
-
+    fourier_executor = FourierExecutor<PulsedBeam<Medium>>(pulsed_beam);
+    diffraction_executor = DiffractionExecutor<PulsedBeam<Medium>>(pulsed_beam);
 }
 
-void TestDiffraction::test() {
+template<template<typename, typename...> class PulsedBeam, typename Medium>
+std::map<std::string, std::string> TestDiffraction<PulsedBeam<Medium>>::initialize_args(std::string& info) {
+    std::map<std::string, std::string> args = {
+            {"prefix",                  "test_diffraction_" + info},
+            {"path_to_project",         "C:/Users/vasilyev/Documents/CLion/filamentation"},
+            {"global_root_dir",         "L:/Vasilyev"},
+            {"global_results_dir_name", "Filamentation_results"},
+            {"python_interpreter",      "C:/Users/vasilyev/Documents/venvs/filamentation/Scripts/python.exe"},
+            {"intensity_rt",            "True"},
+            {"track",                   "True"}};
+
+    return args;
+}
+template<template<typename, typename...> class PulsedBeam, typename Medium>
+void TestDiffraction<PulsedBeam<Medium>>::test() {
 
     auto t1 = std::chrono::high_resolution_clock::now();
 
     double z = 0.0;
     for (int step = 0; step < n_z + 1; ++step) {
         if (step) {
-
-            /*
-             * effects
-             */
 
             fourier_executor.forward();
 
@@ -80,9 +68,6 @@ void TestDiffraction::test() {
 
             z += dz;
         }
-
-
-
 
         if (save_field_every) {
             if (!(step % save_field_every)) {
@@ -109,21 +94,16 @@ void TestDiffraction::test() {
     std::cout << fsec.count() << "s\n";
 
     logger.save_states_to_csv();
-
-
     logger.processor.go();
 }
 
+template<template<typename, typename...> class PulsedBeam, typename Medium>
+TestDiffraction<PulsedBeam<Medium>>::~TestDiffraction() = default;
 
-TestDiffraction::~TestDiffraction() = default;
 
-
-template class Logger<Gauss<SiO2>, ProcessorDiffraction>;
-template class Logger<Gauss<CaF2>, ProcessorDiffraction>;
-template class Logger<Gauss<LiF>, ProcessorDiffraction>;
-template class Logger<Ring<SiO2>, ProcessorDiffraction>;
-template class Logger<Ring<CaF2>, ProcessorDiffraction>;
-template class Logger<Ring<LiF>, ProcessorDiffraction>;
-template class Logger<Vortex<SiO2>, ProcessorDiffraction>;
-template class Logger<Vortex<CaF2>, ProcessorDiffraction>;
-template class Logger<Vortex<LiF>, ProcessorDiffraction>;
+template class TestDiffraction<Gauss<SiO2>>;
+template class TestDiffraction<Gauss<CaF2>>;
+template class TestDiffraction<Gauss<LiF>>;
+template class TestDiffraction<Vortex<SiO2>>;
+template class TestDiffraction<Vortex<CaF2>>;
+template class TestDiffraction<Vortex<LiF>>;
