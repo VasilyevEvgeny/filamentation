@@ -13,3 +13,4 @@ int generate_random_number(int min, int max) {
 
     return uni(rng);
 }
+

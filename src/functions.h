@@ -6,6 +6,7 @@
 #define FILAMENTATION_FUNCTIONS_H
 
 #include <random>
+#include <map>
 
 int generate_random_number(int min, int max);
 

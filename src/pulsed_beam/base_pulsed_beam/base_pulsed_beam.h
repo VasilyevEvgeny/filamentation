@@ -36,6 +36,7 @@ public:
     Medium* medium;
 
     double lambda_0;
+    double omega_0;
 
     size_t M;
     size_t m;
@@ -51,8 +52,11 @@ public:
     size_t n_t;
     double dt;
     std::vector<double> ts;
+    double domega;
+    std::vector<double> Omegas;
 
     double z_diff;
+    double z_disp;
 
     double p_0_to_p_cr;
     double p_cr_to_p_g;

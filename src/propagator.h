@@ -15,6 +15,7 @@
 #include "manager.h"
 #include "equation_terms/fourier_executor.h"
 #include "equation_terms/diffraction_executor.h"
+#include "equation_terms/dispersion/dispersion_executor_full.h"
 
 template<typename T> class Propagator;
 
@@ -35,6 +36,7 @@ public:
     PulsedBeam<Medium>* pulsed_beam;
     FourierExecutor<PulsedBeam<Medium>> fourier_executor;
     DiffractionExecutor<PulsedBeam<Medium>> diffraction_executor;
+    DispersionExecutorFull<PulsedBeam<Medium>> dispersion_executor_full;
 
     size_t n_z;
     double dz;

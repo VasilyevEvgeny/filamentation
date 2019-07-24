@@ -135,7 +135,7 @@ double BaseMedium::calculate_n(double omega) {
                 C_3 / (1 - pow((omega / omega_3), 2)));
 }
 
-double BaseMedium::calculate_k_0(double omega) {
+double BaseMedium::calculate_k(double omega) {
     /*
     Calculates wave vector
             k_0 = \omega * n(\omega) / c
@@ -199,7 +199,7 @@ void BaseMedium::initialize_dispersion_parameters() {
     */
 
     n_0 = calculate_n(omega_0);
-    k_0 = calculate_k_0(omega_0);
+    k_0 = calculate_k(omega_0);
     k_1 = calculate_k_1(omega_0);
     k_2 = calculate_k_2(omega_0);
 }

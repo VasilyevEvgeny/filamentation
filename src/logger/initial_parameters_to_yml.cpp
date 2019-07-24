@@ -27,10 +27,10 @@ void Logger<PulsedBeam<Medium>, Processor>::add_to_yml_file_data(std::string& ym
         sprintf(buffer, str.c_str(), params[0], params[1], params[2], params[3], params[4], params[5], params[6],
                 params[7], params[8], params[9], params[10], params[11], params[12], params[13], params[14]);
     }
-    else if (params.size() == 20) {
+    else if (params.size() == 21) {
         sprintf(buffer, str.c_str(), params[0], params[1], params[2], params[3], params[4], params[5], params[6],
                 params[7], params[8], params[9], params[10], params[11], params[12], params[13], params[14],
-                params[15], params[16], params[17], params[18], params[19]);
+                params[15], params[16], params[17], params[18], params[19], params[20]);
     }
 
 
@@ -126,6 +126,7 @@ pulsed_beam:
     r_0: %g
     lambda_0: %g
     z_diff: %g
+    z_disp: %g
     p_0_to_p_cr: %g
     p_cr_to_p_g: %g
     p_g: %g
@@ -150,6 +151,7 @@ track:
                                          pulsed_beam->r_0,
                                          pulsed_beam->lambda_0,
                                          pulsed_beam->z_diff,
+                                         pulsed_beam->z_disp,
                                          pulsed_beam->p_0_to_p_cr,
                                          pulsed_beam->p_cr_to_p_g,
                                          pulsed_beam->p_g,

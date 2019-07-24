@@ -26,6 +26,9 @@ BasePulsedBeam<Medium>::BasePulsedBeam(
 
     std::cout << "Address of medium in pulsed_beam: " << &(*medium) << std::endl;
 
+    omega_0 = 2 * M_PI * medium->math_constants.c / lambda_0;
+    std::cout << omega_0 << std::endl;
+
     M = 0;
     m = 0;
 
@@ -47,8 +50,21 @@ BasePulsedBeam<Medium>::BasePulsedBeam(
         ts[s] = s * dt - 0.5 * t_max;
     }
 
-    // z_diff
+    // frequency
+    domega = 2 * M_PI / t_max;
+    Omegas = std::vector<double>(n_t, 0.0);
+    for (size_t s = 0; s < n_t; ++s) {
+        if (s < n_t / 2) {
+            Omegas[s] = domega * s;
+        }
+        else {
+            Omegas[s] = domega * (n_t - s);
+        }
+    }
+
+    // lengths
     z_diff = medium->k_0 * pow(r_0, 2);
+    z_disp = pow(t_0, 2) / medium->k_2;
 
     p_cr_to_p_g = 0;
     p_g = calculate_p_g();

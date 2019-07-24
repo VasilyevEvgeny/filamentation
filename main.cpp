@@ -19,25 +19,8 @@ std::map<std::string, std::string> parse_args(char **argv) {
               {"track", argv[7]}};
 }
 
-//class MyClass {
-//public:
-//    explicit MyClass(int& _a) : a(_a) {
-//        std::cout << "address of a in MyClass: " << &a << std::endl;
-//    }
-//    ~MyClass() = default;
-//
-//    int& a;
-//
-//};
-//
 
 int main(int argc, char** argv) {
-
-//    int a = 25;
-//    std::cout << "address of a in main: " << &a <<std::endl;
-//
-//    MyClass my_class(a);
-
 
     const size_t NUM_PROCS = omp_get_num_procs();
 
@@ -53,11 +36,11 @@ int main(int argc, char** argv) {
 
     std::cout << "Address of medium in main: " << &medium << std::endl;
 
-    Vortex<LiF> pulsed_beam(
+    Gauss<LiF> pulsed_beam(
             medium,
             lambda_0,
-            1,
-            1,
+//            1,
+//            1,
             100e-6,
             512,
             40e-15,
@@ -66,13 +49,13 @@ int main(int argc, char** argv) {
 
     std::cout << "PULSED BEAM ADRESS IN MAIN: " << &pulsed_beam << std::endl;
 
-    Propagator<Vortex<LiF>> propagator(
+    Propagator<Gauss<LiF>> propagator(
             args,
             pulsed_beam,
-            100,
-            pulsed_beam.z_diff / 100,
+            500,
+            std::abs(pulsed_beam.z_disp / 500),
             10,
-            0
+            100
             );
 
     propagator.propagate();

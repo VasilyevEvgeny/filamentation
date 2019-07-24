@@ -65,9 +65,9 @@ void Logger<PulsedBeam<Medium>, Processor>::add_to_tex_file_data(std::string& te
     else if (params.size() == 6) {
         sprintf(buffer, str.c_str(), params[0], params[1], params[2], params[3], params[4], params[5]);
     }
-    else if (params.size() == 10) {
+    else if (params.size() == 11) {
         sprintf(buffer, str.c_str(), params[0], params[1], params[2], params[3], params[4], params[5], params[6],
-                params[7], params[8], params[9]);
+                params[7], params[8], params[9], params[10]);
     }
     else if (params.size() == 15) {
         sprintf(buffer, str.c_str(), params[0], params[1], params[2], params[3],
@@ -272,6 +272,8 @@ $\lambda_0$ & %.1f & nm \tabularnewline
 \hline
 $z_{diff}$ & %.2f & cm \tabularnewline
 \hline
+$z_{disp}$ & %.2f & cm \tabularnewline
+\hline
 $P_0 / P_{cr}$ & %.2f & -- \tabularnewline
 \hline
 $P_{cr} / P_G$ & %.2f & -- \tabularnewline
@@ -290,6 +292,7 @@ $E_0$ & %.2f & $\mu$J \tabularnewline
     std::vector<double> pulsed_beam_params_3 = {pulsed_beam->r_0 * 1e6,
                                                 pulsed_beam->lambda_0 * 1e9,
                                                 pulsed_beam->z_diff * 1e2,
+                                                pulsed_beam->z_disp * 1e2,
                                                 pulsed_beam->p_0_to_p_cr,
                                                 pulsed_beam->p_cr_to_p_g,
                                                 pulsed_beam->p_g * 1e-6,

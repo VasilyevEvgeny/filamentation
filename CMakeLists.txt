@@ -60,6 +60,8 @@ add_executable(filamentation
 
         src/processor.cpp
         src/processor.h
+        test/diffraction/processor_diffraction.cpp
+        test/diffraction/processor_diffraction.h
 
         src/equation_terms/base_term.cpp
         src/equation_terms/base_term.h
@@ -86,7 +88,7 @@ add_executable(filamentation
         lib/alglib/src/specialfunctions.cpp
         lib/alglib/src/statistics.cpp
         src/functions.cpp
-        src/functions.h)
+        src/functions.h src/equation_terms/dispersion/base_dispersion_executor.cpp src/equation_terms/dispersion/base_dispersion_executor.h src/equation_terms/dispersion/dispersion_executor_full.cpp src/equation_terms/dispersion/dispersion_executor_full.h)
 
 target_link_libraries(filamentation gtest gtest_main)
 target_link_libraries(filamentation gmock gmock_main)

@@ -75,7 +75,7 @@ public:
     virtual void initialize_ionization_parameters() = 0;
 
     double calculate_n(double omega);
-    double calculate_k_0(double omega);
+    double calculate_k(double omega);
     double calculate_k_1(double omega);
     double calculate_k_2(double omega);
 
