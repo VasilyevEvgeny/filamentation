@@ -42,6 +42,9 @@ Propagator<PulsedBeam<Medium>>::Propagator(
     diffraction_executor = DiffractionExecutor<PulsedBeam<Medium>>(pulsed_beam);
     dispersion_executor_full = DispersionExecutorFull<PulsedBeam<Medium>>(pulsed_beam);
 
+    std::string mode = "fft";
+    dispersion_executor_gvd = DispersionExecutorGVD<PulsedBeam<Medium>>(pulsed_beam, mode);
+
 }
 
 template<template<typename, typename...> class PulsedBeam, typename Medium>
@@ -69,7 +72,9 @@ void Propagator<PulsedBeam<Medium>>::propagate() {
 
             //diffraction_executor.process(dz);
 
-            dispersion_executor_full.process(dz);
+            //dispersion_executor_full.process(dz);
+
+            dispersion_executor_gvd.process(dz);
 
             fourier_executor.backward();
 

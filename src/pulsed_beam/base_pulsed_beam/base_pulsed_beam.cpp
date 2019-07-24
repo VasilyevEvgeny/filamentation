@@ -27,7 +27,6 @@ BasePulsedBeam<Medium>::BasePulsedBeam(
     std::cout << "Address of medium in pulsed_beam: " << &(*medium) << std::endl;
 
     omega_0 = 2 * M_PI * medium->math_constants.c / lambda_0;
-    std::cout << omega_0 << std::endl;
 
     M = 0;
     m = 0;

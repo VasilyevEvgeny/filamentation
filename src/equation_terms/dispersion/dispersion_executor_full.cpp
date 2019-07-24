@@ -31,13 +31,13 @@ void DispersionExecutorFull<PulsedBeam<Medium>>::process(double dz) {
 #pragma omp for
         for (size_t k = 0; k < pb->n_r; ++k) {
             for (size_t s = 0; s < pb->n_t; ++s) {
-                std::complex<double> R_disp = (pow(pb->medium->calculate_k(pb->Omegas[s] + pb->omega_0), 2) -
+                std::complex<double> R_disp_full = (pow(pb->medium->calculate_k(pb->Omegas[s] + pb->omega_0), 2) -
                         pow(pb->medium->k_0 + pb->medium->k_1 * pb->Omegas[s], 2)) / (2j * pb->medium->k_0);
 
-                pb->spectrum[k][s] *= exp(R_disp * dz);
+                pb->spectrum[k][s] *= exp(R_disp_full * dz);
             }
         }
-    };
+    }
 }
 
 

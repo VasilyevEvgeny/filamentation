@@ -88,7 +88,7 @@ add_executable(filamentation
         lib/alglib/src/specialfunctions.cpp
         lib/alglib/src/statistics.cpp
         src/functions.cpp
-        src/functions.h src/equation_terms/dispersion/base_dispersion_executor.cpp src/equation_terms/dispersion/base_dispersion_executor.h src/equation_terms/dispersion/dispersion_executor_full.cpp src/equation_terms/dispersion/dispersion_executor_full.h)
+        src/functions.h src/equation_terms/dispersion/base_dispersion_executor.cpp src/equation_terms/dispersion/base_dispersion_executor.h src/equation_terms/dispersion/dispersion_executor_full.cpp src/equation_terms/dispersion/dispersion_executor_full.h src/equation_terms/dispersion/dispersion_executor_gvd.cpp src/equation_terms/dispersion/dispersion_executor_gvd.h)
 
 target_link_libraries(filamentation gtest gtest_main)
 target_link_libraries(filamentation gmock gmock_main)
