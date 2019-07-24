@@ -65,9 +65,9 @@ void Logger<PulsedBeam<Medium>, Processor>::add_to_tex_file_data(std::string& te
     else if (params.size() == 6) {
         sprintf(buffer, str.c_str(), params[0], params[1], params[2], params[3], params[4], params[5]);
     }
-    else if (params.size() == 11) {
+    else if (params.size() == 12) {
         sprintf(buffer, str.c_str(), params[0], params[1], params[2], params[3], params[4], params[5], params[6],
-                params[7], params[8], params[9], params[10]);
+                params[7], params[8], params[9], params[10], params[11]);
     }
     else if (params.size() == 15) {
         sprintf(buffer, str.c_str(), params[0], params[1], params[2], params[3],
@@ -268,6 +268,8 @@ $m$ & %d & -- \tabularnewline
     std::string pulsed_beam_data_3 = R"(
 $r_0$ & %.1f & $\mu$m \tabularnewline
 \hline
+$t_0$ & %.1f & fs \tabularnewline
+\hline
 $\lambda_0$ & %.1f & nm \tabularnewline
 \hline
 $z_{diff}$ & %.2f & cm \tabularnewline
@@ -290,6 +292,7 @@ $E_0$ & %.2f & $\mu$J \tabularnewline
 \midrule[2pt]
 )";
     std::vector<double> pulsed_beam_params_3 = {pulsed_beam->r_0 * 1e6,
+                                                pulsed_beam->t_0 * 1e15,
                                                 pulsed_beam->lambda_0 * 1e9,
                                                 pulsed_beam->z_diff * 1e2,
                                                 pulsed_beam->z_disp * 1e2,
@@ -422,3 +425,13 @@ template class Logger<Ring<LiF>, ProcessorDiffraction>;
 template class Logger<Vortex<SiO2>, ProcessorDiffraction>;
 template class Logger<Vortex<CaF2>, ProcessorDiffraction>;
 template class Logger<Vortex<LiF>, ProcessorDiffraction>;
+
+template class Logger<Gauss<SiO2>, ProcessorDispersion>;
+template class Logger<Gauss<CaF2>, ProcessorDispersion>;
+template class Logger<Gauss<LiF>, ProcessorDispersion>;
+template class Logger<Ring<SiO2>, ProcessorDispersion>;
+template class Logger<Ring<CaF2>, ProcessorDispersion>;
+template class Logger<Ring<LiF>, ProcessorDispersion>;
+template class Logger<Vortex<SiO2>, ProcessorDispersion>;
+template class Logger<Vortex<CaF2>, ProcessorDispersion>;
+template class Logger<Vortex<LiF>, ProcessorDispersion>;

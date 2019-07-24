@@ -26,10 +26,10 @@ class IntensityRT(BaseReadout):
         self._readout_propagation()
 
         # parameters
-        self.__n_t = self._parameters['grid']['n_t']
-        self.__h_t = self._parameters['grid']['h_t']
         self.__n_r = self._parameters['grid']['n_r']
         self.__h_r = self._parameters['grid']['h_r']
+        self.__n_t = self._parameters['grid']['n_t']
+        self.__h_t = self._parameters['grid']['h_t']
         self.__i_0 = self._parameters['pulsed_beam']['i_0']
 
         # mode -> flat or volume

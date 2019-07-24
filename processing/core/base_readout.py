@@ -66,6 +66,9 @@ class BaseReadout:
         # add z / z_diff
         self._df_propagation['z / z_diff'] = self._df_propagation['z, [m]'] / self._parameters['pulsed_beam']['z_diff']
 
+        # add z / z_disp
+        self._df_propagation['|z / z_disp|'] = self._df_propagation['z, [m]'] / abs(self._parameters['pulsed_beam']['z_disp'])
+
         # add i_max / i_0
         self._df_propagation['i_max / i_0'] = self._df_propagation['i_max, [W/m^2]'] / self._parameters['pulsed_beam']['i_0']
 

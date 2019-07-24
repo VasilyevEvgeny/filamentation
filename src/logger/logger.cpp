@@ -144,3 +144,13 @@ template class Logger<Ring<LiF>, ProcessorDiffraction>;
 template class Logger<Vortex<SiO2>, ProcessorDiffraction>;
 template class Logger<Vortex<CaF2>, ProcessorDiffraction>;
 template class Logger<Vortex<LiF>, ProcessorDiffraction>;
+
+template class Logger<Gauss<SiO2>, ProcessorDispersion>;
+template class Logger<Gauss<CaF2>, ProcessorDispersion>;
+template class Logger<Gauss<LiF>, ProcessorDispersion>;
+template class Logger<Ring<SiO2>, ProcessorDispersion>;
+template class Logger<Ring<CaF2>, ProcessorDispersion>;
+template class Logger<Ring<LiF>, ProcessorDispersion>;
+template class Logger<Vortex<SiO2>, ProcessorDispersion>;
+template class Logger<Vortex<CaF2>, ProcessorDispersion>;
+template class Logger<Vortex<LiF>, ProcessorDispersion>;

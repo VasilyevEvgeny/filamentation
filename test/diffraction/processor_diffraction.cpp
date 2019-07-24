@@ -25,9 +25,4 @@ void ProcessorDiffraction::go() {
     std::cout << execute << std::endl;
     std::system(execute.c_str());
 
-//    std::string execute = path_to_python_interpreter + " " + path_to_project + "/processing/scripts/track.py " +
-//                          "--current_results_dir=" + manager.current_results_dir;
-//    std::cout << execute << std::endl;
-//    std::system(execute.c_str());
-//
 }

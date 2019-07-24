@@ -50,6 +50,8 @@ std::map<std::string, std::string> TestDiffraction<PulsedBeam<Medium>>::initiali
 
     return args;
 }
+
+
 template<template<typename, typename...> class PulsedBeam, typename Medium>
 void TestDiffraction<PulsedBeam<Medium>>::test() {
 

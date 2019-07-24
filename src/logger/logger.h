@@ -15,6 +15,7 @@
 #include "../processor.h"
 
 #include "diffraction/processor_diffraction.h"
+#include "dispersion/processor_dispersion.h"
 
 template<typename PB, typename P> class Logger;
 

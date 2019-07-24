@@ -38,12 +38,12 @@ class TestDiffraction(TestCase):
 
         self.__df_propagation, self.__parameters = None, None
         self.__eps = 0.02
-        self.__png_name = 'diffraction'
+        self.__png_name = 'dispersion'
 
-        self.__horizontal_line = 1 / 2
+        self.__horizontal_line = 1 / sqrt(2)
 
     @staticmethod
-    def __calculate_max_intensity(z, radius, z_to_normalize, spatial_coord=0.0, p=1.0):
+    def __calculate_max_intensity(z, radius, z_to_normalize, spatial_coord=0.0, p=0.5):
         z_rel = z / z_to_normalize
         a_0 = exp(-spatial_coord**2 / (radius**2 * (1 + z_rel**2))) / sqrt(1.0 + z_rel**2) ** p
         k_psi = (spatial_coord / radius)**2 * z_rel / (1 + z_rel**2) ** p - arctan(z_rel)
@@ -51,7 +51,7 @@ class TestDiffraction(TestCase):
         return norm(a_0 * exp(1j * k_psi))**2
 
     def __add_analytics_to_df(self):
-        r_0 = self.__parameters['pulsed_beam']['r_0']
+        t_0 = self.__parameters['pulsed_beam']['t_0']
         k_0 = self.__parameters['medium']['k_0']
 
         self.__df_propagation['analytics'] = 0.0
@@ -59,7 +59,7 @@ class TestDiffraction(TestCase):
         for i in range(n):
             z = self.__df_propagation['z, [m]'][i]
             self.__df_propagation['analytics'][i] = \
-                self.__calculate_max_intensity(z, r_0, self.__parameters['pulsed_beam']['z_diff'])
+                self.__calculate_max_intensity(z, t_0, abs(self.__parameters['pulsed_beam']['z_disp']))
 
     def __check(self):
         numerical = self.__df_propagation['i_max / i_0']
@@ -78,14 +78,14 @@ class TestDiffraction(TestCase):
         label_analytics = self.__track._initialize_label(self.__language,
                                                          'Аналитическая\nформула',
                                                          'Analytics')
-        plt.plot(self.__df_propagation['z / z_diff'], self.__df_propagation['analytics'], color='blue', linewidth=30, label=label_analytics)
-        plt.plot(self.__df_propagation['z / z_diff'], self.__df_propagation['i_max / i_0'], color='red', linewidth=10, label=label_numerical)
+        plt.plot(self.__df_propagation['|z / z_disp|'], self.__df_propagation['analytics'], color='blue', linewidth=30, label=label_analytics)
+        plt.plot(self.__df_propagation['|z / z_disp|'], self.__df_propagation['i_max / i_0'], color='red', linewidth=10, label=label_numerical)
         plt.xticks(fontsize=font_size-5)
         plt.yticks(fontsize=font_size-5)
 
         x_label = self.__track._initialize_label(self.__language,
-                                                 '$\mathbf{z \ / \ z_{диф}}$',
-                                                 '$\mathbf{z \ / \ z_{diff}}$')
+                                                 '$\mathbf{|z \ / \ z_{дисп}|}$',
+                                                 '$\mathbf{|z \ / \ z_{disp}|}$')
         y_label = self.__track._initialize_label(self.__language,
                                                  '$\mathbf{I \ / \ I_{макс} (z=0)}$',
                                                  '$\mathbf{I \ / \ I_{max} (z=0)}$')
