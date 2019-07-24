@@ -268,7 +268,7 @@ add_executable(test_dispersion
         lib/alglib/src/specialfunctions.cpp
         lib/alglib/src/statistics.cpp
         src/functions.cpp
-        src/functions.h )
+        src/functions.h test/dispersion/test_dispersion_gvd.cpp test/dispersion/test_dispersion_gvd.h)
 
 
 #find_library(lib/fftw/libfftw3-3.dll fftw)
