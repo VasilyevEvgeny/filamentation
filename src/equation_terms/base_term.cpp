@@ -14,6 +14,13 @@ pulsed_beam(_pulsed_beam) {
     std::cout << "ADDRED OF PULSED BEAM IN BASE TERM: " << &(*pulsed_beam) << std::endl;
 }
 
+
+template<template<typename, typename...> class PulsedBeam, typename Medium>
+void BaseTerm<PulsedBeam<Medium>>::process(double dz) {
+
+}
+
+
 template class BaseTerm<Gauss<SiO2>>;
 template class BaseTerm<Gauss<CaF2>>;
 template class BaseTerm<Gauss<LiF>>;

@@ -29,9 +29,9 @@ BaseTestDispersion<PulsedBeam<Medium>>::BaseTestDispersion(PulsedBeam<Medium>& _
 
 
 template<template<typename, typename...> class PulsedBeam, typename Medium>
-std::map<std::string, std::string> BaseTestDispersion<PulsedBeam<Medium>>::initialize_args(std::string& info) {
+std::map<std::string, std::string> BaseTestDispersion<PulsedBeam<Medium>>::initialize_args(std::string& term_name) {
     std::map<std::string, std::string> args = {
-            {"prefix",                  "test_dispersion_" + info},
+            {"prefix",                  "test_" + term_name},
             {"path_to_project",         "C:/Users/vasilyev/Documents/CLion/filamentation"},
             {"global_root_dir",         "L:/Vasilyev"},
             {"global_results_dir_name", "Filamentation_results"},

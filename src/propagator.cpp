@@ -6,6 +6,10 @@
 
 #include "propagator.h"
 
+#include <vector>
+
+#define base_term BaseTerm<PulsedBeam<Medium>>
+
 
 template<template<typename, typename...> class PulsedBeam, typename Medium>
 Propagator<PulsedBeam<Medium>>::Propagator() = default;
@@ -32,10 +36,7 @@ Propagator<PulsedBeam<Medium>>::Propagator(
                   {"dz", dz}};
     manager = Manager(_args);
     processor = Processor(_args, manager);
-    logger = Logger<PulsedBeam<Medium>, Processor>(_args, pulsed_beam, manager, processor, track_info);
 
-    logger.save_initial_parameters_to_pdf(true, true);
-    logger.save_initial_parameters_to_yml();
 
 
     fourier_executor = FourierExecutor<PulsedBeam<Medium>>(pulsed_beam);
@@ -45,6 +46,23 @@ Propagator<PulsedBeam<Medium>>::Propagator(
     std::string mode = "sweep";
     dispersion_executor_gvd = DispersionExecutorGVD<PulsedBeam<Medium>>(pulsed_beam, mode);
 
+
+
+    terms_pool.insert(std::pair<std::string, BaseTerm<PulsedBeam<Medium>>*>(fourier_executor.name, &fourier_executor));
+    terms_pool.insert(std::pair<std::string, BaseTerm<PulsedBeam<Medium>>*>(diffraction_executor.name, &diffraction_executor));
+    terms_pool.insert(std::pair<std::string, BaseTerm<PulsedBeam<Medium>>*>(dispersion_executor_full.name, &dispersion_executor_full));
+    terms_pool.insert(std::pair<std::string, BaseTerm<PulsedBeam<Medium>>*>(dispersion_executor_gvd.name, &dispersion_executor_gvd));
+
+
+    active_terms = {"dispersion_gvd"};
+
+
+
+    logger = Logger<PulsedBeam<Medium>, Processor>(_args, pulsed_beam, manager, processor, track_info, terms_pool,
+                                                   active_terms);
+
+    logger.save_initial_parameters_to_pdf(true, true);
+    logger.save_initial_parameters_to_yml();
 }
 
 template<template<typename, typename...> class PulsedBeam, typename Medium>
@@ -72,13 +90,28 @@ void Propagator<PulsedBeam<Medium>>::propagate() {
 
             //diffraction_executor.process(dz);
 
+            for (auto& term_name : active_terms) {
+                terms_pool[term_name]->process(dz);
+            }
+
+
+            //for (const auto& term_name : active_terms) {
+            //    terms_pool[term_name]->process(dz);
+            //}
+
+            fourier_executor.backward();
+
+            //
+
+            //diffraction_executor.process(dz);
+
             //dispersion_executor_full.process(dz);
 
 
 
-            fourier_executor.backward();
+            //
 
-            dispersion_executor_gvd.process(dz);
+            //dispersion_executor_gvd.process(dz);
 
             z += dz;
         }

@@ -24,6 +24,11 @@ public:
     explicit BaseTerm(PulsedBeam<Medium>* _pulsed_beam);
 
     PulsedBeam<Medium>* pulsed_beam;
+
+    std::string name;
+    std::string formula;
+
+    virtual void process(double dz);
 };
 
 

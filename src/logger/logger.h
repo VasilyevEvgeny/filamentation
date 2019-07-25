@@ -13,6 +13,7 @@
 #include "../pulsed_beam/vortex.h"
 #include "../manager.h"
 #include "../processor.h"
+#include "equation_terms/base_term.h"
 
 #include "diffraction/processor_diffraction.h"
 #include "dispersion/processor_dispersion.h"
@@ -28,7 +29,9 @@ public:
             PulsedBeam<Medium>* _pulsed_beam,
             Manager& _manager,
             Processor& _processor,
-            std::map<std::string, double>& _track_info);
+            std::map<std::string, double>& _track_info,
+            std::map<std::string, BaseTerm<PulsedBeam<Medium>>*>& _terms_pool,
+            std::vector<std::string>& _active_terms);
     ~Logger();
 
     Manager manager;
@@ -39,6 +42,9 @@ public:
 
     std::vector<std::string> states_columns;
     std::vector<std::vector<double>> states;
+
+    std::map<std::string, BaseTerm<PulsedBeam<Medium>>*> terms_pool;
+    std::vector<std::string> active_terms;
 
     void add_start(std::string& tex_file_data);
     void add_end(std::string& tex_file_data);

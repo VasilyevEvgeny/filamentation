@@ -116,7 +116,11 @@ void Logger<PulsedBeam<Medium>, Processor>::save_initial_parameters_to_pdf(bool 
     //  EQUATION
     //
 
-    std::string equation = "no equation yet";
+    std::string equation = R"(2 i k_0 \frac{\partial A(r,t, z)}{\partial z} = )";
+    for (auto& term_name : active_terms) {
+        equation += terms_pool[term_name]->formula;
+    }
+
 
     std::string equation_data = R"(
 \midrule[2pt]
@@ -134,7 +138,8 @@ void Logger<PulsedBeam<Medium>, Processor>::save_initial_parameters_to_pdf(bool 
     //  INITIAL CONDITION
     //
 
-    std::string initial = R"(A(r,0) = A_0 \biggl( \frac{r}{r_0} \biggr)^M \exp \biggl\{ -\frac{r^2}{2r_0^2} \biggr\} \exp \biggl\{ -\frac{t^2}{2t_0^2} \biggr\})";
+    std::string initial = R"(A(r,0) = A_0 \biggl( \frac{r}{r_0} \biggr)^M \exp \biggl\{ -\frac{r^2}{2r_0^2} \biggr\}
+\exp \biggl\{ -\frac{t^2}{2t_0^2} \biggr\})";
 
     std::string initial_data = R"(
 \multicolumn{3}{M{15cm}}{\textbf{INITIAL CONDITION}} \tabularnewline

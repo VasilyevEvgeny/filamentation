@@ -17,11 +17,16 @@ Logger<PulsedBeam<Medium>, Processor>::Logger(
         PulsedBeam<Medium>* _pulsed_beam,
         Manager& _manager,
         Processor& _processor,
-        std::map<std::string, double>& _track_info) :
+        std::map<std::string, double>& _track_info,
+        std::map<std::string, BaseTerm<PulsedBeam<Medium>>*>& _terms_pool,
+        std::vector<std::string>& _active_terms)
+        :
     pulsed_beam(_pulsed_beam)
   , manager(_manager)
   , processor(_processor)
-  , track_info(_track_info) {
+  , track_info(_track_info)
+  , terms_pool(_terms_pool)
+  , active_terms(_active_terms){
 
     std::cout << "PULSED BEAM ADRESS IN LOGGER: " << &(*pulsed_beam) << std::endl;
 

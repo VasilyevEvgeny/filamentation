@@ -9,7 +9,7 @@
 #include "diffraction_executor.h"
 
 
-
+#define base BaseTerm<PulsedBeam<Medium>>
 #define pb BaseTerm<PulsedBeam<Medium>>::pulsed_beam
 
 template<template<typename, typename...> class PulsedBeam, typename Medium>
@@ -20,6 +20,10 @@ template<template<typename, typename...> class PulsedBeam, typename Medium>
 DiffractionExecutor<PulsedBeam<Medium>>::DiffractionExecutor(PulsedBeam<Medium>* _pulsed_beam) :
         BaseTerm<PulsedBeam <Medium>>(_pulsed_beam) {
 
+    base::name = "diffraction";
+    base::formula = R"( +\biggl( \frac{\partial^2}{\partial r^2} +
+\frac1{r} \frac{\partial}{\partial r} -
+\frac{m^2}{r^2} \biggr) A(r,t,z) )";
 
 }
 

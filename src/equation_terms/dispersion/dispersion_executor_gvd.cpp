@@ -4,6 +4,7 @@
 
 #include "dispersion_executor_gvd.h"
 
+#define base BaseTerm<PulsedBeam<Medium>>
 #define pb BaseTerm<PulsedBeam<Medium>>::pulsed_beam
 
 
@@ -16,8 +17,8 @@ DispersionExecutorGVD<PulsedBeam<Medium>>::DispersionExecutorGVD(PulsedBeam<Medi
 : BaseDispersionExecutor<PulsedBeam <Medium>>(_pulsed_beam)
 , mode(_mode){
 
-
-
+        base::name = "dispersion_gvd";
+        base::formula = R"( -k_0 k_2 \frac{\partial^2 A(r,t,z)}{\partial t^2} )";
 }
 
 template<template<typename, typename...> class PulsedBeam, typename Medium>

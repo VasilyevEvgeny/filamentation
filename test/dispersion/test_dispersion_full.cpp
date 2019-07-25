@@ -7,7 +7,7 @@
 #include <chrono>
 #include <thread>
 
-#define base BaseTestDispersion<PulsedBeam<Medium>>
+#define base_test BaseTestDispersion<PulsedBeam<Medium>>
 
 template<template<typename, typename...> class PulsedBeam, typename Medium>
 TestDispersionFull<PulsedBeam<Medium>>::TestDispersionFull() = default;
@@ -15,22 +15,22 @@ TestDispersionFull<PulsedBeam<Medium>>::TestDispersionFull() = default;
 
 template<template<typename, typename...> class PulsedBeam, typename Medium>
 TestDispersionFull<PulsedBeam<Medium>>::TestDispersionFull(PulsedBeam<Medium>& _pulsed_beam) :
-base(_pulsed_beam) {
+        base_test(_pulsed_beam) {
 
-    info = "full";
 
-    auto args = base::initialize_args(info);
 
-    base::manager = Manager(args);
-    base::processor_dispersion = ProcessorDispersion(args, base::manager);
+    auto args = base_test::initialize_args(base_test::term_name);
 
-    base::logger = Logger<PulsedBeam<Medium>, ProcessorDispersion>(args, base::pulsed_beam, base::manager,
-                                                        base::processor_dispersion, base::track_info);
-    base::logger.save_initial_parameters_to_pdf(true, true);
-    base::logger.save_initial_parameters_to_yml();
+base_test::manager = Manager(args);
+base_test::processor_dispersion = ProcessorDispersion(args, base_test::manager);
 
-    fourier_executor = FourierExecutor<PulsedBeam<Medium>>(base::pulsed_beam);
-    dispersion_executor_full = DispersionExecutorFull<PulsedBeam<Medium>>(base::pulsed_beam);
+base_test::logger = Logger<PulsedBeam<Medium>, ProcessorDispersion>(args, base_test::pulsed_beam, base_test::manager,
+base_test::processor_dispersion, base_test::track_info);
+base_test::logger.save_initial_parameters_to_pdf(true, true);
+base_test::logger.save_initial_parameters_to_yml();
+
+    fourier_executor = FourierExecutor<PulsedBeam<Medium>>(base_test::pulsed_beam);
+    dispersion_executor_full = DispersionExecutorFull<PulsedBeam<Medium>>(base_test::pulsed_beam);
 
 }
 
@@ -48,22 +48,22 @@ void TestDispersionFull<PulsedBeam<Medium>>::test() {
     auto t1 = std::chrono::high_resolution_clock::now();
 
     double z = 0.0;
-    for (int step = 0; step < base::n_z + 1; ++step) {
+    for (int step = 0; step < base_test::n_z + 1; ++step) {
         if (step) {
 
             fourier_executor.forward();
 
-            dispersion_executor_full.process(base::dz);
+            dispersion_executor_full.process(base_test::dz);
 
             fourier_executor.backward();
 
 
-            z += base::dz;
+            z += base_test::dz;
         }
 
-        if (base::save_field_every) {
-            if (!(step % base::save_field_every)) {
-                base::logger.save_field(step);
+        if (base_test::save_field_every) {
+            if (!(step % base_test::save_field_every)) {
+                base_test::logger.save_field(step);
             }
         }
 

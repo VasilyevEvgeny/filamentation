@@ -18,7 +18,6 @@ public:
     ~TestDispersionFull();
 
 
-    std::string info;
 
 
     FourierExecutor<PulsedBeam<Medium>> fourier_executor;

@@ -40,6 +40,9 @@ public:
     DispersionExecutorFull<PulsedBeam<Medium>> dispersion_executor_full;
     DispersionExecutorGVD<PulsedBeam<Medium>> dispersion_executor_gvd;
 
+    std::map<std::string, BaseTerm<PulsedBeam<Medium>>*> terms_pool;
+    std::vector<std::string> active_terms;
+
     size_t n_z;
     double dz;
     size_t print_current_state_every;

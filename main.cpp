@@ -53,7 +53,7 @@ int main(int argc, char** argv) {
             args,
             pulsed_beam,
             500,
-            std::abs(pulsed_beam.z_disp / 500),
+            std::abs(pulsed_beam.z_diff / 500),
             10,
             100
             );

@@ -19,7 +19,7 @@ public:
     explicit DiffractionExecutor(PulsedBeam<Medium>* _pulsed_beam);
 
 
-    void process(double dz);
+    void process(double dz) override;
 
     ~DiffractionExecutor();
 

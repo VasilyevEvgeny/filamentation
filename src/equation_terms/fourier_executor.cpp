@@ -6,6 +6,8 @@
 
 #include "fourier_executor.h"
 
+#define base BaseTerm<PulsedBeam<Medium>>
+
 template<template<typename, typename...> class PulsedBeam, typename Medium>
 FourierExecutor<PulsedBeam<Medium>>::FourierExecutor() = default;
 
@@ -14,8 +16,8 @@ template<template<typename, typename...> class PulsedBeam, typename Medium>
 FourierExecutor<PulsedBeam<Medium>>::FourierExecutor(PulsedBeam<Medium>* _pulsed_beam) :
         BaseTerm<PulsedBeam <Medium>>(_pulsed_beam) {
 
-
-
+    base::name = "fourier";
+    base::formula = "FFT";
 }
 
 
