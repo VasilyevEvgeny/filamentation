@@ -13,10 +13,13 @@ void Logger<PulsedBeam<Medium>, Processor>::add_start(std::string& tex_file_data
     tex_file_data += R"(
 \documentclass[10pt]{extarticle}
 \usepackage[left=2cm, right=2cm, top=2cm, bottom=2cm]{geometry}
+
+\usepackage{amsmath}
+
 \usepackage{array}
 \newcolumntype{P}[1]{>{\centering\arraybackslash}p{#1}}
 \newcolumntype{M}[1]{>{\centering\arraybackslash}m{#1}}
-\usepackage[table]{xcolor}
+
 \usepackage{booktabs}
 \renewcommand{\arraystretch}{1.2}
 \setlength{\tabcolsep}{0pt}
@@ -24,7 +27,7 @@ void Logger<PulsedBeam<Medium>, Processor>::add_start(std::string& tex_file_data
 \begin{document}
 \pagestyle{empty}
 \begin{center}
-\begin{tabular}{M{5cm}M{5cm}M{5cm}}
+\begin{tabular}{M{15cm}}
 )";
 
 }
@@ -118,22 +121,23 @@ void Logger<PulsedBeam<Medium>, Processor>::save_initial_parameters_to_pdf(bool 
 
     std::string equation = R"(2 i k_0 \frac{\partial A(r,t,z)}{\partial z} = )";
     for (auto& term_name : active_linear_terms) {
-        equation += linear_terms_pool[term_name]->formula;
+        equation += "&" + linear_terms_pool[term_name]->formula + R"(\\)";
     }
     for (auto& term_name : active_nonlinear_terms) {
-        equation += nonlinear_terms_pool[term_name]->formula;
+        equation += "&" + nonlinear_terms_pool[term_name]->formula + R"(\\)";
     }
 
 
     std::string equation_data = R"(
 \midrule[2pt]
-\multicolumn{3}{M{15cm}}{\textbf{EQUATION}} \tabularnewline
+\textbf{EQUATION} \tabularnewline
 \midrule[2pt]
-\multicolumn{3}{M{15cm}}{
-\begin{equation}
+\parbox{\linewidth}{
+\begin{align*}
 %s
-\end{equation}
-} \tabularnewline
+\end{align*}
+}
+\tabularnewline
 \midrule[2pt]
 )";
     std::vector<std::string> equation_params = {equation};
@@ -149,9 +153,9 @@ void Logger<PulsedBeam<Medium>, Processor>::save_initial_parameters_to_pdf(bool 
 \exp \biggl\{ -\frac{t^2}{2t_0^2} \biggr\})";
 
     std::string initial_data = R"(
-\multicolumn{3}{M{15cm}}{\textbf{INITIAL CONDITION}} \tabularnewline
+\textbf{INITIAL CONDITION} \tabularnewline
 \midrule[2pt]
-\multicolumn{3}{M{15cm}}{\[ %s \]} \tabularnewline
+\[ %s \] \tabularnewline
 \midrule[2pt]
 )";
     std::vector<std::string> initial_params = {initial};
@@ -164,12 +168,13 @@ void Logger<PulsedBeam<Medium>, Processor>::save_initial_parameters_to_pdf(bool 
     //
 
     std::string sellmeyer_data = R"(
-\multicolumn{3}{M{15cm}}{\textbf{SELLMEYER FORMULA}} \tabularnewline
+\textbf{SELLMEYER FORMULA} \tabularnewline
 \midrule[2pt]
-\multicolumn{3}{M{15cm}}{\[ n(\lambda) =
+\[ n(\lambda) =
 \sqrt{ 1 + \frac{%.10f \lambda^2}{\lambda^2 - %.10f^2} +
            \frac{%.10f \lambda^2}{\lambda^2 - %.10f^2} +
-           \frac{%.10f \lambda^2}{\lambda^2 - %.10f^2}} \]} \tabularnewline
+           \frac{%.10f \lambda^2}{\lambda^2 - %.10f^2}} \]
+\tabularnewline
 \midrule[2pt]
 \end{tabular}
 )";
