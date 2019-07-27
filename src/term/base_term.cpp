@@ -11,14 +11,13 @@ BaseTerm<PulsedBeam<Medium>>::BaseTerm() = default;
 template<template<typename, typename...> class PulsedBeam, typename Medium>
 BaseTerm<PulsedBeam<Medium>>::BaseTerm(PulsedBeam<Medium>* _pulsed_beam) :
 pulsed_beam(_pulsed_beam) {
-    std::cout << "ADDRED OF PULSED BEAM IN BASE TERM: " << &(*pulsed_beam) << std::endl;
+    std::cout << "ADDRESS OF PULSED BEAM IN BASE TERM: " << &(*pulsed_beam) << std::endl;
 }
 
 
 template<template<typename, typename...> class PulsedBeam, typename Medium>
-void BaseTerm<PulsedBeam<Medium>>::process(double dz) {
+BaseTerm<PulsedBeam<Medium>>::~BaseTerm() = default;
 
-}
 
 
 template class BaseTerm<Gauss<SiO2>>;

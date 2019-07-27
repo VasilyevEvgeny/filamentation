@@ -65,21 +65,21 @@ add_executable(filamentation
         test/dispersion/processor_dispersion.cpp
         test/dispersion/processor_dispersion.h
 
-        src/equation_terms/base_term.cpp
-        src/equation_terms/base_term.h
+        src/term/base_term.cpp
+        src/term/base_term.h
 
-        src/equation_terms/fourier_executor.cpp
-        src/equation_terms/fourier_executor.h
+        src/fft/fft.cpp
+        src/fft/fft.h
 
-        src/equation_terms/diffraction_executor.cpp
-        src/equation_terms/diffraction_executor.h
+        src/term/linear/diffraction/diffraction.cpp
+        src/term/linear/diffraction/diffraction.h
 
-        src/equation_terms/dispersion/base_dispersion_executor.cpp
-        src/equation_terms/dispersion/base_dispersion_executor.h
-        src/equation_terms/dispersion/dispersion_executor_full.cpp
-        src/equation_terms/dispersion/dispersion_executor_full.h
-        src/equation_terms/dispersion/dispersion_executor_gvd.cpp
-        src/equation_terms/dispersion/dispersion_executor_gvd.h
+        src/term/linear/dispersion/base_dispersion.cpp
+        src/term/linear/dispersion/base_dispersion.h
+        src/term/linear/dispersion/dispersion_full.cpp
+        src/term/linear/dispersion/dispersion_full.h
+        src/term/linear/dispersion/dispersion_gvd.cpp
+        src/term/linear/dispersion/dispersion_gvd.h
 
 
         # alglib
@@ -97,7 +97,7 @@ add_executable(filamentation
         lib/alglib/src/specialfunctions.cpp
         lib/alglib/src/statistics.cpp
         src/functions.cpp
-        src/functions.h )
+        src/functions.h src/term/nonlinear/base_nonlinear_term.cpp src/term/nonlinear/base_nonlinear_term.h src/term/nonlinear/kerr_instant/kerr_instant.cpp src/term/nonlinear/kerr_instant/kerr_instant.h src/term/linear/base_linear_term.cpp src/term/linear/base_linear_term.h src/executor/base_executor.cpp src/executor/base_executor.h src/executor/linear_executor.cpp src/executor/linear_executor.h src/executor/nonlinear_executor.cpp src/executor/nonlinear_executor.h)
 
 target_link_libraries(filamentation gtest gtest_main)
 target_link_libraries(filamentation gmock gmock_main)
@@ -149,21 +149,21 @@ add_executable(test_diffraction
         test/dispersion/processor_dispersion.cpp
         test/dispersion/processor_dispersion.h
 
-        src/equation_terms/base_term.cpp
-        src/equation_terms/base_term.h
+        src/term/base_term.cpp
+        src/term/base_term.h
 
-        src/equation_terms/fourier_executor.cpp
-        src/equation_terms/fourier_executor.h
+        src/fft/fft.cpp
+        src/fft/fft.h
 
-        src/equation_terms/diffraction_executor.cpp
-        src/equation_terms/diffraction_executor.h
+        src/term/linear/diffraction/diffraction.cpp
+        src/term/linear/diffraction/diffraction.h
 
-        src/equation_terms/dispersion/base_dispersion_executor.cpp
-        src/equation_terms/dispersion/base_dispersion_executor.h
-        src/equation_terms/dispersion/dispersion_executor_full.cpp
-        src/equation_terms/dispersion/dispersion_executor_full.h
-        src/equation_terms/dispersion/dispersion_executor_gvd.cpp
-        src/equation_terms/dispersion/dispersion_executor_gvd.h
+        src/term/linear/dispersion/base_dispersion.cpp
+        src/term/linear/dispersion/base_dispersion.h
+        src/term/linear/dispersion/dispersion_full.cpp
+        src/term/linear/dispersion/dispersion_full.h
+        src/term/linear/dispersion/dispersion_gvd.cpp
+        src/term/linear/dispersion/dispersion_gvd.h
 
 
         # alglib
@@ -236,21 +236,21 @@ add_executable(test_dispersion
         test/dispersion/processor_dispersion.cpp
         test/dispersion/processor_dispersion.h
 
-        src/equation_terms/base_term.cpp
-        src/equation_terms/base_term.h
+        src/term/base_term.cpp
+        src/term/base_term.h
 
-        src/equation_terms/fourier_executor.cpp
-        src/equation_terms/fourier_executor.h
+        src/fft/fft.cpp
+        src/fft/fft.h
 
-        src/equation_terms/diffraction_executor.cpp
-        src/equation_terms/diffraction_executor.h
+        src/term/linear/diffraction/diffraction.cpp
+        src/term/linear/diffraction/diffraction.h
 
-        src/equation_terms/dispersion/base_dispersion_executor.cpp
-        src/equation_terms/dispersion/base_dispersion_executor.h
-        src/equation_terms/dispersion/dispersion_executor_full.cpp
-        src/equation_terms/dispersion/dispersion_executor_full.h
-        src/equation_terms/dispersion/dispersion_executor_gvd.cpp
-        src/equation_terms/dispersion/dispersion_executor_gvd.h
+        src/term/linear/dispersion/base_dispersion.cpp
+        src/term/linear/dispersion/base_dispersion.h
+        src/term/linear/dispersion/dispersion_full.cpp
+        src/term/linear/dispersion/dispersion_full.h
+        src/term/linear/dispersion/dispersion_gvd.cpp
+        src/term/linear/dispersion/dispersion_gvd.h
 
 
         # alglib

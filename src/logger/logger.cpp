@@ -18,19 +18,21 @@ Logger<PulsedBeam<Medium>, Processor>::Logger(
         Manager& _manager,
         Processor& _processor,
         std::map<std::string, double>& _track_info,
-        std::map<std::string, BaseTerm<PulsedBeam<Medium>>*>& _terms_pool,
-        std::vector<std::string>& _active_terms)
+        std::map<std::string, BaseLinearTerm<PulsedBeam<Medium>>*>& _linear_terms_pool,
+        std::map<std::string, BaseNonlinearTerm<PulsedBeam<Medium>>*>& _nonlinear_terms_pool,
+        std::vector<std::string>& _active_linear_terms,
+        std::vector<std::string>& _active_nonlinear_terms)
         :
     pulsed_beam(_pulsed_beam)
   , manager(_manager)
   , processor(_processor)
   , track_info(_track_info)
-  , terms_pool(_terms_pool)
-  , active_terms(_active_terms){
+  , linear_terms_pool(_linear_terms_pool)
+  , nonlinear_terms_pool(_nonlinear_terms_pool)
+  , active_linear_terms(_active_linear_terms)
+  , active_nonlinear_terms(_active_nonlinear_terms) {
 
     std::cout << "PULSED BEAM ADRESS IN LOGGER: " << &(*pulsed_beam) << std::endl;
-
-
 
 
     states_columns = {"step", "z, [m]", "h_z, [m]", "i_max, [W/m^2]"};

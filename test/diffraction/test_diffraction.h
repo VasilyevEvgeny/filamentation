@@ -18,8 +18,8 @@
 #include "pulsed_beam/vortex.h"
 
 #include "equation_terms/base_term.h"
-#include "equation_terms/fourier_executor.h"
-#include "equation_terms/diffraction_executor.h"
+#include "fft/fft.h"
+#include "term/linear/diffraction/diffraction.h"
 #include "logger/logger.h"
 #include "functions.h"
 

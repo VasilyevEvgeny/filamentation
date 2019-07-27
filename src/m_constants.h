@@ -5,6 +5,7 @@
 #ifndef FILAMENTATION_MATHCONSTANTS_H
 #define FILAMENTATION_MATHCONSTANTS_H
 
+#include <complex>
 
 class MathConstants {
 public:
@@ -16,6 +17,7 @@ public:
     double e;
     double m_e;
     double epsilon_0;
+    std::complex<double> M_COMPLEX_I;
 };
 
 

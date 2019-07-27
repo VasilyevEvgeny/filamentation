@@ -6,22 +6,22 @@
 #include <complex>
 
 
-#include "diffraction_executor.h"
+#include "diffraction.h"
 
 
-#define base BaseTerm<PulsedBeam<Medium>>
+#define base BaseLinearTerm<PulsedBeam<Medium>>
 #define pb BaseTerm<PulsedBeam<Medium>>::pulsed_beam
 
 template<template<typename, typename...> class PulsedBeam, typename Medium>
-DiffractionExecutor<PulsedBeam<Medium>>::DiffractionExecutor() = default;
+Diffraction<PulsedBeam<Medium>>::Diffraction() = default;
 
 
 template<template<typename, typename...> class PulsedBeam, typename Medium>
-DiffractionExecutor<PulsedBeam<Medium>>::DiffractionExecutor(PulsedBeam<Medium>* _pulsed_beam) :
-        BaseTerm<PulsedBeam <Medium>>(_pulsed_beam) {
+Diffraction<PulsedBeam<Medium>>::Diffraction(PulsedBeam<Medium>* _pulsed_beam)
+: BaseLinearTerm<PulsedBeam <Medium>>(_pulsed_beam) {
 
-    base::name = "diffraction";
-    base::formula = R"( +\biggl( \frac{\partial^2}{\partial r^2} +
+base::name = "diffraction";
+base::formula = R"( +\biggl( \frac{\partial^2}{\partial r^2} +
 \frac1{r} \frac{\partial}{\partial r} -
 \frac{m^2}{r^2} \biggr) A(r,t,z) )";
 
@@ -29,7 +29,7 @@ DiffractionExecutor<PulsedBeam<Medium>>::DiffractionExecutor(PulsedBeam<Medium>*
 
 
 template<template<typename, typename...> class PulsedBeam, typename Medium>
-void DiffractionExecutor<PulsedBeam<Medium>>::process(double dz) {
+void Diffraction<PulsedBeam<Medium>>::process(double dz) {
 
 #pragma omp parallel
     {
@@ -94,16 +94,16 @@ void DiffractionExecutor<PulsedBeam<Medium>>::process(double dz) {
 
 
 template<template<typename, typename...> class PulsedBeam, typename Medium>
-DiffractionExecutor<PulsedBeam<Medium>>::~DiffractionExecutor() = default;
+Diffraction<PulsedBeam<Medium>>::~Diffraction() = default;
 
 
+template class Diffraction<Gauss<SiO2>>;
+template class Diffraction<Ring<SiO2>>;
+template class Diffraction<Vortex<SiO2>>;
+template class Diffraction<Gauss<CaF2>>;
+template class Diffraction<Ring<CaF2>>;
+template class Diffraction<Vortex<CaF2>>;
+template class Diffraction<Gauss<LiF>>;
+template class Diffraction<Ring<LiF>>;
+template class Diffraction<Vortex<LiF>>;
 
-template class DiffractionExecutor<Gauss<SiO2>>;
-template class DiffractionExecutor<Ring<SiO2>>;
-template class DiffractionExecutor<Vortex<SiO2>>;
-template class DiffractionExecutor<Gauss<CaF2>>;
-template class DiffractionExecutor<Ring<CaF2>>;
-template class DiffractionExecutor<Vortex<CaF2>>;
-template class DiffractionExecutor<Gauss<LiF>>;
-template class DiffractionExecutor<Ring<LiF>>;
-template class DiffractionExecutor<Vortex<LiF>>;

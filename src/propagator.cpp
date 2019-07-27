@@ -37,31 +37,39 @@ Propagator<PulsedBeam<Medium>>::Propagator(
     manager = Manager(_args);
     processor = Processor(_args, manager);
 
-
-
-    fourier_executor = FourierExecutor<PulsedBeam<Medium>>(pulsed_beam);
-    diffraction_executor = DiffractionExecutor<PulsedBeam<Medium>>(pulsed_beam);
-    dispersion_executor_full = DispersionExecutorFull<PulsedBeam<Medium>>(pulsed_beam);
-
+    // linear terms
+    diffraction = Diffraction<PulsedBeam<Medium>>(pulsed_beam);
+    dispersion_full = DispersionFull<PulsedBeam<Medium>>(pulsed_beam);
     std::string mode = "sweep";
-    dispersion_executor_gvd = DispersionExecutorGVD<PulsedBeam<Medium>>(pulsed_beam, mode);
+    dispersion_gvd = DispersionGVD<PulsedBeam<Medium>>(pulsed_beam, mode);
+
+    // nonlinear terms
+    kerr_instant = KerrInstant<PulsedBeam<Medium>>(pulsed_beam);
+
+    // constainers for linear terms
+    linear_terms_pool.insert(std::pair<std::string, BaseLinearTerm<PulsedBeam<Medium>>*>(diffraction.name, &diffraction));
+    linear_terms_pool.insert(std::pair<std::string, BaseLinearTerm<PulsedBeam<Medium>>*>(dispersion_full.name, &dispersion_full));
+    linear_terms_pool.insert(std::pair<std::string, BaseLinearTerm<PulsedBeam<Medium>>*>(dispersion_gvd.name, &dispersion_gvd));
+
+    // constainers for nonlinear terms
+    nonlinear_terms_pool.insert(std::pair<std::string, BaseNonlinearTerm<PulsedBeam<Medium>>*>(kerr_instant.name, &kerr_instant));
+
+
+    // active terms
+    active_linear_terms = {"diffraction"};
+    active_nonlinear_terms = {"kerr_instant"};
+
+    // executors
+    linear_executor = LinearExecutor<PulsedBeam<Medium>>(pulsed_beam, active_linear_terms, linear_terms_pool);
+    nonlinear_executor = NonlinearExecutor<PulsedBeam<Medium>>(pulsed_beam, active_nonlinear_terms, nonlinear_terms_pool);
 
 
 
-    terms_pool.insert(std::pair<std::string, BaseTerm<PulsedBeam<Medium>>*>(fourier_executor.name, &fourier_executor));
-    terms_pool.insert(std::pair<std::string, BaseTerm<PulsedBeam<Medium>>*>(diffraction_executor.name, &diffraction_executor));
-    terms_pool.insert(std::pair<std::string, BaseTerm<PulsedBeam<Medium>>*>(dispersion_executor_full.name, &dispersion_executor_full));
-    terms_pool.insert(std::pair<std::string, BaseTerm<PulsedBeam<Medium>>*>(dispersion_executor_gvd.name, &dispersion_executor_gvd));
+    logger = Logger<PulsedBeam<Medium>, Processor>(_args, pulsed_beam, manager, processor, track_info,
+                                                   linear_terms_pool, nonlinear_terms_pool,
+                                                   active_linear_terms, active_nonlinear_terms);
 
-
-    active_terms = {"dispersion_gvd"};
-
-
-
-    logger = Logger<PulsedBeam<Medium>, Processor>(_args, pulsed_beam, manager, processor, track_info, terms_pool,
-                                                   active_terms);
-
-    logger.save_initial_parameters_to_pdf(true, true);
+    logger.save_initial_parameters_to_pdf(true, false);
     logger.save_initial_parameters_to_yml();
 }
 
@@ -86,32 +94,11 @@ void Propagator<PulsedBeam<Medium>>::propagate() {
              * effects
              */
 
-            fourier_executor.forward();
+            linear_executor.execute(dz);
 
-            //diffraction_executor.process(dz);
-
-            for (auto& term_name : active_terms) {
-                terms_pool[term_name]->process(dz);
-            }
+            nonlinear_executor.execute(dz);
 
 
-            //for (const auto& term_name : active_terms) {
-            //    terms_pool[term_name]->process(dz);
-            //}
-
-            fourier_executor.backward();
-
-            //
-
-            //diffraction_executor.process(dz);
-
-            //dispersion_executor_full.process(dz);
-
-
-
-            //
-
-            //dispersion_executor_gvd.process(dz);
 
             z += dz;
         }

@@ -13,10 +13,14 @@
 #include "logger/logger.h"
 #include "medium/base_medium.h"
 #include "manager.h"
-#include "equation_terms/fourier_executor.h"
-#include "equation_terms/diffraction_executor.h"
-#include "equation_terms/dispersion/dispersion_executor_full.h"
-#include "equation_terms/dispersion/dispersion_executor_gvd.h"
+
+#include "term/linear/diffraction/diffraction.h"
+#include "term/linear/dispersion/dispersion_full.h"
+#include "term/linear/dispersion/dispersion_gvd.h"
+#include "term/nonlinear/kerr_instant/kerr_instant.h"
+
+#include "executor/linear_executor.h"
+#include "executor/nonlinear_executor.h"
 
 template<typename T> class Propagator;
 
@@ -35,13 +39,24 @@ public:
 
 
     PulsedBeam<Medium>* pulsed_beam;
-    FourierExecutor<PulsedBeam<Medium>> fourier_executor;
-    DiffractionExecutor<PulsedBeam<Medium>> diffraction_executor;
-    DispersionExecutorFull<PulsedBeam<Medium>> dispersion_executor_full;
-    DispersionExecutorGVD<PulsedBeam<Medium>> dispersion_executor_gvd;
 
-    std::map<std::string, BaseTerm<PulsedBeam<Medium>>*> terms_pool;
-    std::vector<std::string> active_terms;
+    // linear terms
+    Diffraction<PulsedBeam<Medium>> diffraction;
+    DispersionFull<PulsedBeam<Medium>> dispersion_full;
+    DispersionGVD<PulsedBeam<Medium>> dispersion_gvd;
+
+    // nonlinear terms
+    KerrInstant<PulsedBeam<Medium>> kerr_instant;
+
+    // executors
+    LinearExecutor<PulsedBeam<Medium>> linear_executor;
+    NonlinearExecutor<PulsedBeam<Medium>> nonlinear_executor;
+
+    // containers for terms
+    std::map<std::string, BaseLinearTerm<PulsedBeam<Medium>>*> linear_terms_pool;
+    std::map<std::string, BaseNonlinearTerm<PulsedBeam<Medium>>*> nonlinear_terms_pool;
+    std::vector<std::string> active_linear_terms;
+    std::vector<std::string> active_nonlinear_terms;
 
     size_t n_z;
     double dz;

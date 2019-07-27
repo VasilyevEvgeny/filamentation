@@ -116,9 +116,12 @@ void Logger<PulsedBeam<Medium>, Processor>::save_initial_parameters_to_pdf(bool 
     //  EQUATION
     //
 
-    std::string equation = R"(2 i k_0 \frac{\partial A(r,t, z)}{\partial z} = )";
-    for (auto& term_name : active_terms) {
-        equation += terms_pool[term_name]->formula;
+    std::string equation = R"(2 i k_0 \frac{\partial A(r,t,z)}{\partial z} = )";
+    for (auto& term_name : active_linear_terms) {
+        equation += linear_terms_pool[term_name]->formula;
+    }
+    for (auto& term_name : active_nonlinear_terms) {
+        equation += nonlinear_terms_pool[term_name]->formula;
     }
 
 
@@ -126,7 +129,11 @@ void Logger<PulsedBeam<Medium>, Processor>::save_initial_parameters_to_pdf(bool 
 \midrule[2pt]
 \multicolumn{3}{M{15cm}}{\textbf{EQUATION}} \tabularnewline
 \midrule[2pt]
-\multicolumn{3}{M{15cm}}{\[ %s \]} \tabularnewline
+\multicolumn{3}{M{15cm}}{
+\begin{equation}
+%s
+\end{equation}
+} \tabularnewline
 \midrule[2pt]
 )";
     std::vector<std::string> equation_params = {equation};

@@ -2,19 +2,19 @@
 // Created by vasilyev on 24.07.2019.
 //
 
-#include "dispersion_executor_gvd.h"
+#include "dispersion_gvd.h"
 
-#define base BaseTerm<PulsedBeam<Medium>>
+#define base BaseLinearTerm<PulsedBeam<Medium>>
 #define pb BaseTerm<PulsedBeam<Medium>>::pulsed_beam
 
 
 template<template<typename, typename...> class PulsedBeam, typename Medium>
-DispersionExecutorGVD<PulsedBeam<Medium>>::DispersionExecutorGVD() = default;
+DispersionGVD<PulsedBeam<Medium>>::DispersionGVD() = default;
 
 
 template<template<typename, typename...> class PulsedBeam, typename Medium>
-DispersionExecutorGVD<PulsedBeam<Medium>>::DispersionExecutorGVD(PulsedBeam<Medium>* _pulsed_beam, std::string& _mode)
-: BaseDispersionExecutor<PulsedBeam <Medium>>(_pulsed_beam)
+DispersionGVD<PulsedBeam<Medium>>::DispersionGVD(PulsedBeam<Medium>* _pulsed_beam, std::string& _mode)
+: BaseDispersion<PulsedBeam <Medium>>(_pulsed_beam)
 , mode(_mode){
 
         base::name = "dispersion_gvd";
@@ -22,12 +22,12 @@ DispersionExecutorGVD<PulsedBeam<Medium>>::DispersionExecutorGVD(PulsedBeam<Medi
 }
 
 template<template<typename, typename...> class PulsedBeam, typename Medium>
-DispersionExecutorGVD<PulsedBeam<Medium>>::~DispersionExecutorGVD() = default;
+DispersionGVD<PulsedBeam<Medium>>::~DispersionGVD() = default;
 
 
 
 template<template<typename, typename...> class PulsedBeam, typename Medium>
-void DispersionExecutorGVD<PulsedBeam<Medium>>::process(double dz) {
+void DispersionGVD<PulsedBeam<Medium>>::process(double dz) {
     if (mode == "fft") {
         return process_fft(dz);
     }
@@ -38,7 +38,7 @@ void DispersionExecutorGVD<PulsedBeam<Medium>>::process(double dz) {
 }
 
 template<template<typename, typename...> class PulsedBeam, typename Medium>
-void DispersionExecutorGVD<PulsedBeam<Medium>>::process_fft(double dz) {
+void DispersionGVD<PulsedBeam<Medium>>::process_fft(double dz) {
 
 #pragma omp parallel
     {
@@ -56,7 +56,7 @@ void DispersionExecutorGVD<PulsedBeam<Medium>>::process_fft(double dz) {
 
 
 template<template<typename, typename...> class PulsedBeam, typename Medium>
-void DispersionExecutorGVD<PulsedBeam<Medium>>::process_sweep(double dz) {
+void DispersionGVD<PulsedBeam<Medium>>::process_sweep(double dz) {
 
 #pragma omp parallel
     {
@@ -107,12 +107,12 @@ void DispersionExecutorGVD<PulsedBeam<Medium>>::process_sweep(double dz) {
 
 
 
-template class DispersionExecutorGVD<Gauss<SiO2>>;
-template class DispersionExecutorGVD<Gauss<CaF2>>;
-template class DispersionExecutorGVD<Gauss<LiF>>;
-template class DispersionExecutorGVD<Ring<SiO2>>;
-template class DispersionExecutorGVD<Ring<CaF2>>;
-template class DispersionExecutorGVD<Ring<LiF>>;
-template class DispersionExecutorGVD<Vortex<SiO2>>;
-template class DispersionExecutorGVD<Vortex<CaF2>>;
-template class DispersionExecutorGVD<Vortex<LiF>>;
+template class DispersionGVD<Gauss<SiO2>>;
+template class DispersionGVD<Gauss<CaF2>>;
+template class DispersionGVD<Gauss<LiF>>;
+template class DispersionGVD<Ring<SiO2>>;
+template class DispersionGVD<Ring<CaF2>>;
+template class DispersionGVD<Ring<LiF>>;
+template class DispersionGVD<Vortex<SiO2>>;
+template class DispersionGVD<Vortex<CaF2>>;
+template class DispersionGVD<Vortex<LiF>>;

@@ -4,9 +4,8 @@
 #include <string>
 #include <omp.h>
 
-#include "src/pulsed_beam/base_pulsed_beam/base_pulsed_beam.h"
-#include "src/propagator.h"
-
+#include "pulsed_beam/base_pulsed_beam/base_pulsed_beam.h"
+#include "propagator.h"
 
 
 std::map<std::string, std::string> parse_args(char **argv) {
@@ -45,15 +44,16 @@ int main(int argc, char** argv) {
             512,
             40e-15,
             1024,
-            5);
+            10);
 
     std::cout << "PULSED BEAM ADRESS IN MAIN: " << &pulsed_beam << std::endl;
 
     Propagator<Gauss<LiF>> propagator(
             args,
             pulsed_beam,
-            500,
-            std::abs(pulsed_beam.z_diff / 500),
+            1,
+            1e-5,
+//            std::abs(pulsed_beam.z_diff / 500),
             10,
             100
             );

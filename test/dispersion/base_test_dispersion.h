@@ -18,7 +18,7 @@
 #include "pulsed_beam/vortex.h"
 
 #include "equation_terms/base_term.h"
-#include "equation_terms/fourier_executor.h"
+#include "fft/fft.h"
 #include "equation_terms/dispersion/dispersion_executor_full.h"
 #include "equation_terms/dispersion/dispersion_executor_gvd.h"
 #include "logger/logger.h"

@@ -13,7 +13,8 @@
 #include "../pulsed_beam/vortex.h"
 #include "../manager.h"
 #include "../processor.h"
-#include "equation_terms/base_term.h"
+#include "term/linear/base_linear_term.h"
+#include "term/nonlinear/base_nonlinear_term.h"
 
 #include "diffraction/processor_diffraction.h"
 #include "dispersion/processor_dispersion.h"
@@ -30,8 +31,10 @@ public:
             Manager& _manager,
             Processor& _processor,
             std::map<std::string, double>& _track_info,
-            std::map<std::string, BaseTerm<PulsedBeam<Medium>>*>& _terms_pool,
-            std::vector<std::string>& _active_terms);
+            std::map<std::string, BaseLinearTerm<PulsedBeam<Medium>>*>& _linear_terms_pool,
+            std::map<std::string, BaseNonlinearTerm<PulsedBeam<Medium>>*>& _nonlinear_terms_pool,
+            std::vector<std::string>& _active_linear_terms,
+            std::vector<std::string>& _active_nonlinear_terms);
     ~Logger();
 
     Manager manager;
@@ -43,8 +46,10 @@ public:
     std::vector<std::string> states_columns;
     std::vector<std::vector<double>> states;
 
-    std::map<std::string, BaseTerm<PulsedBeam<Medium>>*> terms_pool;
-    std::vector<std::string> active_terms;
+    std::map<std::string, BaseLinearTerm<PulsedBeam<Medium>>*> linear_terms_pool;
+    std::map<std::string, BaseNonlinearTerm<PulsedBeam<Medium>>*> nonlinear_terms_pool;
+    std::vector<std::string> active_linear_terms;
+    std::vector<std::string> active_nonlinear_terms;
 
     void add_start(std::string& tex_file_data);
     void add_end(std::string& tex_file_data);

@@ -6,17 +6,17 @@
 #define FILAMENTATION_DISPERSIONEXECUTORGVD_H
 
 
-#include "base_dispersion_executor.h"
+#include "base_dispersion.h"
 
-template<typename T> class DispersionExecutorGVD;
+template<typename T> class DispersionGVD;
 
 template<template<typename, typename...> class PulsedBeam, typename Medium>
-class DispersionExecutorGVD<PulsedBeam<Medium>> : public BaseDispersionExecutor<PulsedBeam<Medium>>  {
+class DispersionGVD<PulsedBeam<Medium>> : public BaseDispersion<PulsedBeam<Medium>>  {
 public:
-    DispersionExecutorGVD();
-    DispersionExecutorGVD(PulsedBeam<Medium>* _pulsed_beam, std::string& mode);
+    DispersionGVD();
+    DispersionGVD(PulsedBeam<Medium>* _pulsed_beam, std::string& mode);
 
-    ~DispersionExecutorGVD();
+    ~DispersionGVD();
 
     std::string mode;
 

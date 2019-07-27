@@ -22,13 +22,12 @@ class BaseTerm<PulsedBeam<Medium>> {
 public:
     BaseTerm();
     explicit BaseTerm(PulsedBeam<Medium>* _pulsed_beam);
+    ~BaseTerm();
 
     PulsedBeam<Medium>* pulsed_beam;
 
     std::string name;
     std::string formula;
-
-    virtual void process(double dz);
 };
 
 
