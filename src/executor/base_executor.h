@@ -24,7 +24,7 @@ public:
     BaseExecutor();
     explicit BaseExecutor(PulsedBeam<Medium>* _pulsed_beam,
                           std::vector<std::string>& active_terms);
-    ~BaseExecutor();
+    virtual ~BaseExecutor();
 
     PulsedBeam<Medium>* pulsed_beam;
 

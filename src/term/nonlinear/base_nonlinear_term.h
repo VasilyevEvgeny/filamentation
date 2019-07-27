@@ -15,7 +15,7 @@ public:
     BaseNonlinearTerm();
     explicit BaseNonlinearTerm(PulsedBeam<Medium>* _pulsed_beam);
 
-    ~BaseNonlinearTerm();
+    virtual ~BaseNonlinearTerm();
 
     std::complex<double> R;
 

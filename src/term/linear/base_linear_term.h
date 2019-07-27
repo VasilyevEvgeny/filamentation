@@ -15,7 +15,7 @@ public:
     BaseLinearTerm();
     explicit BaseLinearTerm(PulsedBeam<Medium>* _pulsed_beam);
 
-    ~BaseLinearTerm();
+    virtual ~BaseLinearTerm();
 
     virtual void process(double dz) = 0;
 };

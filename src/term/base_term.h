@@ -22,7 +22,7 @@ class BaseTerm<PulsedBeam<Medium>> {
 public:
     BaseTerm();
     explicit BaseTerm(PulsedBeam<Medium>* _pulsed_beam);
-    ~BaseTerm();
+    virtual ~BaseTerm();
 
     PulsedBeam<Medium>* pulsed_beam;
 
