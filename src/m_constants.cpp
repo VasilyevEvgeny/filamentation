@@ -10,6 +10,7 @@ MathConstants::MathConstants() :
         , e(1.602176620898e-19)
         , m_e(9.1093829140e-31)
         , epsilon_0(8.85418781762039e-12)
+        , mu_0(4.0 * M_PI * 1e-7)
         , M_COMPLEX_I(std::complex<double>(0.0, 1.0)){
 
 }

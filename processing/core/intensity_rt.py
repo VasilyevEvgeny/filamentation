@@ -73,7 +73,7 @@ class IntensityRT(BaseReadout):
         self.__log_ticks = [-1.0, 0.0, +1.0]
         self.__log_ticklabels = ['+' + str(round(e)) if e > 0 else '$-$' + str(abs(round(e))) if e != 0 else '  0'
                       for e in self.__log_ticks]
-        self.__dpi = 50
+        self.__dpi = 100
 
         # flags
         self.__ticks = True

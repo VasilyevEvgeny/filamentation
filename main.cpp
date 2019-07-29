@@ -44,15 +44,15 @@ int main(int argc, char** argv) {
             512,
             40e-15,
             1024,
-            10);
+            5);
 
     std::cout << "PULSED BEAM ADRESS IN MAIN: " << &pulsed_beam << std::endl;
 
     Propagator<Gauss<LiF>> propagator(
             args,
             pulsed_beam,
-            1,
-            1e-5,
+            1500,
+            4e-5,
 //            std::abs(pulsed_beam.z_diff / 500),
             10,
             100

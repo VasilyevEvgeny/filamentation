@@ -17,6 +17,7 @@ public:
     double e;
     double m_e;
     double epsilon_0;
+    double mu_0;
     std::complex<double> M_COMPLEX_I;
 };
 

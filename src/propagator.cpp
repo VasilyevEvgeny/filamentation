@@ -54,9 +54,8 @@ Propagator<PulsedBeam<Medium>>::Propagator(
     // constainers for nonlinear terms
     nonlinear_terms_pool.insert(std::pair<std::string, BaseNonlinearTerm<PulsedBeam<Medium>>*>(kerr_instant.name, &kerr_instant));
 
-
     // active terms
-    active_linear_terms = {"diffraction"};
+    active_linear_terms = {"diffraction", "dispersion_full"};
     active_nonlinear_terms = {"kerr_instant"};
 
     // executors
@@ -98,13 +97,8 @@ void Propagator<PulsedBeam<Medium>>::propagate() {
 
             nonlinear_executor.execute(dz);
 
-
-
             z += dz;
         }
-
-
-
 
         if (save_field_every) {
             if (!(step % save_field_every)) {
@@ -119,8 +113,6 @@ void Propagator<PulsedBeam<Medium>>::propagate() {
                 logger.print_current_state(step, z);
             }
         }
-
-
     }
 
     auto t2 = std::chrono::high_resolution_clock::now();
@@ -135,10 +127,6 @@ void Propagator<PulsedBeam<Medium>>::propagate() {
 
     logger.processor.go();
 }
-
-
-
-
 
 
 template class Propagator<Gauss<SiO2>>;

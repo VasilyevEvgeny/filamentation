@@ -9,7 +9,7 @@ args = parse_args()
 
 intensity_rt = IntensityRT(args=args,
                            mode='flat',
-                           log=False,
+                           log=True,
                            maximum_intensity='local',
                            normalize_to='i_0',
                            language='english',

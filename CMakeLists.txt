@@ -17,6 +17,7 @@ add_subdirectory(lib/googletest-master)
 include_directories(lib/googletest-master/googletest/include)
 include_directories(lib/googletest-master/googlemock/include)
 
+include_directories(lib/alglib/src)
 
 include_directories(src)
 include_directories(test)
@@ -97,7 +98,7 @@ add_executable(filamentation
         lib/alglib/src/specialfunctions.cpp
         lib/alglib/src/statistics.cpp
         src/functions.cpp
-        src/functions.h src/term/nonlinear/base_nonlinear_term.cpp src/term/nonlinear/base_nonlinear_term.h src/term/nonlinear/kerr_instant/kerr_instant.cpp src/term/nonlinear/kerr_instant/kerr_instant.h src/term/linear/base_linear_term.cpp src/term/linear/base_linear_term.h src/executor/base_executor.cpp src/executor/base_executor.h src/executor/linear_executor.cpp src/executor/linear_executor.h src/executor/nonlinear_executor.cpp src/executor/nonlinear_executor.h)
+        src/functions.h src/term/nonlinear/base_nonlinear_term.cpp src/term/nonlinear/base_nonlinear_term.h src/term/nonlinear/kerr_instant/kerr_instant.cpp src/term/nonlinear/kerr_instant/kerr_instant.h src/term/linear/base_linear_term.cpp src/term/linear/base_linear_term.h src/executor/base_executor.cpp src/executor/base_executor.h src/executor/linear_executor.cpp src/executor/linear_executor.h src/executor/nonlinear_executor.cpp src/executor/nonlinear_executor.h src/ionization/base_ionization.cpp src/ionization/base_ionization.h src/ionization/keldysh/base_keldysh.cpp src/ionization/keldysh/base_keldysh.h src/ionization/keldysh/original_keldysh.cpp src/ionization/keldysh/original_keldysh.h src/ionization/keldysh/smoothed_keldysh.cpp src/ionization/keldysh/smoothed_keldysh.h)
 
 target_link_libraries(filamentation gtest gtest_main)
 target_link_libraries(filamentation gmock gmock_main)
