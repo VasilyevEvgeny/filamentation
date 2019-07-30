@@ -11,6 +11,7 @@
 
 Manager::Manager(std::map<std::string, std::string>& args) {
     global_results_dir = args["global_root_dir"] + "/" + args["global_results_dir_name"];
+    ionization_tables_dir = args["global_root_dir"] + "/" + args["ionization_tables_dir_name"];
 
     current_results_dir_name = args["prefix"] + "_" + get_current_datetime();
     current_results_dir = global_results_dir + "/" + current_results_dir_name;
@@ -20,6 +21,7 @@ Manager::Manager(std::map<std::string, std::string>& args) {
 
     try {
         _mkdir(global_results_dir.c_str());
+        _mkdir(ionization_tables_dir.c_str());
 
         if (_mkdir(current_results_dir.c_str())) {
             throw std::runtime_error("current_results_dir wasn't created!");

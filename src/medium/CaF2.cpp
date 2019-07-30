@@ -9,6 +9,7 @@ CaF2::CaF2() = default;
 CaF2::CaF2(double _lambda_0) : BaseMedium(_lambda_0) {
 
     info = "CaF$_2$";
+    name = "CaF2";
 
     lambda_1 = 0.0502636050e-6;
     lambda_2 = 0.1003909000e-6;
@@ -25,6 +26,12 @@ CaF2::CaF2(double _lambda_0) : BaseMedium(_lambda_0) {
     CaF2::initialize_ionization_parameters();
 
     delta = 0;
+
+    ionization = SmoothedKeldysh(
+            omega_0,
+            U_i,
+            N_0,
+            n_0);
 }
 
 CaF2::~CaF2() = default;

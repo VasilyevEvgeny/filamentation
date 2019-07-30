@@ -11,6 +11,7 @@ SiO2::SiO2() = default;
 SiO2::SiO2(double _lambda_0) : BaseMedium(_lambda_0) {
 
     info = "SiO$_2$";
+    name = "SiO2";
 
     lambda_1 = 0.0684043000e-6;
     lambda_2 = 0.1162414000e-6;
@@ -27,6 +28,12 @@ SiO2::SiO2(double _lambda_0) : BaseMedium(_lambda_0) {
     SiO2::initialize_ionization_parameters();
 
     delta = 0;
+
+    ionization = SmoothedKeldysh(
+            omega_0,
+            U_i,
+            N_0,
+            n_0);
 }
 
 SiO2::~SiO2() = default;

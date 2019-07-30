@@ -2,6 +2,8 @@
 // Created by vasilyev on 28.07.2019.
 //
 
+#include <iostream>
+
 #include "base_keldysh.h"
 
 #include "specialfunctions.h"
@@ -72,7 +74,8 @@ double BaseKeldysh::calculate_v(double x_plus_1, double x) {
 double BaseKeldysh::calculate_Q(double alpha, double beta, double v, double Xi) {
     double sum = 0.0;
     for (size_t n = 0; n < 100; ++n) {
-        sum += exp(-n * alpha) * alglib::dawsonintegral(sqrt(beta * (n + 2 * v)));
+        sum += exp(-alpha * n) * alglib::dawsonintegral(sqrt(beta * (n + 2 * v)));
+//        std::cout << "sum = " << sum << std::endl;
     }
 
     return sqrt(M_PI / (2.0 * alglib::ellipticintegralk(Xi))) * sum;
@@ -96,6 +99,18 @@ double BaseKeldysh::R(double i) {
     double v = calculate_v(x_plus_1, x);
     double Q = calculate_Q(alpha, beta, v, Xi);
     double W = calculate_W(x_plus_1, alpha, Gamma, Q);
+
+//    std::cout << E << std::endl;
+//    std::cout << gamma << std::endl;
+//    std::cout << Gamma << std::endl;
+//    std::cout << Xi << std::endl;
+//    std::cout << alpha << std::endl;
+//    std::cout << beta << std::endl;
+//    std::cout << x << std::endl;
+//    std::cout << x_plus_1 << std::endl;
+//    std::cout << v << std::endl;
+//    std::cout << Q << std::endl;
+//    std::cout << W << std::endl;
 
     return W / N_0;
 }

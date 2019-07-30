@@ -9,6 +9,7 @@ LiF::LiF() = default;
 LiF::LiF(double _lambda_0) : BaseMedium(_lambda_0) {
 
     info = "LiF";
+    name = "LiF";
 
     lambda_1 = 0.0737600000e-6;
     lambda_2 = 32.790000000e-6;
@@ -26,6 +27,11 @@ LiF::LiF(double _lambda_0) : BaseMedium(_lambda_0) {
 
     delta = 0;
 
+    ionization = SmoothedKeldysh(
+            omega_0,
+            U_i,
+            N_0,
+            n_0);
 }
 
 LiF::~LiF() = default;

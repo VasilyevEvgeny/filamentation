@@ -37,6 +37,11 @@ Propagator<PulsedBeam<Medium>>::Propagator(
     manager = Manager(_args);
     processor = Processor(_args, manager);
 
+    // ionization_table
+    pulsed_beam->medium->ionization.make_ionization_table(manager.ionization_tables_dir,
+                                                                pulsed_beam->medium->name,
+                                                                pulsed_beam->lambda_0);
+
     // linear terms
     diffraction = Diffraction<PulsedBeam<Medium>>(pulsed_beam);
     dispersion_full = DispersionFull<PulsedBeam<Medium>>(pulsed_beam);

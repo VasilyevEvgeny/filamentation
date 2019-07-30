@@ -8,6 +8,8 @@
 #include <iostream>
 
 #include "m_constants.h"
+#include "ionization/keldysh/original_keldysh.h"
+#include "ionization/keldysh/smoothed_keldysh.h"
 
 class BaseMedium {
 
@@ -19,6 +21,7 @@ public:
     MathConstants math_constants;
 
     std::string info;
+    std::string name;
 
     // central wavelength
     double lambda_0;
@@ -68,6 +71,8 @@ public:
 
     //extinction
     double delta;
+
+    SmoothedKeldysh ionization;
 
     void initialize_omegas();
     void initialize_dispersion_parameters();

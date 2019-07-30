@@ -18,6 +18,8 @@ OriginalKeldysh::OriginalKeldysh(
               _N_0,
               _n_0) {
 
+
+    name = "original";
 }
 
 

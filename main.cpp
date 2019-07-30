@@ -13,9 +13,10 @@ std::map<std::string, std::string> parse_args(char **argv) {
               {"path_to_project", argv[2]},
               {"global_root_dir", argv[3]},
               {"global_results_dir_name", argv[4]},
-              {"python_interpreter", argv[5]},
-              {"intensity_rt", argv[6]},
-              {"track", argv[7]}};
+              {"ionization_tables_dir_name", argv[5]},
+              {"python_interpreter", argv[6]},
+              {"intensity_rt", argv[7]},
+              {"track", argv[8]}};
 }
 
 
@@ -31,11 +32,11 @@ int main(int argc, char** argv) {
 
     double lambda_0 = 1800e-9;
 
-    LiF medium(lambda_0);
+    SiO2 medium(lambda_0);
 
     std::cout << "Address of medium in main: " << &medium << std::endl;
 
-    Gauss<LiF> pulsed_beam(
+    Gauss<SiO2> pulsed_beam(
             medium,
             lambda_0,
 //            1,
@@ -48,7 +49,7 @@ int main(int argc, char** argv) {
 
     std::cout << "PULSED BEAM ADRESS IN MAIN: " << &pulsed_beam << std::endl;
 
-    Propagator<Gauss<LiF>> propagator(
+    Propagator<Gauss<SiO2>> propagator(
             args,
             pulsed_beam,
             1500,

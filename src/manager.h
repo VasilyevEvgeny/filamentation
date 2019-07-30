@@ -17,6 +17,7 @@ public:
     ~Manager();
 
     std::string global_results_dir;
+    std::string ionization_tables_dir;
 
     std::string current_results_dir_name;
     std::string current_results_dir;

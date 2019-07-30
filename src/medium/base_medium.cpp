@@ -54,8 +54,8 @@ BaseMedium::BaseMedium() {
     delta = 0;
 }
 
-BaseMedium::BaseMedium(double _lambda_0) :
-  lambda_0(_lambda_0) {
+BaseMedium::BaseMedium(double _lambda_0)
+: lambda_0(_lambda_0) {
 
     // light speed
     c = math_constants.c;
@@ -104,6 +104,10 @@ BaseMedium::BaseMedium(double _lambda_0) :
     K = 0;
 
     delta = 0;
+
+
+
+
 
 }
 

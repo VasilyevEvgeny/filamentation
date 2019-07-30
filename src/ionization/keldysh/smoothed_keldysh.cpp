@@ -4,6 +4,8 @@
 
 #include "smoothed_keldysh.h"
 
+#include <iostream>
+
 
 SmoothedKeldysh::SmoothedKeldysh() = default;
 
@@ -14,9 +16,10 @@ SmoothedKeldysh::SmoothedKeldysh(
         double _N_0,
         double _n_0)
         : BaseKeldysh(_omega_0,
-                                _U_i,
-                                _N_0,
-                                _n_0) {
+                      _U_i,
+                      _N_0,
+                      _n_0) {
+    name = "smoothed";
 
 }
 
