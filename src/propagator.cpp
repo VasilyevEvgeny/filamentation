@@ -38,7 +38,8 @@ Propagator<PulsedBeam<Medium>>::Propagator(
     processor = Processor(_args, manager);
 
     // ionization_table
-    pulsed_beam->medium->ionization.make_ionization_table(manager.ionization_tables_dir,
+    pulsed_beam->medium->ionization.initialize_ionization_table(_args,
+                                                                manager.ionization_tables_dir,
                                                                 pulsed_beam->medium->name,
                                                                 pulsed_beam->lambda_0);
 
