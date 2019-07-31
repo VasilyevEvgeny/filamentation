@@ -5,15 +5,16 @@
 #include <fstream>
 #include <iostream>
 #include <sstream>
+#include <algorithm>
 
 #include "base_ionization.h"
 
 
 
 BaseIonization::BaseIonization() {
-    step_max = 500000;
+    n_i = 500000;
     i_start = 5e14;
-    di = 1e13;
+    i_step = 1e13;
 }
 
 
@@ -33,9 +34,9 @@ std::string BaseIonization::generate_ionization_table_name(std::string& medium_n
 void BaseIonization::make_ionization_table(std::string& path_to_ionization_table) {
     std::ofstream f(path_to_ionization_table);
 
-    for(size_t step = 0; step < step_max; ++step) {
-        double i = i_start + step * di;
-        double rate = R(i);
+    for(size_t step = 0; step < n_i; ++step) {
+        double i = i_start + step * i_step;
+        double rate = calculate_R(i);
 
         f << std::scientific;
         f << i << "    " << rate << "\n";
@@ -75,12 +76,38 @@ void BaseIonization::initialize_ionization_table(std::map<std::string, std::stri
     }
 
     // create data structure with rates array
-    // ...
+    rates = std::vector<double>(n_i, 0.0);
+    std::string line;
+    size_t i = 0;
+    while (std::getline(f, line)) {
+        double col1, col2;
+        std::istringstream ss(line);
+        ss >> col1;
+        char c = ss.peek();
+        while (!std::isdigit(c)) {
+            ss.get();
+            c = ss.peek();
+        }
+        ss >> col2;
+        rates[i] = col2;
+
+        i += 1;
+    }
+
+    f.close();
 
     // plot ionization rates
     process_ionization_table(args, path_to_ionization_table);
-
 }
 
+
+double BaseIonization::R(double i) {
+    if (i < i_start) {
+        return 0.0;
+    }
+    else {
+        return rates[std::min((size_t)((i - i_start) / i_step), n_i - 1)];
+    }
+}
 
 

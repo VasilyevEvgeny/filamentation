@@ -7,6 +7,7 @@
 
 #include <string>
 #include <map>
+#include <vector>
 
 class BaseIonization {
 public:
@@ -15,11 +16,14 @@ public:
 
     std::string name;
 
-    long int step_max;
+    size_t n_i;
     double i_start;
-    double di;
+    double i_step;
 
-    virtual double R(double i) = 0;
+    virtual double calculate_R(double i) = 0;
+
+    std::vector<double> rates;
+    double R(double i);
 
 
     std::string generate_ionization_table_name(std::string& medium_name, double lambda_0);

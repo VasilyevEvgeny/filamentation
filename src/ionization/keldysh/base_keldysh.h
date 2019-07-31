@@ -42,7 +42,7 @@ public:
     double calculate_W(double x_plus_1, double alpha, double Gamma, double Q);
 
 
-    double R(double i) override;
+    double calculate_R(double i) override;
 };
 
 

@@ -86,7 +86,7 @@ double BaseKeldysh::calculate_W(double x_plus_1, double alpha, double Gamma, dou
            Q * exp(-alpha * x_plus_1);
 }
 
-double BaseKeldysh::R(double i) {
+double BaseKeldysh::calculate_R(double i) {
 
     double E = calculate_E(i);
     double gamma = calculate_gamma(E);

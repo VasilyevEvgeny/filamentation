@@ -32,6 +32,7 @@ LiF::LiF(double _lambda_0) : BaseMedium(_lambda_0) {
             U_i,
             N_0,
             n_0);
+
 }
 
 LiF::~LiF() = default;
