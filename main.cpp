@@ -32,11 +32,11 @@ int main(int argc, char** argv) {
 
     double lambda_0 = 1800e-9;
 
-    SiO2 medium(lambda_0);
+    LiF medium(lambda_0);
 
     std::cout << "Address of medium in main: " << &medium << std::endl;
 
-    Gauss<SiO2> pulsed_beam(
+    Gauss<LiF> pulsed_beam(
             medium,
             lambda_0,
 //            1,
@@ -49,7 +49,7 @@ int main(int argc, char** argv) {
 
     std::cout << "PULSED BEAM ADRESS IN MAIN: " << &pulsed_beam << std::endl;
 
-    Propagator<Gauss<SiO2>> propagator(
+    Propagator<Gauss<LiF>> propagator(
             args,
             pulsed_beam,
             1500,

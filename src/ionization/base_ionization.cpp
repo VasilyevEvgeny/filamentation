@@ -50,7 +50,8 @@ void BaseIonization::process_ionization_table(std::map<std::string, std::string>
     std::string path_to_project = args["path_to_project"];
     std::string path_to_python_interpreter = args["python_interpreter"];
 
-    std::string execute = path_to_python_interpreter + " " + path_to_project + "/processing/scripts/ionization.py ";
+    std::string execute = path_to_python_interpreter + " " + path_to_project + "/processing/scripts/ionization.py " +
+            "--path_to_ionization_table=" + path_to_ionization_table;
     std::cout << execute << std::endl;
     std::system(execute.c_str());
 

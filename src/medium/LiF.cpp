@@ -27,7 +27,7 @@ LiF::LiF(double _lambda_0) : BaseMedium(_lambda_0) {
 
     delta = 0;
 
-    ionization = SmoothedKeldysh(
+    ionization = OriginalKeldysh(
             omega_0,
             U_i,
             N_0,

@@ -72,7 +72,7 @@ public:
     //extinction
     double delta;
 
-    SmoothedKeldysh ionization;
+    OriginalKeldysh ionization;
 
     void initialize_omegas();
     void initialize_dispersion_parameters();
