@@ -52,7 +52,7 @@ int main(int argc, char** argv) {
     Propagator<Gauss<LiF>> propagator(
             args,
             pulsed_beam,
-            1500,
+            1,
             4e-5,
 //            std::abs(pulsed_beam.z_diff / 500),
             10,

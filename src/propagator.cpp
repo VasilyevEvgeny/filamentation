@@ -44,13 +44,13 @@ Propagator<PulsedBeam<Medium>>::Propagator(
                                                                 pulsed_beam->lambda_0);
 
     // linear terms
-    diffraction = Diffraction<PulsedBeam<Medium>>(pulsed_beam);
-    dispersion_full = DispersionFull<PulsedBeam<Medium>>(pulsed_beam);
+    diffraction = Diffraction<PulsedBeam<Medium>>(pulsed_beam, false);
+    dispersion_full = DispersionFull<PulsedBeam<Medium>>(pulsed_beam, false);
     std::string mode = "sweep";
-    dispersion_gvd = DispersionGVD<PulsedBeam<Medium>>(pulsed_beam, mode);
+    dispersion_gvd = DispersionGVD<PulsedBeam<Medium>>(pulsed_beam, mode, false);
 
     // nonlinear terms
-    kerr_instant = KerrInstant<PulsedBeam<Medium>>(pulsed_beam);
+    kerr = Kerr<PulsedBeam<Medium>>(pulsed_beam, 1.0, true);
 
     // constainers for linear terms
     linear_terms_pool.insert(std::pair<std::string, BaseLinearTerm<PulsedBeam<Medium>>*>(diffraction.name, &diffraction));
@@ -58,11 +58,11 @@ Propagator<PulsedBeam<Medium>>::Propagator(
     linear_terms_pool.insert(std::pair<std::string, BaseLinearTerm<PulsedBeam<Medium>>*>(dispersion_gvd.name, &dispersion_gvd));
 
     // constainers for nonlinear terms
-    nonlinear_terms_pool.insert(std::pair<std::string, BaseNonlinearTerm<PulsedBeam<Medium>>*>(kerr_instant.name, &kerr_instant));
+    nonlinear_terms_pool.insert(std::pair<std::string, BaseNonlinearTerm<PulsedBeam<Medium>>*>(kerr.name, &kerr));
 
     // active terms
     active_linear_terms = {"diffraction", "dispersion_full"};
-    active_nonlinear_terms = {"kerr_instant"};
+    active_nonlinear_terms = {"kerr"};
 
     // executors
     linear_executor = LinearExecutor<PulsedBeam<Medium>>(pulsed_beam, active_linear_terms, linear_terms_pool);

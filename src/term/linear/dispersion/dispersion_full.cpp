@@ -13,8 +13,8 @@ DispersionFull<PulsedBeam<Medium>>::DispersionFull() = default;
 
 
 template<template<typename, typename...> class PulsedBeam, typename Medium>
-DispersionFull<PulsedBeam<Medium>>::DispersionFull(PulsedBeam<Medium>* _pulsed_beam) :
-        BaseDispersion<PulsedBeam <Medium>>(_pulsed_beam) {
+DispersionFull<PulsedBeam<Medium>>::DispersionFull(PulsedBeam<Medium>* _pulsed_beam, bool _T) :
+        BaseDispersion<PulsedBeam <Medium>>(_pulsed_beam, _T) {
 
 base::name = "dispersion_full";
 base::formula = R"( +\frac1{2 \pi} \int\limits_{-\infty}^{+\infty}

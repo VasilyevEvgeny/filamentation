@@ -17,8 +17,8 @@ Diffraction<PulsedBeam<Medium>>::Diffraction() = default;
 
 
 template<template<typename, typename...> class PulsedBeam, typename Medium>
-Diffraction<PulsedBeam<Medium>>::Diffraction(PulsedBeam<Medium>* _pulsed_beam)
-: BaseLinearTerm<PulsedBeam <Medium>>(_pulsed_beam) {
+Diffraction<PulsedBeam<Medium>>::Diffraction(PulsedBeam<Medium>* _pulsed_beam, bool _T)
+: BaseLinearTerm<PulsedBeam <Medium>>(_pulsed_beam, _T) {
 
 base::name = "diffraction";
 base::formula = R"( +\biggl( \frac{\partial^2}{\partial r^2} +

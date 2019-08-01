@@ -13,7 +13,7 @@ template<template<typename, typename...> class PulsedBeam, typename Medium>
 class BaseDispersion<PulsedBeam<Medium>> : public BaseLinearTerm<PulsedBeam<Medium>> {
 public:
     BaseDispersion();
-    explicit BaseDispersion(PulsedBeam<Medium>* _pulsed_beam);
+    explicit BaseDispersion(PulsedBeam<Medium>* _pulsed_beam, bool _T);
 
     ~BaseDispersion();
 

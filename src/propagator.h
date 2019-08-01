@@ -17,7 +17,7 @@
 #include "term/linear/diffraction/diffraction.h"
 #include "term/linear/dispersion/dispersion_full.h"
 #include "term/linear/dispersion/dispersion_gvd.h"
-#include "term/nonlinear/kerr_instant/kerr_instant.h"
+#include "term/nonlinear/kerr/kerr.h"
 
 #include "executor/linear_executor.h"
 #include "executor/nonlinear_executor.h"
@@ -46,7 +46,7 @@ public:
     DispersionGVD<PulsedBeam<Medium>> dispersion_gvd;
 
     // nonlinear terms
-    KerrInstant<PulsedBeam<Medium>> kerr_instant;
+    Kerr<PulsedBeam<Medium>> kerr;
 
     // executors
     LinearExecutor<PulsedBeam<Medium>> linear_executor;

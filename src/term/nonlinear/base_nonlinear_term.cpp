@@ -9,8 +9,17 @@ BaseNonlinearTerm<PulsedBeam<Medium>>::BaseNonlinearTerm() = default;
 
 
 template<template<typename, typename...> class PulsedBeam, typename Medium>
-BaseNonlinearTerm<PulsedBeam<Medium>>::BaseNonlinearTerm(PulsedBeam<Medium>* _pulsed_beam) :
-        BaseTerm<PulsedBeam <Medium>>(_pulsed_beam) {
+BaseNonlinearTerm<PulsedBeam<Medium>>::BaseNonlinearTerm(PulsedBeam<Medium>* _pulsed_beam, bool _T)
+: BaseTerm<PulsedBeam <Medium>>(_pulsed_beam, _T)
+, R_kerr_instant(0)
+, R_kerr_instant_T(0)
+, R_plasma(0)
+, R_plasma_T(0)
+, R_diss(0)
+, R_bremsstrahlung(0)
+, R_bremsstrahlung_T(0) {
+
+
 
 
 }

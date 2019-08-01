@@ -8,15 +8,17 @@
 
 #include "../base_nonlinear_term.h"
 
-template<typename T> class KerrInstant;
+template<typename T> class Kerr;
 
 template<template<typename, typename...> class PulsedBeam, typename Medium>
-class KerrInstant<PulsedBeam<Medium>>: public BaseNonlinearTerm<PulsedBeam<Medium>>  {
+class Kerr<PulsedBeam<Medium>>: public BaseNonlinearTerm<PulsedBeam<Medium>>  {
 public:
-    KerrInstant();
-    explicit KerrInstant(PulsedBeam<Medium>* _pulsed_beam);
+    Kerr();
+    explicit Kerr(PulsedBeam<Medium>* _pulsed_beam, double _g, bool _T);
 
-    ~KerrInstant();
+    double g;
+
+    ~Kerr();
 };
 
 

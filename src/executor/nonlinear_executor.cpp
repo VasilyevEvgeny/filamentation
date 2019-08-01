@@ -36,12 +36,12 @@ void NonlinearExecutor<PulsedBeam<Medium>>::execute(double dz) {
             std::complex<double> increment = std::complex<double>(0.0, 0.0);
             for(auto& nonlinear_term_name : base::active_terms) {
 
-                increment += nonlinear_terms_pool[nonlinear_term_name]->R;
+                increment += 0.0; //nonlinear_terms_pool[nonlinear_term_name]->R;
             }
 
 
 
-            base::pulsed_beam->field[k][s] *= exp(increment * norm(base::pulsed_beam->field[k][s]) * dz);
+            //base::pulsed_beam->field[k][s] *= exp(increment * norm(base::pulsed_beam->field[k][s]) * dz);
 
         }
     }
