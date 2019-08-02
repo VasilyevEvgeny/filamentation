@@ -18,6 +18,8 @@
 #include "term/linear/dispersion/dispersion_full.h"
 #include "term/linear/dispersion/dispersion_gvd.h"
 #include "term/nonlinear/kerr/kerr.h"
+#include "term/nonlinear/plasma/plasma.h"
+#include "term/nonlinear/bremsstrahlung/bremsstrahlung.h"
 
 #include "executor/linear_executor.h"
 #include "executor/nonlinear_executor.h"
@@ -47,6 +49,8 @@ public:
 
     // nonlinear terms
     Kerr<PulsedBeam<Medium>> kerr;
+    Plasma<PulsedBeam<Medium>> plasma;
+    Bremsstrahlung<PulsedBeam<Medium>> bremsstrahlung;
 
     // executors
     LinearExecutor<PulsedBeam<Medium>> linear_executor;

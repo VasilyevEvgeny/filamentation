@@ -19,6 +19,9 @@ Manager::Manager(std::map<std::string, std::string>& args) {
     field_dir_name = "field";
     field_dir = current_results_dir + "/" + field_dir_name;
 
+    plasma_dir_name = "plasma";
+    plasma_dir = current_results_dir + "/" + plasma_dir_name;
+
     try {
         _mkdir(global_results_dir.c_str());
         _mkdir(ionization_tables_dir.c_str());
@@ -29,6 +32,10 @@ Manager::Manager(std::map<std::string, std::string>& args) {
 
         if (_mkdir(field_dir.c_str())) {
             throw std::runtime_error("field_dir wasn't created!");
+        }
+
+        if (_mkdir(plasma_dir.c_str())) {
+            throw std::runtime_error("plasma_dir wasn't created!");
         }
     }
     catch(const std::exception &e) {

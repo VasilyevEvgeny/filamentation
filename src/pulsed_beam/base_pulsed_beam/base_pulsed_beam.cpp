@@ -76,6 +76,9 @@ BasePulsedBeam<Medium>::BasePulsedBeam(
 
     // spectrum
     spectrum = std::vector<std::vector<std::complex<double>>>(n_r, std::vector<std::complex<double>>(n_t, 0.0));
+
+    // plasma
+    plasma = std::vector<std::vector<double>>(n_r, std::vector<double>(n_t, 0.0));
 }
 
 

@@ -25,6 +25,9 @@ public:
     std::string field_dir_name;
     std::string field_dir;
 
+    std::string plasma_dir_name;
+    std::string plasma_dir;
+
 private:
     std::string get_current_datetime() const;
 };

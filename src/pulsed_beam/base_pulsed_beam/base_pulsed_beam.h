@@ -77,6 +77,7 @@ public:
     std::vector<std::vector<std::complex<double>>> field;
     std::vector<std::vector<std::complex<double>>> spectrum;
 
+    std::vector<std::vector<double>> plasma;
 
 private:
 

@@ -50,7 +50,9 @@ Propagator<PulsedBeam<Medium>>::Propagator(
     dispersion_gvd = DispersionGVD<PulsedBeam<Medium>>(pulsed_beam, mode, false);
 
     // nonlinear terms
-    kerr = Kerr<PulsedBeam<Medium>>(pulsed_beam, 1.0, true);
+    kerr = Kerr<PulsedBeam<Medium>>(pulsed_beam, 0.0, true);
+    plasma = Plasma<PulsedBeam<Medium>>(pulsed_beam, true);
+    bremsstrahlung = Bremsstrahlung<PulsedBeam<Medium>>(pulsed_beam, true);
 
     // constainers for linear terms
     linear_terms_pool.insert(std::pair<std::string, BaseLinearTerm<PulsedBeam<Medium>>*>(diffraction.name, &diffraction));
@@ -59,10 +61,12 @@ Propagator<PulsedBeam<Medium>>::Propagator(
 
     // constainers for nonlinear terms
     nonlinear_terms_pool.insert(std::pair<std::string, BaseNonlinearTerm<PulsedBeam<Medium>>*>(kerr.name, &kerr));
+    nonlinear_terms_pool.insert(std::pair<std::string, BaseNonlinearTerm<PulsedBeam<Medium>>*>(plasma.name, &plasma));
+    nonlinear_terms_pool.insert(std::pair<std::string, BaseNonlinearTerm<PulsedBeam<Medium>>*>(bremsstrahlung.name, &bremsstrahlung));
 
     // active terms
     active_linear_terms = {"diffraction", "dispersion_full"};
-    active_nonlinear_terms = {"kerr"};
+    active_nonlinear_terms = {"kerr", "plasma", "bremsstrahlung"};
 
     // executors
     linear_executor = LinearExecutor<PulsedBeam<Medium>>(pulsed_beam, active_linear_terms, linear_terms_pool);
@@ -109,6 +113,7 @@ void Propagator<PulsedBeam<Medium>>::propagate() {
         if (save_field_every) {
             if (!(step % save_field_every)) {
                 logger.save_field(step);
+                logger.save_plasma(step);
             }
         }
 

@@ -102,6 +102,30 @@ void Logger<PulsedBeam<Medium>, Processor>::save_field(int step) {
     f.close();
 }
 
+
+template<template<typename, typename...> class PulsedBeam, typename Medium, typename Processor>
+void Logger<PulsedBeam<Medium>, Processor>::save_plasma(int step) {
+    std::stringstream ss;
+    ss << std::setw(5) << std::setfill('0') << step;
+    std::string filename = manager.plasma_dir + "/" + ss.str();
+
+    std::ofstream f(filename);
+    f << std::scientific;
+    std::string space = "    ";
+    for (int k = 0; k < pulsed_beam->n_r; ++k) {
+        for (int s = 0; s < pulsed_beam->n_t; ++s) {
+            if (s) {
+                f << space;
+            }
+            f << pulsed_beam->plasma[k][s];
+        }
+        f << "\n";
+    }
+
+    f.close();
+}
+
+
 template<template<typename, typename...> class PulsedBeam, typename Medium, typename Processor>
 void Logger<PulsedBeam<Medium>, Processor>::save_states_to_csv() {
 

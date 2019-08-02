@@ -66,6 +66,7 @@ public:
     void flush_current_state(size_t step, double z);
     void save_states_to_csv();
     void save_field(int step);
+    void save_plasma(int step);
 
 private:
 

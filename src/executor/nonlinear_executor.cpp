@@ -27,16 +27,30 @@ NonlinearExecutor<PulsedBeam<Medium>>::~NonlinearExecutor() = default;
 
 
 
+
+
 template<template<typename, typename...> class PulsedBeam, typename Medium>
 void NonlinearExecutor<PulsedBeam<Medium>>::execute(double dz) {
 
     for(size_t k = 0; k < base::pulsed_beam->n_r; ++k) {
-        for(size_t s = 0; s < base::pulsed_beam->n_t; ++s) {
+        for(size_t s = 1; s < base::pulsed_beam->n_t; ++s) {
+
+            double i_current = norm(base::pulsed_beam->field[k][s]);
+            double i_prev = norm(base::pulsed_beam->field[k][s - 1]);
+            double i_deriv = (i_current - i_prev) / base::pulsed_beam->dt;
+
+
 
             std::complex<double> increment = std::complex<double>(0.0, 0.0);
             for(auto& nonlinear_term_name : base::active_terms) {
 
-                increment += 0.0; //nonlinear_terms_pool[nonlinear_term_name]->R;
+                increment +=  0.0;// nonlinear_terms_pool[nonlinear_term_name]->R_kerr_instant
+//                             + nonlinear_terms_pool[nonlinear_term_name]->R_kerr_instant_T * i_deriv
+//                             + nonlinear_terms_pool[nonlinear_term_name]->R_plasma
+//                             + nonlinear_terms_pool[nonlinear_term_name]->R_plasma_T
+//                             + nonlinear_terms_pool[nonlinear_term_name]->R_bremsstrahlung
+//                             + nonlinear_terms_pool[nonlinear_term_name]->R_bremsstrahlung_T
+//                             + nonlinear_terms_pool[nonlinear_term_name]->R_diss;
             }
 
 
