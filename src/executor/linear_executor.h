@@ -8,7 +8,7 @@
 #include <map>
 
 #include "base_executor.h"
-#include "term/linear/base_linear_term.h"
+#include "term/wave_equation/linear/base_linear_term.h"
 #include "fft/fft.h"
 
 template<typename T> class LinearExecutor;

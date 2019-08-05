@@ -19,6 +19,7 @@ public:
     std::string path_to_project;
     std::string path_to_python_interpreter;
     std::string intensity_rt;
+    std::string plasma_rt;
     std::string track;
 
     Manager manager;

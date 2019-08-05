@@ -1,8 +1,8 @@
 //
-// Created by vasilyev on 01.08.2019.
+// Created by vasilyev on 31.07.2019.
 //
 
-#include "bremsstrahlung.h"
+#include "plasma.h"
 
 #define base BaseTerm<PulsedBeam<Medium>>
 #define base_nonlinear BaseNonlinearTerm<PulsedBeam<Medium>>
@@ -11,7 +11,6 @@
 #define m_e BaseTerm<PulsedBeam<Medium>>::pulsed_beam->medium->math_constants.m_e
 #define eps_0 BaseTerm<PulsedBeam<Medium>>::pulsed_beam->medium->math_constants.epsilon_0
 #define e BaseTerm<PulsedBeam<Medium>>::pulsed_beam->medium->math_constants.e
-#define c BaseTerm<PulsedBeam<Medium>>::pulsed_beam->medium->math_constants.c
 
 #define omega_0 BaseTerm<PulsedBeam<Medium>>::pulsed_beam->omega_0
 #define i_0 BaseTerm<PulsedBeam<Medium>>::pulsed_beam->i_0
@@ -19,37 +18,44 @@
 #define k_0 BaseTerm<PulsedBeam<Medium>>::pulsed_beam->medium->k_0
 #define n_0 BaseTerm<PulsedBeam<Medium>>::pulsed_beam->medium->n_0
 #define n_2 BaseTerm<PulsedBeam<Medium>>::pulsed_beam->medium->n_2
-#define v_ei BaseTerm<PulsedBeam<Medium>>::pulsed_beam->medium->v_ei
 
 
 template<template<typename, typename...> class PulsedBeam, typename Medium>
-Bremsstrahlung<PulsedBeam<Medium>>::Bremsstrahlung() = default;
+Plasma<PulsedBeam<Medium>>::Plasma() = default;
+
 
 template<template<typename, typename...> class PulsedBeam, typename Medium>
-Bremsstrahlung<PulsedBeam<Medium>>::Bremsstrahlung(PulsedBeam<Medium>* _pulsed_beam, bool _T)
+Plasma<PulsedBeam<Medium>>::Plasma(PulsedBeam<Medium>* _pulsed_beam, bool _T)
 : BaseNonlinearTerm<PulsedBeam<Medium>>(_pulsed_beam, _T) {
 
-    base::name = "bremsstrahlung";
+    base::name = "plasma";
 
-    base_nonlinear::R_bremsstrahlung = -pow(e, 2) * v_ei / (2.0 * k_0 * pow(c, 2) * m_e * eps_0 * omega_0);
+    base_nonlinear::R_plasma = ii * pow(e, 2) * k_0 / (2.0 * m_e * pow(omega_0 * n_0, 2) * eps_0);
 
     if (base::T) {
-        base_nonlinear::R_bremsstrahlung_T = -ii * pow(e, 2) * v_ei / (k_0 * pow(c, 2) * m_e * eps_0 * pow(omega_0, 2));
+        base_nonlinear::R_plasma_T = -pow(e, 2) * k_0 / (2.0 * m_e * pow(omega_0, 3) * pow(n_0, 2) * eps_0);
     }
 
+
+    if (!base:: T) {
+        base::formula = R"( + \frac{2 k_0^2}{n_0} \Delta n_{pl} A(r, t, z) )";
+    }
+    else {
+        base::formula = R"( + \hat{T}^{-1} \frac{2 k_0^2}{n_0} \Delta n_{pl} A(r, t, z) )";
+    }
 }
 
+
 template<template<typename, typename...> class PulsedBeam, typename Medium>
-Bremsstrahlung<PulsedBeam<Medium>>::~Bremsstrahlung() = default;
+Plasma<PulsedBeam<Medium>>::~Plasma() = default;
 
 
-
-template class Bremsstrahlung<Gauss<SiO2>>;
-template class Bremsstrahlung<Gauss<CaF2>>;
-template class Bremsstrahlung<Gauss<LiF>>;
-template class Bremsstrahlung<Ring<SiO2>>;
-template class Bremsstrahlung<Ring<CaF2>>;
-template class Bremsstrahlung<Ring<LiF>>;
-template class Bremsstrahlung<Vortex<SiO2>>;
-template class Bremsstrahlung<Vortex<CaF2>>;
-template class Bremsstrahlung<Vortex<LiF>>;
+template class Plasma<Gauss<SiO2>>;
+template class Plasma<Gauss<CaF2>>;
+template class Plasma<Gauss<LiF>>;
+template class Plasma<Ring<SiO2>>;
+template class Plasma<Ring<CaF2>>;
+template class Plasma<Ring<LiF>>;
+template class Plasma<Vortex<SiO2>>;
+template class Plasma<Vortex<CaF2>>;
+template class Plasma<Vortex<LiF>>;

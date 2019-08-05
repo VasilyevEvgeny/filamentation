@@ -5,7 +5,7 @@
 #ifndef FILAMENTATION_DISPERSIONEXECUTOR_H
 #define FILAMENTATION_DISPERSIONEXECUTOR_H
 
-#include "../base_linear_term.h"
+#include "term/wave_equation/linear/base_linear_term.h"
 
 template<typename T> class BaseDispersion;
 

@@ -24,8 +24,10 @@ class BaseReadout:
         self._args = kwargs['args']
 
         self._field_dir = self._args.current_results_dir + '/field'
+        self._plasma_dir = self._args.current_results_dir + '/plasma'
 
         self._field_paths = []
+        self._plasma_paths = []
         self._parameters = None
         self._df_propagation = None
 
@@ -82,6 +84,10 @@ class BaseReadout:
     def _readout_field_paths(self):
         for path in glob(self._field_dir + '/*'):
             self._field_paths.append(path.replace('\\', '/'))
+
+    def _readout_plasma_paths(self):
+        for path in glob(self._plasma_dir + '/*'):
+            self._plasma_paths.append(path.replace('\\', '/'))
 
     @staticmethod
     def _reflect(arr):

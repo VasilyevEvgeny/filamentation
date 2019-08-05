@@ -50,9 +50,9 @@ Kerr<PulsedBeam<Medium>>::Kerr(PulsedBeam<Medium>* _pulsed_beam, double _g, bool
         }
     }
 
-    base_nonlinear::R_kerr_instant = -ii * k_0 * (1.0 - g) * n_2 * i_0 / n_0;
+    base_nonlinear::R_kerr_instant = -ii * k_0 * (1.0 - g) * n_2 / n_0;
     if (base::T) {
-        base_nonlinear::R_kerr_instant_T = -k_0 * (1.0 - g) * n_2 * i_0 / (n_0 * omega_0);
+        base_nonlinear::R_kerr_instant_T = -k_0 * (1.0 - g) * n_2 / (n_0 * omega_0);
     }
 
 }

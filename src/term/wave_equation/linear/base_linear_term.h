@@ -5,7 +5,7 @@
 #ifndef FILAMENTATION_BASELINEARTERM_H
 #define FILAMENTATION_BASELINEARTERM_H
 
-#include "../base_term.h"
+#include "term/base_term.h"
 
 template<typename T> class BaseLinearTerm;
 

@@ -16,7 +16,8 @@ std::map<std::string, std::string> parse_args(char **argv) {
               {"ionization_tables_dir_name", argv[5]},
               {"python_interpreter", argv[6]},
               {"intensity_rt", argv[7]},
-              {"track", argv[8]}};
+              {"plasma_rt", argv[8]},
+              {"track", argv[9]}};
 }
 
 
@@ -52,7 +53,7 @@ int main(int argc, char** argv) {
     Propagator<Gauss<LiF>> propagator(
             args,
             pulsed_beam,
-            2000,
+            1,
             4e-5,
 //            std::abs(pulsed_beam.z_diff / 500),
             10,

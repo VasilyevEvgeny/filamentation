@@ -72,15 +72,15 @@ add_executable(filamentation
         src/fft/fft.cpp
         src/fft/fft.h
 
-        src/term/linear/diffraction/diffraction.cpp
-        src/term/linear/diffraction/diffraction.h
+        src/term/wave_equation/linear/diffraction/diffraction.cpp
+        src/term/wave_equation/linear/diffraction/diffraction.h
 
-        src/term/linear/dispersion/base_dispersion.cpp
-        src/term/linear/dispersion/base_dispersion.h
-        src/term/linear/dispersion/dispersion_full.cpp
-        src/term/linear/dispersion/dispersion_full.h
-        src/term/linear/dispersion/dispersion_gvd.cpp
-        src/term/linear/dispersion/dispersion_gvd.h
+        src/term/wave_equation/linear/dispersion/base_dispersion.cpp
+        src/term/wave_equation/linear/dispersion/base_dispersion.h
+        src/term/wave_equation/linear/dispersion/dispersion_full.cpp
+        src/term/wave_equation/linear/dispersion/dispersion_full.h
+        src/term/wave_equation/linear/dispersion/dispersion_gvd.cpp
+        src/term/wave_equation/linear/dispersion/dispersion_gvd.h
 
 
         # alglib
@@ -98,7 +98,7 @@ add_executable(filamentation
         lib/alglib/src/specialfunctions.cpp
         lib/alglib/src/statistics.cpp
         src/functions.cpp
-        src/functions.h src/term/nonlinear/base_nonlinear_term.cpp src/term/nonlinear/base_nonlinear_term.h src/term/nonlinear/kerr/kerr.cpp src/term/nonlinear/kerr/kerr.h src/term/linear/base_linear_term.cpp src/term/linear/base_linear_term.h src/executor/base_executor.cpp src/executor/base_executor.h src/executor/linear_executor.cpp src/executor/linear_executor.h src/executor/nonlinear_executor.cpp src/executor/nonlinear_executor.h src/ionization/base_ionization.cpp src/ionization/base_ionization.h src/ionization/keldysh/base_keldysh.cpp src/ionization/keldysh/base_keldysh.h src/ionization/keldysh/original_keldysh.cpp src/ionization/keldysh/original_keldysh.h src/ionization/keldysh/smoothed_keldysh.cpp src/ionization/keldysh/smoothed_keldysh.h src/term/nonlinear/plasma/plasma.cpp src/term/nonlinear/plasma/plasma.h src/term/nonlinear/bremsstrahlung/bremsstrahlung.cpp src/term/nonlinear/bremsstrahlung/bremsstrahlung.h)
+        src/functions.h src/term/wave_equation/nonlinear/base_nonlinear_term.cpp src/term/wave_equation/nonlinear/base_nonlinear_term.h src/term/wave_equation/nonlinear/kerr/kerr.cpp src/term/wave_equation/nonlinear/kerr/kerr.h src/term/wave_equation/linear/base_linear_term.cpp src/term/wave_equation/linear/base_linear_term.h src/executor/base_executor.cpp src/executor/base_executor.h src/executor/linear_executor.cpp src/executor/linear_executor.h src/executor/nonlinear_executor.cpp src/executor/nonlinear_executor.h src/ionization/base_ionization.cpp src/ionization/base_ionization.h src/ionization/keldysh/base_keldysh.cpp src/ionization/keldysh/base_keldysh.h src/ionization/keldysh/original_keldysh.cpp src/ionization/keldysh/original_keldysh.h src/ionization/keldysh/smoothed_keldysh.cpp src/ionization/keldysh/smoothed_keldysh.h src/term/wave_equation/nonlinear/plasma/plasma.cpp src/term/wave_equation/nonlinear/plasma/plasma.h src/term/wave_equation/nonlinear/bremsstrahlung/bremsstrahlung.cpp src/term/wave_equation/nonlinear/bremsstrahlung/bremsstrahlung.h src/term/kinetic_equation/kinetic_equation.cpp src/term/kinetic_equation/kinetic_equation.h src/term/wave_equation/nonlinear/dissipation/dissipation.cpp src/term/wave_equation/nonlinear/dissipation/dissipation.h)
 
 target_link_libraries(filamentation gtest gtest_main)
 target_link_libraries(filamentation gmock gmock_main)
@@ -156,15 +156,15 @@ add_executable(test_diffraction
         src/fft/fft.cpp
         src/fft/fft.h
 
-        src/term/linear/diffraction/diffraction.cpp
-        src/term/linear/diffraction/diffraction.h
+        src/term/wave_equation/linear/diffraction/diffraction.cpp
+        src/term/wave_equation/linear/diffraction/diffraction.h
 
-        src/term/linear/dispersion/base_dispersion.cpp
-        src/term/linear/dispersion/base_dispersion.h
-        src/term/linear/dispersion/dispersion_full.cpp
-        src/term/linear/dispersion/dispersion_full.h
-        src/term/linear/dispersion/dispersion_gvd.cpp
-        src/term/linear/dispersion/dispersion_gvd.h
+        src/term/wave_equation/linear/dispersion/base_dispersion.cpp
+        src/term/wave_equation/linear/dispersion/base_dispersion.h
+        src/term/wave_equation/linear/dispersion/dispersion_full.cpp
+        src/term/wave_equation/linear/dispersion/dispersion_full.h
+        src/term/wave_equation/linear/dispersion/dispersion_gvd.cpp
+        src/term/wave_equation/linear/dispersion/dispersion_gvd.h
 
 
         # alglib
@@ -243,15 +243,15 @@ add_executable(test_dispersion
         src/fft/fft.cpp
         src/fft/fft.h
 
-        src/term/linear/diffraction/diffraction.cpp
-        src/term/linear/diffraction/diffraction.h
+        src/term/wave_equation/linear/diffraction/diffraction.cpp
+        src/term/wave_equation/linear/diffraction/diffraction.h
 
-        src/term/linear/dispersion/base_dispersion.cpp
-        src/term/linear/dispersion/base_dispersion.h
-        src/term/linear/dispersion/dispersion_full.cpp
-        src/term/linear/dispersion/dispersion_full.h
-        src/term/linear/dispersion/dispersion_gvd.cpp
-        src/term/linear/dispersion/dispersion_gvd.h
+        src/term/wave_equation/linear/dispersion/base_dispersion.cpp
+        src/term/wave_equation/linear/dispersion/base_dispersion.h
+        src/term/wave_equation/linear/dispersion/dispersion_full.cpp
+        src/term/wave_equation/linear/dispersion/dispersion_full.h
+        src/term/wave_equation/linear/dispersion/dispersion_gvd.cpp
+        src/term/wave_equation/linear/dispersion/dispersion_gvd.h
 
 
         # alglib

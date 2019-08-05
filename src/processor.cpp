@@ -14,6 +14,7 @@ Processor::Processor(std::map<std::string, std::string>& args, Manager& _manager
     path_to_project = args["path_to_project"];
     path_to_python_interpreter = args["python_interpreter"];
     intensity_rt = args["intensity_rt"];
+    plasma_rt = args["plasma_rt"];
     track = args["track"];
 }
 
@@ -42,6 +43,12 @@ std::string Processor::get_cwd() {
 void Processor::go() {
     if (intensity_rt == "True") {
         std::string execute = path_to_python_interpreter + " " + path_to_project + "/processing/scripts/intensity_rt.py " +
+                              "--current_results_dir=" + manager.current_results_dir;
+        std::cout << execute << std::endl;
+        std::system(execute.c_str());
+    }
+    if (plasma_rt == "True") {
+        std::string execute = path_to_python_interpreter + " " + path_to_project + "/processing/scripts/plasma_rt.py " +
                               "--current_results_dir=" + manager.current_results_dir;
         std::cout << execute << std::endl;
         std::system(execute.c_str());

@@ -5,7 +5,7 @@
 #ifndef FILAMENTATION_BREMSSTRAHLUNG_H
 #define FILAMENTATION_BREMSSTRAHLUNG_H
 
-#include "../base_nonlinear_term.h"
+#include "term/wave_equation/nonlinear/base_nonlinear_term.h"
 
 template<typename T> class Bremsstrahlung;
 

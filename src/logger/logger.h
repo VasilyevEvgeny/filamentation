@@ -13,8 +13,8 @@
 #include "../pulsed_beam/vortex.h"
 #include "../manager.h"
 #include "../processor.h"
-#include "term/linear/base_linear_term.h"
-#include "term/nonlinear/base_nonlinear_term.h"
+#include "term/wave_equation/linear/base_linear_term.h"
+#include "term/wave_equation/nonlinear/base_nonlinear_term.h"
 
 #include "diffraction/processor_diffraction.h"
 #include "dispersion/processor_dispersion.h"

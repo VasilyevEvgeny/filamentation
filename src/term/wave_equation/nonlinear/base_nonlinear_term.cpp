@@ -15,7 +15,7 @@ BaseNonlinearTerm<PulsedBeam<Medium>>::BaseNonlinearTerm(PulsedBeam<Medium>* _pu
 , R_kerr_instant_T(0)
 , R_plasma(0)
 , R_plasma_T(0)
-, R_diss(0)
+, R_dissipation(0)
 , R_bremsstrahlung(0)
 , R_bremsstrahlung_T(0) {
 

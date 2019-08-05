@@ -14,12 +14,15 @@
 #include "medium/base_medium.h"
 #include "manager.h"
 
-#include "term/linear/diffraction/diffraction.h"
-#include "term/linear/dispersion/dispersion_full.h"
-#include "term/linear/dispersion/dispersion_gvd.h"
-#include "term/nonlinear/kerr/kerr.h"
-#include "term/nonlinear/plasma/plasma.h"
-#include "term/nonlinear/bremsstrahlung/bremsstrahlung.h"
+#include "term/wave_equation/linear/diffraction/diffraction.h"
+#include "term/wave_equation/linear/dispersion/dispersion_full.h"
+#include "term/wave_equation/linear/dispersion/dispersion_gvd.h"
+#include "term/wave_equation/nonlinear/kerr/kerr.h"
+#include "term/wave_equation/nonlinear/plasma/plasma.h"
+#include "term/wave_equation/nonlinear/bremsstrahlung/bremsstrahlung.h"
+#include "term/wave_equation/nonlinear/dissipation/dissipation.h"
+
+#include "term/kinetic_equation/kinetic_equation.h"
 
 #include "executor/linear_executor.h"
 #include "executor/nonlinear_executor.h"
@@ -51,6 +54,7 @@ public:
     Kerr<PulsedBeam<Medium>> kerr;
     Plasma<PulsedBeam<Medium>> plasma;
     Bremsstrahlung<PulsedBeam<Medium>> bremsstrahlung;
+    Dissipation<PulsedBeam<Medium>> dissipation;
 
     // executors
     LinearExecutor<PulsedBeam<Medium>> linear_executor;

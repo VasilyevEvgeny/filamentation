@@ -5,7 +5,7 @@
 #ifndef FILAMENTATION_BASENONLINEARTERM_H
 #define FILAMENTATION_BASENONLINEARTERM_H
 
-#include "../base_term.h"
+#include "term/base_term.h"
 
 template<typename T> class BaseNonlinearTerm;
 
@@ -21,7 +21,7 @@ public:
     std::complex<double> R_kerr_instant_T;
     std::complex<double> R_plasma;
     std::complex<double> R_plasma_T;
-    std::complex<double> R_diss;
+    std::complex<double> R_dissipation;
     std::complex<double> R_bremsstrahlung;
     std::complex<double> R_bremsstrahlung_T;
 
