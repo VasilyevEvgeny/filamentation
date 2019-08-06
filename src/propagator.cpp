@@ -75,10 +75,10 @@ Propagator<PulsedBeam<Medium>>::Propagator(
     nonlinear_executor = NonlinearExecutor<PulsedBeam<Medium>>(pulsed_beam, active_nonlinear_terms, nonlinear_terms_pool,
             &dissipation);
 
-
     logger = Logger<PulsedBeam<Medium>, Processor>(_args, pulsed_beam, manager, processor, track_info,
                                                    linear_terms_pool, nonlinear_terms_pool,
-                                                   active_linear_terms, active_nonlinear_terms);
+                                                   active_linear_terms, active_nonlinear_terms,
+                                                   nonlinear_executor.kinetic_equation);
 
     logger.save_initial_parameters_to_pdf(true, false);
     logger.save_initial_parameters_to_yml();

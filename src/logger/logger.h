@@ -15,6 +15,7 @@
 #include "../processor.h"
 #include "term/wave_equation/linear/base_linear_term.h"
 #include "term/wave_equation/nonlinear/base_nonlinear_term.h"
+#include "term/kinetic_equation/kinetic_equation.h"
 
 #include "diffraction/processor_diffraction.h"
 #include "dispersion/processor_dispersion.h"
@@ -34,7 +35,8 @@ public:
             std::map<std::string, BaseLinearTerm<PulsedBeam<Medium>>*>& _linear_terms_pool,
             std::map<std::string, BaseNonlinearTerm<PulsedBeam<Medium>>*>& _nonlinear_terms_pool,
             std::vector<std::string>& _active_linear_terms,
-            std::vector<std::string>& _active_nonlinear_terms);
+            std::vector<std::string>& _active_nonlinear_terms,
+            KineticEquation<PulsedBeam<Medium>>& _kinetic_equation);
     ~Logger();
 
     Manager manager;
@@ -50,6 +52,7 @@ public:
     std::map<std::string, BaseNonlinearTerm<PulsedBeam<Medium>>*> nonlinear_terms_pool;
     std::vector<std::string> active_linear_terms;
     std::vector<std::string> active_nonlinear_terms;
+    KineticEquation<PulsedBeam<Medium>> kinetic_equation;
 
     void add_start(std::string& tex_file_data);
     void add_end(std::string& tex_file_data);

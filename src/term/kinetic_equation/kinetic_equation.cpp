@@ -17,9 +17,9 @@ KineticEquation<PulsedBeam<Medium>>::KineticEquation(PulsedBeam<Medium>* _pulsed
 , v_i_const(_v_i_const)
 , beta(_beta){
 
-base::name = "kinetic_equation";
+    base::name = "kinetic_equation";
 
-
+    base::formula = R"( \frac{\partial N_e(r,t)}{\partial t} =& \ R_E \Bigl[ N_0 - N_e(r,t) \Bigr] + \nu_i N_e(r,t) - \beta N_e(r,t) )";
 
 }
 

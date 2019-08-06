@@ -127,15 +127,20 @@ void Logger<PulsedBeam<Medium>, Processor>::save_initial_parameters_to_pdf(bool 
         equation += "&" + nonlinear_terms_pool[term_name]->formula + R"(\\)";
     }
 
+    equation += kinetic_equation.formula;
 
     std::string equation_data = R"(
 \midrule[2pt]
 \textbf{EQUATION} \tabularnewline
 \midrule[2pt]
 \parbox{\linewidth}{
-\begin{align*}
+\begin{equation}
+\left\{
+\begin{aligned}
 %s
-\end{align*}
+\end{aligned}
+\right.
+\end{equation}
 }
 \tabularnewline
 \midrule[2pt]
