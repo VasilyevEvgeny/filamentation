@@ -1,0 +1,24 @@
+info:
+  prefix: filament
+
+medium:
+  type: LiF
+
+pulsed_beam:
+  lambda_0: 1800e-9
+  r_0: 100e-6
+  t_0: 50e-15
+  M: 1
+  m: 1
+
+grid:
+  n_r: 1024
+  n_t: 512
+
+track:
+  n_z: 1000
+  dz_0: 1e-5
+  print_current_state_every: 10
+  save_every: 100
+  save_field: true
+  save_plasma: true
