@@ -7,6 +7,7 @@
 #include <omp.h>
 
 #include "pulsed_beam/base_pulsed_beam/base_pulsed_beam.h"
+#include "config_manager.h"
 #include "propagator.h"
 
 std::map<std::string, std::string> parse_args(char **argv) {
@@ -23,53 +24,40 @@ std::map<std::string, std::string> parse_args(char **argv) {
 
 
 
-auto parse_config(std::string& path_to_config) {
-    std::map<std::string, std::map<std::string, std::string>> config;
 
-    std::ifstream f(path_to_config);
-    std::string line;
-    std::string key_1;
-    std::string key_2;
-    std::string val;
-    while (getline(f, line)) {
-        if (line.empty()) {
-            continue;
-        }
-        else if (line[0] != ' ' and line[1] != ' ') {
-            key_1 = line;
-            key_1.pop_back();
-
-            std::cout << "key_1 = " << key_1 << std::endl;
-        }
-        else {
-            std::istringstream ss(line);
-            ss >> key_2 >> val;
-            key_2.pop_back();
-
-            std::cout << "key_2 = " << key_2 << std::endl;
-            std::cout << "val = " << val << std::endl;
-
-            config[key_1][key_2] = val;
-        }
-    }
-
-    std::cout << "config:" << std::endl;
-    for (auto& item_global : config) {
-        std::string global_key = item_global.first;
-        std::cout << global_key << ":" << std::endl;
-        for (auto& item_local : item_global.second) {
-            std::string local_key = item_local.first;
-            std::string value = item_local.second;
-            std::cout << "  " << local_key << ": " << value << std::endl;
-        }
-    }
-
-}
 
 
 int main(int argc, char** argv) {
     std::string path_to_config = "config.yml";
-    parse_config(path_to_config);
+    auto configManager = ConfigManager();
+    configManager.parse_and_validate_config(path_to_config);
+
+//    if (config["pulsed_beam"]["lambda_0"] == "SiO2") {
+//#ifndef MEDIUM
+//#define MEDIUM SiO2
+//#endif
+//    }
+//    else if (config["pulsed_beam"]["lambda_0"] == "CaF2") {
+//#ifndef MEDIUM
+//#define MEDIUM CaF2
+//#endif
+//    }
+//    else if (config["pulsed_beam"]["lambda_0"] == "LiF") {
+//#ifndef MEDIUM
+//#define MEDIUM LiF
+//#endif
+//    }
+//    else {
+//        throw std::runtime_error("Wrong medium name!");
+//    }
+
+
+
+
+
+
+
+
 
 //    const size_t NUM_PROCS = omp_get_num_procs();
 //

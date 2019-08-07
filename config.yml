@@ -1,5 +1,10 @@
 info:
   prefix: filament
+  path_to_project: C:/Users/vasilyev/Documents/CLion/filamentation
+  path_to_python_interpreter: C:/Users/vasilyev/Documents/venvs/filamentation/Scripts/python.exe
+  global_root_dir: L:/Vasilyev
+  global_results_dir_name: Filamentation_results
+  ionization_tables_dir_name: Filamentation_ionization_tables
 
 medium:
   type: LiF
@@ -22,3 +27,8 @@ track:
   save_every: 100
   save_field: true
   save_plasma: true
+
+plot:
+  plot_intensity_rt: true
+  plot_plasma_rt: true
+  plot_track: true
