@@ -2,19 +2,21 @@
 // Created by vasilyev on 29.06.2019.
 //
 
-#ifndef FILAMENTATION_MANAGER_H
-#define FILAMENTATION_MANAGER_H
+#ifndef FILAMENTATION_DIRMANAGER_H
+#define FILAMENTATION_DIRMANAGER_H
 
 #include <direct.h>
 #include <string>
 #include <map>
 #include <iostream>
 
-class Manager {
+#include "manager/config_manager.h"
+
+class DirManager {
 public:
-    Manager() = default;
-    explicit Manager(std::map<std::string, std::string>& args);
-    ~Manager();
+    DirManager() = default;
+    explicit DirManager(ConfigManager& config_manager);
+    ~DirManager();
 
     std::string global_results_dir;
     std::string ionization_tables_dir;
@@ -33,4 +35,4 @@ private:
 };
 
 
-#endif //FILAMENTATION_MANAGER_H
+#endif //FILAMENTATION_DIRMANAGER_H

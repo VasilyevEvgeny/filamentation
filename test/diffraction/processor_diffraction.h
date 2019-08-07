@@ -6,11 +6,12 @@
 #define FILAMENTATION_PROCESSORDIFFRACTION_H
 
 #include "processor.h"
+#include "manager/config_manager.h"
 
 class ProcessorDiffraction : public Processor {
 public:
     ProcessorDiffraction();
-    ProcessorDiffraction(std::map<std::string, std::string>& args, Manager& _manager);
+    ProcessorDiffraction(ConfigManager& _config_manager, DirManager& _dir_manager);
 
     std::string path_to_test_script;
 

@@ -43,7 +43,7 @@ void Logger<PulsedBeam<Medium>, Processor>::save_initial_parameters_to_yml() {
     std::string yml_file_data;
 
     std::string yml_file_name = "parameters";
-    std::string path = manager.current_results_dir;
+    std::string path = dir_manager.current_results_dir;
     std::string yml_file_path = path + "/" + yml_file_name + ".yml";
 
     /*
@@ -167,8 +167,8 @@ track:
                                          pulsed_beam->t_max,
                                          (double)pulsed_beam->n_t,
                                          pulsed_beam->dt,
-                                         track_info["n_z"],
-                                         track_info["dz"]};
+                                         (double)config_manager.n_z,
+                                         config_manager.dz_0};
     Logger::add_to_yml_file_data(yml_file_data, data_5, data_5_params);
 
 

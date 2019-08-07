@@ -13,32 +13,27 @@ Logger<PulsedBeam<Medium>, Processor>::Logger() = default;
 
 template<template<typename, typename...> class PulsedBeam, typename Medium, typename Processor>
 Logger<PulsedBeam<Medium>, Processor>::Logger(
-        std::map<std::string, std::string>& _args,
-        PulsedBeam<Medium>* _pulsed_beam,
-        Manager& _manager,
+        ConfigManager& _config_manager,
+        DirManager& _dir_manager,
         Processor& _processor,
-        std::map<std::string, double>& _track_info,
+        PulsedBeam<Medium>* _pulsed_beam,
         std::map<std::string, BaseLinearTerm<PulsedBeam<Medium>>*>& _linear_terms_pool,
         std::map<std::string, BaseNonlinearTerm<PulsedBeam<Medium>>*>& _nonlinear_terms_pool,
         std::vector<std::string>& _active_linear_terms,
         std::vector<std::string>& _active_nonlinear_terms,
         KineticEquation<PulsedBeam<Medium>>& _kinetic_equation)
-        :
-    pulsed_beam(_pulsed_beam)
-  , manager(_manager)
-  , processor(_processor)
-  , track_info(_track_info)
-  , linear_terms_pool(_linear_terms_pool)
-  , nonlinear_terms_pool(_nonlinear_terms_pool)
-  , active_linear_terms(_active_linear_terms)
-  , active_nonlinear_terms(_active_nonlinear_terms)
-  , kinetic_equation(_kinetic_equation) {
-
-    std::cout << "PULSED BEAM ADRESS IN LOGGER: " << &(*pulsed_beam) << std::endl;
-
+: config_manager(_config_manager)
+, dir_manager(_dir_manager)
+, processor(_processor)
+, pulsed_beam(_pulsed_beam)
+, linear_terms_pool(_linear_terms_pool)
+, nonlinear_terms_pool(_nonlinear_terms_pool)
+, active_linear_terms(_active_linear_terms)
+, active_nonlinear_terms(_active_nonlinear_terms)
+, kinetic_equation(_kinetic_equation) {
 
     states_columns = {"step", "z, [m]", "h_z, [m]", "i_max, [W/m^2]"};
-    states = std::vector<std::vector<double>>(track_info["n_z"] + 1,
+    states = std::vector<std::vector<double>>(config_manager.n_z + 1,
             std::vector<double>(states_columns.size(), 0.0));
 
 }
@@ -49,7 +44,7 @@ Logger<PulsedBeam<Medium>, Processor>::~Logger() {
 }
 
 template<template<typename, typename...> class PulsedBeam, typename Medium, typename Processor>
-void Logger<PulsedBeam<Medium>, Processor>::print_current_state(size_t step, double z) {
+void Logger<PulsedBeam<Medium>, Processor>::print_current_state(size_t step, double z, double dz) {
     size_t w1 = 7;
     size_t w2 = 20;
     size_t w3 = 20;
@@ -67,17 +62,17 @@ void Logger<PulsedBeam<Medium>, Processor>::print_current_state(size_t step, dou
 
     std::cout << std::setw(w1) << std::setfill('0') << std::fixed << std::setprecision(0) << step;
     std::cout << std::setw(w2) << std::setfill(' ') << std::scientific << std::setprecision(5) << z;
-    std::cout << std::setw(w3) << std::setfill(' ') << std::scientific << std::setprecision(5) << track_info["dz"];
+    std::cout << std::setw(w3) << std::setfill(' ') << std::scientific << std::setprecision(5) << dz;
     std::cout << std::setw(w4) << std::setfill(' ') << std::scientific << std::setprecision(5) << pulsed_beam->max_intensity(pulsed_beam->i_0);
     std::cout << std::setw(w5) << std::setfill(' ') << std::scientific << std::setprecision(5) << pulsed_beam->max_intensity(1);
     std::cout << std::endl;
 }
 
 template<template<typename, typename...> class PulsedBeam, typename Medium, typename Processor>
-void Logger<PulsedBeam<Medium>, Processor>::flush_current_state(size_t step, double z) {
+void Logger<PulsedBeam<Medium>, Processor>::flush_current_state(size_t step, double z, double dz) {
     states[step][0] = (double)step;
     states[step][1] = z;
-    states[step][2] = track_info["dz"];
+    states[step][2] = dz;
     states[step][3] = pulsed_beam->max_intensity(1);
 }
 
@@ -86,7 +81,7 @@ template<template<typename, typename...> class PulsedBeam, typename Medium, type
 void Logger<PulsedBeam<Medium>, Processor>::save_field(int step) {
     std::stringstream ss;
     ss << std::setw(5) << std::setfill('0') << step;
-    std::string filename = manager.field_dir + "/" + ss.str();
+    std::string filename = dir_manager.field_dir + "/" + ss.str();
 
     std::ofstream f(filename);
     f << std::scientific;
@@ -109,7 +104,7 @@ template<template<typename, typename...> class PulsedBeam, typename Medium, type
 void Logger<PulsedBeam<Medium>, Processor>::save_plasma(int step) {
     std::stringstream ss;
     ss << std::setw(5) << std::setfill('0') << step;
-    std::string filename = manager.plasma_dir + "/" + ss.str();
+    std::string filename = dir_manager.plasma_dir + "/" + ss.str();
 
     std::ofstream f(filename);
     f << std::scientific;
@@ -132,7 +127,7 @@ template<template<typename, typename...> class PulsedBeam, typename Medium, type
 void Logger<PulsedBeam<Medium>, Processor>::save_states_to_csv() {
 
     std::string filename = "propagation.csv";
-    std::string path_to_save = manager.current_results_dir + "/" + filename;
+    std::string path_to_save = dir_manager.current_results_dir + "/" + filename;
     std::ofstream f(path_to_save);
 
     size_t w1 = 7;
@@ -148,7 +143,7 @@ void Logger<PulsedBeam<Medium>, Processor>::save_states_to_csv() {
 
     //f << "\n";
 
-    for (size_t step = 0; step < track_info["n_z"]; ++step) {
+    for (size_t step = 0; step < config_manager.n_z; ++step) {
         f << std::setw(w1) << std::setfill('0') << std::fixed << std::setprecision(0) << states[step][0] << sep;
         f << std::setw(w2) << std::setfill(' ') << std::scientific << std::setprecision(5) << states[step][1] << sep;
         f << std::setw(w3) << std::setfill(' ') << std::scientific << std::setprecision(5) << states[step][2] << sep;

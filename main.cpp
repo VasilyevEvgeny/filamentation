@@ -7,96 +7,116 @@
 #include <omp.h>
 
 #include "pulsed_beam/base_pulsed_beam/base_pulsed_beam.h"
-#include "config_manager.h"
+#include "manager/config_manager.h"
 #include "propagator.h"
-
-std::map<std::string, std::string> parse_args(char **argv) {
-     return  {{"prefix", argv[1]},
-              {"path_to_project", argv[2]},
-              {"global_root_dir", argv[3]},
-              {"global_results_dir_name", argv[4]},
-              {"ionization_tables_dir_name", argv[5]},
-              {"python_interpreter", argv[6]},
-              {"intensity_rt", argv[7]},
-              {"plasma_rt", argv[8]},
-              {"track", argv[9]}};
-}
-
-
-
 
 
 
 int main(int argc, char** argv) {
+
+    // config
     std::string path_to_config = "config.yml";
-    auto configManager = ConfigManager();
-    configManager.parse_and_validate_config(path_to_config);
+    ConfigManager config_manager = ConfigManager(path_to_config);
+    config_manager.parse_and_validate_config();
 
-//    if (config["pulsed_beam"]["lambda_0"] == "SiO2") {
-//#ifndef MEDIUM
-//#define MEDIUM SiO2
-//#endif
-//    }
-//    else if (config["pulsed_beam"]["lambda_0"] == "CaF2") {
-//#ifndef MEDIUM
-//#define MEDIUM CaF2
-//#endif
-//    }
-//    else if (config["pulsed_beam"]["lambda_0"] == "LiF") {
-//#ifndef MEDIUM
-//#define MEDIUM LiF
-//#endif
-//    }
-//    else {
-//        throw std::runtime_error("Wrong medium name!");
-//    }
+    // threads
+    omp_set_num_threads(config_manager.num_threads);
 
+    // medium
+    if (config_manager.medium == "SiO2") {
+#ifndef MEDIUM
+#define MEDIUM SiO2
+#endif
+    }
+    else if (config_manager.medium == "CaF2") {
+#ifndef MEDIUM
+#define MEDIUM CaF2
+#endif
+    }
+    else if (config_manager.medium == "LiF") {
+#ifndef MEDIUM
+#define MEDIUM LiF
+#endif
+    }
 
-
-
-
+    MEDIUM medium(config_manager.lambda_0);
 
 
 
+    // pulsed_beam
 
-//    const size_t NUM_PROCS = omp_get_num_procs();
-//
-//    std::cout << "NUM_PROCS: " << NUM_PROCS << std::endl;
-//
-//    omp_set_num_threads(NUM_PROCS);
-//
-//    auto args = parse_args(argv);
-//
-//    double lambda_0 = 1800e-9;
-//
-//    LiF medium(lambda_0);
-//
-//    std::cout << "Address of medium in main: " << &medium << std::endl;
-//
-//    Gauss<LiF> pulsed_beam(
-//            medium,
-//            lambda_0,
-////            1,
-////            1,
-//            100e-6,
-//            512,
-//            40e-15,
-//            1024,
-//            5);
-//
-//    std::cout << "PULSED BEAM ADRESS IN MAIN: " << &pulsed_beam << std::endl;
-//
-//    Propagator<Gauss<LiF>> propagator(
-//            args,
-//            pulsed_beam,
-//            1,
-//            4e-5,
-////            std::abs(pulsed_beam.z_diff / 500),
-//            10,
-//            100
-//            );
-//
-//    propagator.propagate();
+    if (config_manager.M == 0 && config_manager.m == 0) {
+#ifndef PULSED_BEAM
+#define PULSED_BEAM Gauss
+#endif
+
+        Gauss<MEDIUM> pulsed_beam(
+            medium,
+            config_manager.lambda_0,
+            config_manager.r_0,
+            config_manager.n_r,
+            config_manager.t_0,
+            config_manager.n_t,
+            config_manager.p_0_to_p_cr);
+
+        // propagator
+        Propagator<Gauss<MEDIUM>> propagator(
+                config_manager,
+                pulsed_beam);
+
+        propagator.propagate();
+
+    }
+    else if (config_manager.m == 0) {
+#ifndef PULSED_BEAM
+#define PULSED_BEAM Ring
+#endif
+
+        Ring<MEDIUM> pulsed_beam(
+            medium,
+            config_manager.lambda_0,
+            config_manager.M,
+            config_manager.r_0,
+            config_manager.n_r,
+            config_manager.t_0,
+            config_manager.n_t,
+            config_manager.p_0_to_p_cr);
+
+        // propagator
+        Propagator<Ring<MEDIUM>> propagator(
+                config_manager,
+                pulsed_beam);
+
+        propagator.propagate();
+
+    }
+    else {
+#ifndef PULSED_BEAM
+#define PULSED_BEAM Vortex
+#endif
+
+        Vortex<MEDIUM> pulsed_beam(
+                medium,
+                config_manager.lambda_0,
+                config_manager.M,
+                config_manager.m,
+                config_manager.r_0,
+                config_manager.n_r,
+                config_manager.t_0,
+                config_manager.n_t,
+                config_manager.p_0_to_p_cr);
+
+        // propagator
+        Propagator<Vortex<MEDIUM>> propagator(
+                config_manager,
+                pulsed_beam);
+
+        propagator.propagate();
+
+    }
+
+
+
 
 
     return 0;

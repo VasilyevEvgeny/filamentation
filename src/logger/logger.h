@@ -11,7 +11,8 @@
 #include "../pulsed_beam/gauss.h"
 #include "../pulsed_beam/ring.h"
 #include "../pulsed_beam/vortex.h"
-#include "../manager.h"
+#include "manager/dir_manager.h"
+#include "manager/config_manager.h"
 #include "../processor.h"
 #include "term/wave_equation/linear/base_linear_term.h"
 #include "term/wave_equation/nonlinear/base_nonlinear_term.h"
@@ -27,11 +28,10 @@ class Logger<PulsedBeam<Medium>, Processor> {
 public:
     Logger();
     explicit Logger(
-            std::map<std::string, std::string>& _args,
-            PulsedBeam<Medium>* _pulsed_beam,
-            Manager& _manager,
+            ConfigManager& _config_manager,
+            DirManager& _dir_manager,
             Processor& _processor,
-            std::map<std::string, double>& _track_info,
+            PulsedBeam<Medium>* _pulsed_beam,
             std::map<std::string, BaseLinearTerm<PulsedBeam<Medium>>*>& _linear_terms_pool,
             std::map<std::string, BaseNonlinearTerm<PulsedBeam<Medium>>*>& _nonlinear_terms_pool,
             std::vector<std::string>& _active_linear_terms,
@@ -39,11 +39,11 @@ public:
             KineticEquation<PulsedBeam<Medium>>& _kinetic_equation);
     ~Logger();
 
-    Manager manager;
+    ConfigManager config_manager;
+    DirManager dir_manager;
     Processor processor;
 
     PulsedBeam<Medium>* pulsed_beam;
-    std::map<std::string, double> track_info;
 
     std::vector<std::string> states_columns;
     std::vector<std::vector<double>> states;
@@ -65,8 +65,8 @@ public:
     void save_initial_parameters_to_pdf(bool delete_tmp_files, bool delete_tex_file);
     void save_initial_parameters_to_yml();
 
-    void print_current_state(size_t step, double z);
-    void flush_current_state(size_t step, double z);
+    void print_current_state(size_t step, double z, double dz);
+    void flush_current_state(size_t step, double z, double dz);
     void save_states_to_csv();
     void save_field(int step);
     void save_plasma(int step);

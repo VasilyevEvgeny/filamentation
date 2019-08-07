@@ -101,7 +101,7 @@ void Logger<PulsedBeam<Medium>, Processor>::save_initial_parameters_to_pdf(bool 
     std::string tex_file_data;
 
     std::string tex_file_name = "parameters";
-    std::string path = manager.current_results_dir;
+    std::string path = dir_manager.current_results_dir;
     std::string tex_file_path = path + "/" + tex_file_name + ".tex";
 
 
@@ -388,13 +388,13 @@ $h_t$ & %.1f & fs \tabularnewline
     std::string track_data = R"(
 \multicolumn{3}{M{15cm}}{\textbf{TRACK}} \tabularnewline
 \midrule[2pt]
-$n_z$ & %.0f & -- \tabularnewline
+$n_z$ & %0.f & -- \tabularnewline
 \hline
 $h_z(z=0)$ & %.1f & $\mu$m \tabularnewline
 \midrule[2pt]
 )";
-    std::vector<double> track_params = {track_info["n_z"],
-                                        track_info["dz"] * 1e6};
+    std::vector<double> track_params = {(double)config_manager.n_z,
+                                        config_manager.dz_0 * 1e6};
 
     Logger::add_to_tex_file_data(tex_file_data, track_data, track_params);
 

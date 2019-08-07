@@ -46,10 +46,12 @@ void BaseIonization::make_ionization_table(std::string& path_to_ionization_table
 }
 
 
-void BaseIonization::process_ionization_table(std::map<std::string, std::string>& args, std::string& path_to_ionization_table) {
+void BaseIonization::process_ionization_table(
+        ConfigManager& config_manager,
+        std::string& path_to_ionization_table) {
 
-    std::string path_to_project = args["path_to_project"];
-    std::string path_to_python_interpreter = args["python_interpreter"];
+    std::string path_to_project = config_manager.path_to_project;
+    std::string path_to_python_interpreter = config_manager.path_to_python_interpreter;
 
     std::string execute = path_to_python_interpreter + " " + path_to_project + "/processing/scripts/ionization.py " +
             "--path_to_ionization_table=" + path_to_ionization_table;
@@ -58,13 +60,12 @@ void BaseIonization::process_ionization_table(std::map<std::string, std::string>
 
 }
 
-void BaseIonization::initialize_ionization_table(std::map<std::string, std::string>& args,
-                                                 std::string& path_to_ionization_tables_dir,
-                                                 std::string& medium_name,
+void BaseIonization::initialize_ionization_table(ConfigManager& config_manager,
                                                  double lambda_0) {
 
-    std::string ionization_table_name = generate_ionization_table_name(medium_name, lambda_0);
-    std::string path_to_ionization_table = path_to_ionization_tables_dir + "/" + ionization_table_name;
+    std::string ionization_table_name = generate_ionization_table_name(config_manager.medium, lambda_0);
+    std::string path_to_ionization_table = config_manager.global_root_dir + "/" +
+            config_manager.ionization_tables_dir_name + "/" + ionization_table_name;
 
     std::ifstream f(path_to_ionization_table.c_str());
     if (f.good()) {
@@ -73,6 +74,9 @@ void BaseIonization::initialize_ionization_table(std::map<std::string, std::stri
     else {
         std::cout << "ionization table doesn't exist!" << std::endl;
         make_ionization_table(path_to_ionization_table);
+
+        // create new plot of ionization rates
+        process_ionization_table(config_manager, path_to_ionization_table);
     }
 
     // create data structure with rates array
@@ -95,9 +99,6 @@ void BaseIonization::initialize_ionization_table(std::map<std::string, std::stri
     }
 
     f.close();
-
-    // plot ionization rates
-    process_ionization_table(args, path_to_ionization_table);
 }
 
 
@@ -109,5 +110,3 @@ double BaseIonization::R(double i) {
         return rates[std::min((size_t)((i - i_start) / i_step), n_i - 1)];
     }
 }
-
-

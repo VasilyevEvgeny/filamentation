@@ -6,8 +6,8 @@
 
 ProcessorDispersion::ProcessorDispersion() = default;
 
-ProcessorDispersion::ProcessorDispersion(std::map<std::string, std::string>& _args, Manager& _manager) :
-        Processor(_args, _manager){
+ProcessorDispersion::ProcessorDispersion(ConfigManager& _config_manager, DirManager& _dir_manager) :
+        Processor(_config_manager, _dir_manager){
 
     path_to_test_script = "/processing/test/dispersion.py";
 

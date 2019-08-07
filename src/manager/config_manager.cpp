@@ -6,17 +6,21 @@
 
 #include <sstream>
 #include <fstream>
-
+#include <omp.h>
 
 ConfigManager::ConfigManager() = default;
+
+ConfigManager::ConfigManager(std::string& _path_to_config)
+: path_to_config(_path_to_config) {}
+
 ConfigManager::~ConfigManager() = default;
 
-void ConfigManager::parse_and_validate_config(std::string &path_to_config) {
-    parse_config(path_to_config);
+void ConfigManager::parse_and_validate_config() {
+    parse_config();
     validate_config();
 }
 
-void ConfigManager::parse_config(std::string& path_to_config) {
+void ConfigManager::parse_config() {
 
     std::ifstream f(path_to_config);
     std::string line;
@@ -127,8 +131,13 @@ void ConfigManager::validate_config() {
         }
 
         m = std::stoi(config.at("pulsed_beam").at("m"));
-        if (m < -5 || m > 5) {
+        if (m < 0 || m > 5) {
             throw std::runtime_error("Wrong m!");
+        }
+
+        p_0_to_p_cr = std::stod(config.at("pulsed_beam").at("p_0_to_p_cr"));
+        if (p_0_to_p_cr < 0.1 || p_0_to_p_cr > 500) {
+            throw std::runtime_error("Wrong p_0_to_p_cr!");
         }
 
         // grid
@@ -218,6 +227,12 @@ void ConfigManager::validate_config() {
             throw std::runtime_error("Wrong plot_track!");
         }
 
+        // other
+        num_threads = std::stoi(config.at("other").at("num_threads"));
+        if (num_threads < 1 or num_threads > omp_get_num_procs()) {
+            throw std::runtime_error("Wrong num_threads!");
+        }
+
 
     }
     catch (std::runtime_error &e) {
@@ -228,5 +243,19 @@ void ConfigManager::validate_config() {
 
 
 
+
+}
+
+void ConfigManager::initialize_subconfigs() {
+
+    // info
+    config_info = config["info"];
+
+
+
+    // plot
+    config_plot = {{"plot_intensity_rt", plot_intensity_rt},
+                   {"plot_plasma_rt", plot_plasma_rt},
+                   {"plot_track", plot_track}};
 
 }

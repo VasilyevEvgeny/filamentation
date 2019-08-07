@@ -5,15 +5,15 @@
 #include <stdexcept>
 #include <ctime>
 
-#include "manager.h"
+#include "manager/dir_manager.h"
 
 
 
-Manager::Manager(std::map<std::string, std::string>& args) {
-    global_results_dir = args["global_root_dir"] + "/" + args["global_results_dir_name"];
-    ionization_tables_dir = args["global_root_dir"] + "/" + args["ionization_tables_dir_name"];
+DirManager::DirManager(ConfigManager& _config_manager) {
+    global_results_dir = _config_manager.global_root_dir + "/" + _config_manager.global_results_dir_name;
+    ionization_tables_dir = _config_manager.global_root_dir + "/" + _config_manager.ionization_tables_dir_name;
 
-    current_results_dir_name = args["prefix"] + "_" + get_current_datetime();
+    current_results_dir_name = _config_manager.prefix + "_" + get_current_datetime();
     current_results_dir = global_results_dir + "/" + current_results_dir_name;
 
     field_dir_name = "field";
@@ -44,9 +44,9 @@ Manager::Manager(std::map<std::string, std::string>& args) {
     }
 }
 
-Manager::~Manager() = default;
+DirManager::~DirManager() = default;
 
-std::string Manager::get_current_datetime() const {
+std::string DirManager::get_current_datetime() const {
     time_t rawtime;
     struct tm *timeinfo;
     char buffer[80];

@@ -6,11 +6,12 @@
 #define FILAMENTATION_PROCESSORDISPERSION_H
 
 #include "processor.h"
+#include "manager/config_manager.h"
 
 class ProcessorDispersion : public Processor {
 public:
     ProcessorDispersion();
-    ProcessorDispersion(std::map<std::string, std::string>& args, Manager& _manager);
+    ProcessorDispersion(ConfigManager& _config_manager, DirManager& _dir_manager);
 
     std::string path_to_test_script;
 

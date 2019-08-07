@@ -9,6 +9,8 @@
 #include <map>
 #include <vector>
 
+#include "manager/config_manager.h"
+
 class BaseIonization {
 public:
     BaseIonization();
@@ -28,12 +30,10 @@ public:
 
     std::string generate_ionization_table_name(std::string& medium_name, double lambda_0);
     void make_ionization_table(std::string& path_to_ionization_tables_dir);
-    void process_ionization_table(std::map<std::string, std::string>& args,
+    void process_ionization_table(ConfigManager& config_manager,
                                   std::string& path_to_ionization_table);
 
-    void initialize_ionization_table(std::map<std::string, std::string>& args,
-                                     std::string& path_to_ionization_tables_dir,
-                                     std::string& medium_name,
+    void initialize_ionization_table(ConfigManager& config_manager,
                                      double lambda_0);
 
 };

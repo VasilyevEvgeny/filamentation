@@ -8,23 +8,26 @@
 #include <string>
 #include <map>
 
-#include "manager.h"
+#include "manager/config_manager.h"
+#include "manager/dir_manager.h"
 
 
 class Processor {
 public:
     Processor();
-    explicit Processor(std::map<std::string, std::string>& _args, Manager& _manager);
+    explicit Processor(
+            ConfigManager& config_manager,
+            DirManager& _manager);
 
     std::string path_to_project;
     std::string path_to_python_interpreter;
-    std::string intensity_rt;
-    std::string plasma_rt;
-    std::string track;
 
-    Manager manager;
+    bool plot_intensity_rt;
+    bool plot_plasma_rt;
+    bool plot_track;
 
-    std::string get_cwd();
+    DirManager manager;
+
     virtual void go();
 };
 
