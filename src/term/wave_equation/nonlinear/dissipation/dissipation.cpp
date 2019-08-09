@@ -29,9 +29,10 @@ template<template<typename, typename...> class PulsedBeam, typename Medium>
 Dissipation<PulsedBeam<Medium>>::Dissipation() = default;
 
 template<template<typename, typename...> class PulsedBeam, typename Medium>
-Dissipation<PulsedBeam<Medium>>::Dissipation(PulsedBeam<Medium>* _pulsed_beam, double _delta)
-: BaseNonlinearTerm<PulsedBeam<Medium>>(_pulsed_beam, false)
-, delta(_delta) {
+Dissipation<PulsedBeam<Medium>>::Dissipation(PulsedBeam<Medium>* _pulsed_beam)
+: BaseNonlinearTerm<PulsedBeam<Medium>>(_pulsed_beam, false) {
+
+    delta = base::pulsed_beam->medium->delta;
 
     base::name = "dissipation";
 

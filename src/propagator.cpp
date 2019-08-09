@@ -29,31 +29,30 @@ Propagator<PulsedBeam<Medium>>::Propagator(
                                                                 pulsed_beam->lambda_0);
 
     // linear terms
-    diffraction = Diffraction<PulsedBeam<Medium>>(pulsed_beam, false);
-    dispersion_full = DispersionFull<PulsedBeam<Medium>>(pulsed_beam, false);
-    std::string mode = "sweep";
-    dispersion_gvd = DispersionGVD<PulsedBeam<Medium>>(pulsed_beam, mode, false);
+    diffraction = Diffraction<PulsedBeam<Medium>>(pulsed_beam, config_manager.T.at("diffraction"));
+    dispersion_full = DispersionFull<PulsedBeam<Medium>>(pulsed_beam, config_manager.T.at("dispersion"));
+    dispersion_gvd = DispersionGVD<PulsedBeam<Medium>>(pulsed_beam);
 
     // nonlinear terms
-    kerr = Kerr<PulsedBeam<Medium>>(pulsed_beam, 0.0, true);
-    plasma = Plasma<PulsedBeam<Medium>>(pulsed_beam, true);
-    bremsstrahlung = Bremsstrahlung<PulsedBeam<Medium>>(pulsed_beam, true);
-    dissipation = Dissipation<PulsedBeam<Medium>>(pulsed_beam, pulsed_beam->medium->delta);
+    kerr = Kerr<PulsedBeam<Medium>>(pulsed_beam, config_manager.kerr_info, config_manager.T.at("kerr"));
+    plasma = Plasma<PulsedBeam<Medium>>(pulsed_beam, config_manager.T.at("plasma"));
+    bremsstrahlung = Bremsstrahlung<PulsedBeam<Medium>>(pulsed_beam, config_manager.T.at("bremsstrahlung"));
+    dissipation = Dissipation<PulsedBeam<Medium>>(pulsed_beam);
 
-    // constainers for linear terms
+    // container for linear terms
     linear_terms_pool.insert(std::pair<std::string, BaseLinearTerm<PulsedBeam<Medium>>*>(diffraction.name, &diffraction));
     linear_terms_pool.insert(std::pair<std::string, BaseLinearTerm<PulsedBeam<Medium>>*>(dispersion_full.name, &dispersion_full));
     linear_terms_pool.insert(std::pair<std::string, BaseLinearTerm<PulsedBeam<Medium>>*>(dispersion_gvd.name, &dispersion_gvd));
 
-    // constainers for nonlinear terms
+    // container for nonlinear terms
     nonlinear_terms_pool.insert(std::pair<std::string, BaseNonlinearTerm<PulsedBeam<Medium>>*>(kerr.name, &kerr));
     nonlinear_terms_pool.insert(std::pair<std::string, BaseNonlinearTerm<PulsedBeam<Medium>>*>(plasma.name, &plasma));
     nonlinear_terms_pool.insert(std::pair<std::string, BaseNonlinearTerm<PulsedBeam<Medium>>*>(bremsstrahlung.name, &bremsstrahlung));
     nonlinear_terms_pool.insert(std::pair<std::string, BaseNonlinearTerm<PulsedBeam<Medium>>*>(dissipation.name, &dissipation));
 
     // active terms
-    active_linear_terms = {"diffraction", "dispersion_full"};
-    active_nonlinear_terms = {"kerr", "plasma", "bremsstrahlung", "dissipation"};
+    active_linear_terms = config_manager.active_linear_terms;
+    active_nonlinear_terms = config_manager.active_nonlinear_terms;
 
     // executors
     linear_executor = LinearExecutor<PulsedBeam<Medium>>(pulsed_beam, active_linear_terms, linear_terms_pool);
@@ -117,7 +116,7 @@ void Propagator<PulsedBeam<Medium>>::propagate() {
     auto t2 = std::chrono::high_resolution_clock::now();
 
     std::chrono::duration<float> fsec = t2 - t1;
-    std::chrono::milliseconds d = std::chrono::duration_cast<std::chrono::milliseconds>(fsec);
+    std::chrono::hours d = std::chrono::duration_cast<std::chrono::hours>(fsec);
 
     std::cout << fsec.count() << "s\n";
 

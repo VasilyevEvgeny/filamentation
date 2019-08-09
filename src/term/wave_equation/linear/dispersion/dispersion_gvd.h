@@ -14,7 +14,7 @@ template<template<typename, typename...> class PulsedBeam, typename Medium>
 class DispersionGVD<PulsedBeam<Medium>> : public BaseDispersion<PulsedBeam<Medium>>  {
 public:
     DispersionGVD();
-    DispersionGVD(PulsedBeam<Medium>* _pulsed_beam, std::string& mode, bool _T);
+    DispersionGVD(PulsedBeam<Medium>* _pulsed_beam);
 
     ~DispersionGVD();
 

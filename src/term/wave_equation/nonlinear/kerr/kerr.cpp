@@ -25,11 +25,21 @@ Kerr<PulsedBeam<Medium>>::Kerr() = default;
 
 
 template<template<typename, typename...> class PulsedBeam, typename Medium>
-Kerr<PulsedBeam<Medium>>::Kerr(PulsedBeam<Medium>* _pulsed_beam, double _g, bool _T)
+Kerr<PulsedBeam<Medium>>::Kerr(PulsedBeam<Medium>* _pulsed_beam, std::map<std::string, bool>& _kerr_info, bool _T)
 : BaseNonlinearTerm<PulsedBeam<Medium>>(_pulsed_beam, _T)
-, g(_g) {
+, kerr_info(_kerr_info) {
 
     base::name = "kerr";
+
+    if (kerr_info.at("instant") && kerr_info.at("inertial")) {
+        g = base::pulsed_beam->medium->g;
+    }
+    else if (kerr_info["instant"] && !kerr_info["inertial"]) {
+        g = 0.0;
+    }
+    else {
+        g = 1.0;
+    }
 
     if (g == 0) {
         base::formula = R"( + \frac{2 k_0^2}{n_0} n_2 I(r,t,z) A(r,t,z) )";

@@ -20,10 +20,19 @@ template<template<typename, typename...> class PulsedBeam, typename Medium>
 Diffraction<PulsedBeam<Medium>>::Diffraction(PulsedBeam<Medium>* _pulsed_beam, bool _T)
 : BaseLinearTerm<PulsedBeam <Medium>>(_pulsed_beam, _T) {
 
-base::name = "diffraction";
-base::formula = R"( +\biggl( \frac{\partial^2}{\partial r^2} +
-\frac1{r} \frac{\partial}{\partial r} -
-\frac{m^2}{r^2} \biggr) A(r,t,z) )";
+    base::name = "diffraction";
+
+    if (base::T) {
+        base::formula = R"( + \hat{T}^{-1} \biggl( \frac{\partial^2}{\partial r^2} +
+        \frac1{r} \frac{\partial}{\partial r} -
+        \frac{m^2}{r^2} \biggr) A(r,t,z) )";
+    }
+    else {
+        base::formula = R"( +\biggl( \frac{\partial^2}{\partial r^2} +
+        \frac1{r} \frac{\partial}{\partial r} -
+        \frac{m^2}{r^2} \biggr) A(r,t,z) )";
+    }
+
 
 }
 

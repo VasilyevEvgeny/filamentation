@@ -6,6 +6,23 @@ info:
   global_results_dir_name: Filamentation_results
   ionization_tables_dir_name: Filamentation_ionization_tables
 
+equation:
+  diffraction: true
+  dispersion_full: true
+  dispersion_gvd: false
+  kerr_instant: true
+  kerr_inertial: true
+  plasma: true
+  bremsstrahlung: true
+  dissipation: true
+
+T:
+  diffraction: true
+  dispersion: true
+  kerr: true
+  plasma: true
+  bremsstrahlung: true
+
 medium:
   type: LiF
 
@@ -24,6 +41,7 @@ grid:
 track:
   n_z: 1000
   dz_0: 1e-5
+  constant_dz: true
   print_current_state_every: 10
   save_every: 100
   save_field: true

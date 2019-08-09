@@ -134,13 +134,13 @@ void Logger<PulsedBeam<Medium>, Processor>::save_initial_parameters_to_pdf(bool 
 \textbf{EQUATION} \tabularnewline
 \midrule[2pt]
 \parbox{\linewidth}{
-\begin{equation}
+\begin{equation*}
 \left\{
 \begin{aligned}
 %s
 \end{aligned}
 \right.
-\end{equation}
+\end{equation*}
 }
 \tabularnewline
 \midrule[2pt]

@@ -16,11 +16,19 @@ template<template<typename, typename...> class PulsedBeam, typename Medium>
 DispersionFull<PulsedBeam<Medium>>::DispersionFull(PulsedBeam<Medium>* _pulsed_beam, bool _T) :
         BaseDispersion<PulsedBeam <Medium>>(_pulsed_beam, _T) {
 
-base::name = "dispersion_full";
-base::formula = R"( +\frac1{2 \pi} \int\limits_{-\infty}^{+\infty}
-\Bigl( k^2(\omega_0 + \Omega) - (k_0 + k_1 \Omega)^2 \Bigr) \tilde{A}(r, \Omega, z)
-\exp \{ i \Omega t \} d \Omega )";
-}
+    base::name = "dispersion_full";
+
+    if (base::T) {
+        base::formula = R"( + \hat{T}^{-1} \frac1{2 \pi} \int\limits_{-\infty}^{+\infty}
+        \Bigl( k^2(\omega_0 + \Omega) - (k_0 + k_1 \Omega)^2 \Bigr) \tilde{A}(r, \Omega, z)
+        \exp \{ i \Omega t \} d \Omega )";
+    } else {
+        base::formula = R"( +\frac1{2 \pi} \int\limits_{-\infty}^{+\infty}
+        \Bigl( k^2(\omega_0 + \Omega) - (k_0 + k_1 \Omega)^2 \Bigr) \tilde{A}(r, \Omega, z)
+        \exp \{ i \Omega t \} d \Omega )";
+    }
+
+    }
 
 template<template<typename, typename...> class PulsedBeam, typename Medium>
 DispersionFull<PulsedBeam<Medium>>::~DispersionFull() = default;

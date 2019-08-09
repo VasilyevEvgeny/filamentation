@@ -13,12 +13,12 @@ DispersionGVD<PulsedBeam<Medium>>::DispersionGVD() = default;
 
 
 template<template<typename, typename...> class PulsedBeam, typename Medium>
-DispersionGVD<PulsedBeam<Medium>>::DispersionGVD(PulsedBeam<Medium>* _pulsed_beam, std::string& _mode, bool _T)
-: BaseDispersion<PulsedBeam <Medium>>(_pulsed_beam, _T)
-, mode(_mode){
+DispersionGVD<PulsedBeam<Medium>>::DispersionGVD(PulsedBeam<Medium>* _pulsed_beam)
+: BaseDispersion<PulsedBeam <Medium>>(_pulsed_beam, false){
+    mode = "sweep";
 
-        base::name = "dispersion_gvd";
-        base::formula = R"( -k_0 k_2 \frac{\partial^2 A(r,t,z)}{\partial t^2} )";
+    base::name = "dispersion_gvd";
+    base::formula = R"( -k_0 k_2 \frac{\partial^2 A(r,t,z)}{\partial t^2} )";
 }
 
 template<template<typename, typename...> class PulsedBeam, typename Medium>

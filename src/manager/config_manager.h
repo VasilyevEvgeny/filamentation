@@ -7,6 +7,7 @@
 
 #include <iostream>
 #include <map>
+#include <vector>
 
 class ConfigManager {
 public:
@@ -19,12 +20,9 @@ public:
     void parse_config();
     void print_config();
     void validate_config();
-    void initialize_subconfigs();
 
     std::string path_to_config;
     std::map<std::string, std::map<std::string, std::string>> config;
-    std::map<std::string, std::string> config_info;
-    std::map<std::string, bool> config_plot;
 
     // info
     std::string prefix;
@@ -33,6 +31,12 @@ public:
     std::string global_root_dir;
     std::string global_results_dir_name;
     std::string ionization_tables_dir_name;
+
+    // equation
+    std::vector<std::string> active_linear_terms;
+    std::vector<std::string> active_nonlinear_terms;
+    std::map<std::string, bool> T;
+    std::map<std::string, bool> kerr_info;
 
     //medium
     std::string medium;

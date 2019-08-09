@@ -70,7 +70,10 @@ void ConfigManager::validate_config() {
 
     try {
 
-        // info
+        /*
+         * INFO
+         */
+
         prefix = config.at("info").at("prefix");
         if (prefix.empty()) {
             throw std::runtime_error("Wrong prefix!");
@@ -101,14 +104,215 @@ void ConfigManager::validate_config() {
             throw std::runtime_error("Wrong ionization_tables_dir_name!");
         }
 
+        /*
+         * EQUATION
+         */
 
-        // medium
+        // diffraction
+        bool diffraction;
+        if (config.at("equation").at("diffraction") == "true") {
+            diffraction = true;
+        }
+        else if (config.at("equation").at("diffraction") == "false") {
+            diffraction = false;
+        }
+        else {
+            throw std::runtime_error("Wrong diffraction!");
+        }
+        if (diffraction) {
+            active_linear_terms.emplace_back("diffraction");
+        }
+
+        // dispersion
+        bool dispersion_full;
+        if (config.at("equation").at("dispersion_full") == "true") {
+            dispersion_full = true;
+        }
+        else if (config.at("equation").at("dispersion_full") == "false") {
+            dispersion_full = false;
+        }
+        else {
+            throw std::runtime_error("Wrong dispersion_full!");
+        }
+
+        bool dispersion_gvd;
+        if (config.at("equation").at("dispersion_gvd") == "true") {
+            dispersion_gvd = true;
+        }
+        else if (config.at("equation").at("dispersion_gvd") == "false") {
+            dispersion_gvd = false;
+        }
+        else {
+            throw std::runtime_error("Wrong dispersion_gvd!");
+        }
+
+        if (dispersion_full && !dispersion_gvd) {
+            active_linear_terms.emplace_back("dispersion_full");
+        }
+        else if (!dispersion_full && dispersion_gvd) {
+            active_linear_terms.emplace_back("dispersion_gvd");
+        }
+        else if (dispersion_full && dispersion_gvd) {
+            throw std::runtime_error("Two dispersions in wave equation!");
+        }
+
+        // kerr_instant
+        bool kerr_instant;
+        if (config.at("equation").at("kerr_instant") == "true") {
+            kerr_instant = true;
+        }
+        else if (config.at("equation").at("kerr_instant") == "false") {
+            kerr_instant = false;
+        }
+        else {
+            throw std::runtime_error("Wrong kerr_instant!");
+        }
+
+        // kerr_inertial
+        bool kerr_inertial;
+        if (config.at("equation").at("kerr_inertial") == "true") {
+            kerr_inertial = true;
+        }
+        else if (config.at("equation").at("kerr_inertial") == "false") {
+            kerr_inertial = false;
+        }
+        else {
+            throw std::runtime_error("Wrong kerr_inertial!");
+        }
+
+        kerr_info.insert({"instant", kerr_instant});
+        kerr_info.insert({"inertial", kerr_inertial});
+        if (kerr_instant || kerr_inertial) {
+            active_nonlinear_terms.emplace_back("kerr");
+        }
+
+        // plasma
+        bool plasma;
+        if (config.at("equation").at("plasma") == "true") {
+            plasma = true;
+        }
+        else if (config.at("equation").at("plasma") == "false") {
+            plasma = false;
+        }
+        else {
+            throw std::runtime_error("Wrong plasma!");
+        }
+        if (plasma) {
+            active_nonlinear_terms.emplace_back("plasma");
+        }
+
+        // bremsstrahlung
+        bool bremsstrahlung;
+        if (config.at("equation").at("bremsstrahlung") == "true") {
+            bremsstrahlung = true;
+        }
+        else if (config.at("equation").at("bremsstrahlung") == "false") {
+            bremsstrahlung = false;
+        }
+        else {
+            throw std::runtime_error("Wrong bremsstrahlung!");
+        }
+        if (bremsstrahlung) {
+            active_nonlinear_terms.emplace_back("bremsstrahlung");
+        }
+
+        // dissipation
+        bool dissipation;
+        if (config.at("equation").at("dissipation") == "true") {
+            dissipation = true;
+        }
+        else if (config.at("equation").at("dissipation") == "false") {
+            dissipation = false;
+        }
+        else {
+            throw std::runtime_error("Wrong dissipation!");
+        }
+        if (dissipation) {
+            active_nonlinear_terms.emplace_back("dissipation");
+        }
+
+
+        /*
+         * T
+         */
+
+        // diffraction
+        bool T_diffraction;
+        if (config.at("T").at("diffraction") == "true") {
+            T_diffraction = true;
+        }
+        else if (config.at("T").at("diffraction") == "false") {
+            T_diffraction = false;
+        }
+        else {
+            throw std::runtime_error("Wrong T_diffraction!");
+        }
+        T.insert({"diffraction", T_diffraction});
+
+        // dispersion
+        bool T_dispersion;
+        if (config.at("T").at("dispersion") == "true") {
+            T_dispersion = true;
+        }
+        else if (config.at("T").at("dispersion") == "false") {
+            T_dispersion = false;
+        }
+        else {
+            throw std::runtime_error("Wrong T_dispersion!");
+        }
+        T.insert({"dispersion", T_dispersion});
+
+        // kerr
+        bool T_kerr;
+        if (config.at("T").at("kerr") == "true") {
+            T_kerr = true;
+        }
+        else if (config.at("T").at("kerr") == "false") {
+            T_kerr = false;
+        }
+        else {
+            throw std::runtime_error("Wrong T_kerr!");
+        }
+        T.insert({"kerr", T_kerr});
+
+        // plasma
+        bool T_plasma;
+        if (config.at("T").at("plasma") == "true") {
+            T_plasma = true;
+        }
+        else if (config.at("T").at("plasma") == "false") {
+            T_plasma = false;
+        }
+        else {
+            throw std::runtime_error("Wrong T_plasma!");
+        }
+        T.insert({"plasma", T_plasma});
+
+        // bremsstrahlung
+        bool T_bremsstrahlung;
+        if (config.at("T").at("bremsstrahlung") == "true") {
+            T_bremsstrahlung = true;
+        }
+        else if (config.at("T").at("bremsstrahlung") == "false") {
+            T_bremsstrahlung = false;
+        }
+        else {
+            throw std::runtime_error("Wrong T_plasma!");
+        }
+        T.insert({"bremsstrahlung", T_bremsstrahlung});
+
+        /*
+         * MEDIUM
+         */
+
         medium = config.at("medium").at("type");
         if (medium != "SiO2" && medium != "CaF2" && medium != "LiF") {
             throw std::runtime_error("Wrong medium!");
         }
 
-        // pulsed_beam
+        /*
+         * PULSED_BEAM
+         */
 
         lambda_0 = std::stod(config.at("pulsed_beam").at("lambda_0"));
         if (lambda_0 < 300e-9 || lambda_0 > 5e-6) {
@@ -140,7 +344,9 @@ void ConfigManager::validate_config() {
             throw std::runtime_error("Wrong p_0_to_p_cr!");
         }
 
-        // grid
+        /*
+         * GRID
+         */
 
         n_r = std::stoi(config.at("grid").at("n_r"));
         if (n_r < 1 || n_r > 16000) {
@@ -152,7 +358,9 @@ void ConfigManager::validate_config() {
             throw std::runtime_error("Wrong n_t!");
         }
 
-        // track
+        /*
+         * TRACK
+         */
 
         n_z = std::stoi(config.at("track").at("n_z"));
         if (n_z < 1 || n_z > 100000) {
@@ -194,8 +402,9 @@ void ConfigManager::validate_config() {
             throw std::runtime_error("Wrong save_plasma!");
         }
 
-
-        // plot
+        /*
+         * PLOT
+         */
 
         if (config.at("plot").at("plot_intensity_rt") == "true") {
             plot_intensity_rt = true;
@@ -227,7 +436,10 @@ void ConfigManager::validate_config() {
             throw std::runtime_error("Wrong plot_track!");
         }
 
-        // other
+        /*
+         * OTHER
+         */
+
         num_threads = std::stoi(config.at("other").at("num_threads"));
         if (num_threads < 1 or num_threads > omp_get_num_procs()) {
             throw std::runtime_error("Wrong num_threads!");
@@ -243,19 +455,5 @@ void ConfigManager::validate_config() {
 
 
 
-
-}
-
-void ConfigManager::initialize_subconfigs() {
-
-    // info
-    config_info = config["info"];
-
-
-
-    // plot
-    config_plot = {{"plot_intensity_rt", plot_intensity_rt},
-                   {"plot_plasma_rt", plot_plasma_rt},
-                   {"plot_track", plot_track}};
 
 }
