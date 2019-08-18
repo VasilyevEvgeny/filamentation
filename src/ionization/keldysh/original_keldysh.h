@@ -10,10 +10,10 @@
 class OriginalKeldysh : public BaseKeldysh {
 public:
     OriginalKeldysh();
-    OriginalKeldysh(double _omega_0,
-                    double _U_i,
-                    double _N_0,
-                    double _n_0);
+    explicit OriginalKeldysh(double _omega_0,
+                             double _U_i,
+                             double _N_0,
+                             double _n_0);
     ~OriginalKeldysh() override;
 
     double calculate_x_plus_1(double x) override;

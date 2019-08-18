@@ -12,14 +12,14 @@ template<typename Medium>
 class Ring : public BasePulsedBeam<Medium> {
 public:
     Ring();
-    Ring(Medium& medium,
-          double _lambda_0,
-          size_t _M,
-          double _r_0,
-          size_t _n_r,
-          double _t_0,
-          size_t _n_t,
-          double _p0_to_p_cr);
+    explicit Ring(std::shared_ptr<Medium> medium,
+                  double _lambda_0,
+                  size_t _M,
+                  double _r_0,
+                  size_t _n_r,
+                  double _t_0,
+                  size_t _n_t,
+                  double _p0_to_p_cr);
 
     ~Ring() override;
 

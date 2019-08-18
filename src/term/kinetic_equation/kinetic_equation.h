@@ -13,7 +13,7 @@ template<template<typename, typename...> class PulsedBeam, typename Medium>
 class KineticEquation<PulsedBeam<Medium>>: public BaseTerm<PulsedBeam<Medium>> {
 public:
     KineticEquation();
-    explicit KineticEquation(PulsedBeam<Medium>* _pulsed_beam, double _v_i_const, double _beta);
+    explicit KineticEquation(std::shared_ptr<PulsedBeam<Medium>> _pulsed_beam, double _v_i_const, double _beta);
     ~KineticEquation();
 
 

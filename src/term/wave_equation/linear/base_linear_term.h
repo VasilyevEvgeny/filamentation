@@ -13,7 +13,7 @@ template<template<typename, typename...> class PulsedBeam, typename Medium>
 class BaseLinearTerm<PulsedBeam<Medium>> : public BaseTerm<PulsedBeam<Medium>> {
 public:
     BaseLinearTerm();
-    explicit BaseLinearTerm(PulsedBeam<Medium>* _pulsed_beam, bool _T);
+    explicit BaseLinearTerm(std::shared_ptr<PulsedBeam<Medium>> _pulsed_beam, bool _T);
 
     virtual ~BaseLinearTerm();
 

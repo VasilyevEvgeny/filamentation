@@ -16,11 +16,9 @@ Propagator<PulsedBeam<Medium>>::Propagator() = default;
 template<template<typename, typename...> class PulsedBeam, typename Medium>
 Propagator<PulsedBeam<Medium>>::Propagator(
         ConfigManager& _config_manager,
-        PulsedBeam<Medium>& _pulsed_beam)
+        std::shared_ptr<PulsedBeam<Medium>> _pulsed_beam)
 : config_manager(_config_manager)
-, pulsed_beam(&_pulsed_beam) {
-
-    std::cout << "PB in Propagator: " << &(*pulsed_beam) << std::endl;
+, pulsed_beam(_pulsed_beam) {
 
     dir_manager = DirManager(config_manager);
     processor = Processor(config_manager,
@@ -40,16 +38,12 @@ Propagator<PulsedBeam<Medium>>::Propagator(
         std::cout << term << std::endl;
     }
 
-
     // executors
-    linear_executor = LinearExecutor<PulsedBeam<Medium>>(config_manager, pulsed_beam);
-
-    std::cout << "Linear executor in Propagator: " << &(linear_executor) << std::endl;
-
-    nonlinear_executor = NonlinearExecutor<PulsedBeam<Medium>>(config_manager, pulsed_beam);
+    linear_executor = std::make_shared<LinearExecutor<PulsedBeam<Medium>>>(config_manager, pulsed_beam);
+    nonlinear_executor = std::make_shared<NonlinearExecutor<PulsedBeam<Medium>>>(config_manager, pulsed_beam);
 
     logger = Logger<PulsedBeam<Medium>, Processor>(config_manager, dir_manager, processor, pulsed_beam,
-                                                   &linear_executor, &nonlinear_executor);
+                                                   linear_executor, nonlinear_executor);
 
     logger.save_initial_parameters_to_pdf(true, false);
     logger.save_initial_parameters_to_yml();
@@ -77,8 +71,8 @@ void Propagator<PulsedBeam<Medium>>::propagate() {
              * effects
              */
 
-            linear_executor.execute(dz);
-            nonlinear_executor.execute(dz);
+            linear_executor->execute(dz);
+            nonlinear_executor->execute(dz);
 
             z += dz;
         }

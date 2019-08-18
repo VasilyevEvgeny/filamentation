@@ -13,7 +13,7 @@ DispersionFull<PulsedBeam<Medium>>::DispersionFull() = default;
 
 
 template<template<typename, typename...> class PulsedBeam, typename Medium>
-DispersionFull<PulsedBeam<Medium>>::DispersionFull(PulsedBeam<Medium>* _pulsed_beam, bool _T) :
+DispersionFull<PulsedBeam<Medium>>::DispersionFull(std::shared_ptr<PulsedBeam<Medium>> _pulsed_beam, bool _T) :
         BaseDispersion<PulsedBeam <Medium>>(_pulsed_beam, _T) {
 
     base::name = "dispersion_full";

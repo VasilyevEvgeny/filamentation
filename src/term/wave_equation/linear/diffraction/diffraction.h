@@ -17,7 +17,7 @@ template<template<typename, typename...> class PulsedBeam, typename Medium>
 class Diffraction<PulsedBeam<Medium>> : public BaseLinearTerm<PulsedBeam<Medium>>{
 public:
     Diffraction();
-    explicit Diffraction(PulsedBeam<Medium>* _pulsed_beam, bool _T);
+    explicit Diffraction(std::shared_ptr<PulsedBeam<Medium>> _pulsed_beam, bool _T);
 
     ~Diffraction();
 

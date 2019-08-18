@@ -12,9 +12,9 @@ class BaseKeldysh : public BaseIonization {
 public:
     BaseKeldysh();
     explicit BaseKeldysh(double _omega_0,
-                               double _U_i,
-                               double _N_0,
-                               double _n_0);
+                         double _U_i,
+                         double _N_0,
+                         double _n_0);
 
     ~BaseKeldysh() override;
 

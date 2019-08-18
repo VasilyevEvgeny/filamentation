@@ -29,23 +29,22 @@ template<template<typename, typename...> class PulsedBeam, typename Medium, type
 class Logger<PulsedBeam<Medium>, Processor> {
 public:
     Logger();
-    explicit Logger(
-            ConfigManager& _config_manager,
-            DirManager& _dir_manager,
-            Processor& _processor,
-            PulsedBeam<Medium>* _pulsed_beam,
-            LinearExecutor<PulsedBeam<Medium>>* _linear_executor,
-            NonlinearExecutor<PulsedBeam<Medium>>* _nonlinear_executor);
+    explicit Logger(ConfigManager& _config_manager,
+                    DirManager& _dir_manager,
+                    Processor& _processor,
+                    std::shared_ptr<PulsedBeam<Medium>> _pulsed_beam,
+                    std::shared_ptr<LinearExecutor<PulsedBeam<Medium>>> _linear_executor,
+                    std::shared_ptr<NonlinearExecutor<PulsedBeam<Medium>>> _nonlinear_executor);
     ~Logger();
 
     ConfigManager config_manager;
     DirManager dir_manager;
     Processor processor;
 
-    PulsedBeam<Medium>* pulsed_beam;
+    std::shared_ptr<PulsedBeam<Medium>> pulsed_beam;
 
-    LinearExecutor<PulsedBeam<Medium>>* linear_executor;
-    NonlinearExecutor<PulsedBeam<Medium>>* nonlinear_executor;
+    std::shared_ptr<LinearExecutor<PulsedBeam<Medium>>> linear_executor;
+    std::shared_ptr<NonlinearExecutor<PulsedBeam<Medium>>> nonlinear_executor;
 
     std::vector<std::string> states_columns;
     std::vector<std::vector<double>> states;

@@ -23,9 +23,8 @@ template<template<typename, typename...> class PulsedBeam, typename Medium>
 class NonlinearExecutor<PulsedBeam<Medium>> : public BaseExecutor<PulsedBeam<Medium>> {
 public:
     NonlinearExecutor();
-    explicit NonlinearExecutor(
-            ConfigManager& _config_manager,
-            PulsedBeam<Medium>* _pulsed_beam);
+    explicit NonlinearExecutor(ConfigManager& _config_manager,
+                               std::shared_ptr<PulsedBeam<Medium>> _pulsed_beam);
     ~NonlinearExecutor();
 
     ConfigManager config_manager;

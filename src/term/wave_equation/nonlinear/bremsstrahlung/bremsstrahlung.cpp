@@ -26,7 +26,7 @@ template<template<typename, typename...> class PulsedBeam, typename Medium>
 Bremsstrahlung<PulsedBeam<Medium>>::Bremsstrahlung() = default;
 
 template<template<typename, typename...> class PulsedBeam, typename Medium>
-Bremsstrahlung<PulsedBeam<Medium>>::Bremsstrahlung(PulsedBeam<Medium>* _pulsed_beam, bool _T)
+Bremsstrahlung<PulsedBeam<Medium>>::Bremsstrahlung(std::shared_ptr<PulsedBeam<Medium>> _pulsed_beam, bool _T)
 : BaseNonlinearTerm<PulsedBeam<Medium>>(_pulsed_beam, _T) {
 
     base::name = "bremsstrahlung";

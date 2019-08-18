@@ -12,7 +12,7 @@ KineticEquation<PulsedBeam<Medium>>::KineticEquation() = default;
 
 
 template<template<typename, typename...> class PulsedBeam, typename Medium>
-KineticEquation<PulsedBeam<Medium>>::KineticEquation(PulsedBeam<Medium>* _pulsed_beam, double _v_i_const, double _beta)
+KineticEquation<PulsedBeam<Medium>>::KineticEquation(std::shared_ptr<PulsedBeam<Medium>> _pulsed_beam, double _v_i_const, double _beta)
 : BaseTerm<PulsedBeam<Medium>>(_pulsed_beam, false)
 , v_i_const(_v_i_const)
 , beta(_beta){

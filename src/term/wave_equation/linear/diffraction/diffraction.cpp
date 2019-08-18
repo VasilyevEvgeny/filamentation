@@ -17,7 +17,7 @@ Diffraction<PulsedBeam<Medium>>::Diffraction() = default;
 
 
 template<template<typename, typename...> class PulsedBeam, typename Medium>
-Diffraction<PulsedBeam<Medium>>::Diffraction(PulsedBeam<Medium>* _pulsed_beam, bool _T)
+Diffraction<PulsedBeam<Medium>>::Diffraction(std::shared_ptr<PulsedBeam<Medium>> _pulsed_beam, bool _T)
 : BaseLinearTerm<PulsedBeam <Medium>>(_pulsed_beam, _T) {
 
     base::name = "diffraction";

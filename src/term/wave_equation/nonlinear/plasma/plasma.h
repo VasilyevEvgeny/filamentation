@@ -14,7 +14,7 @@ template<template<typename, typename...> class PulsedBeam, typename Medium>
 class Plasma<PulsedBeam<Medium>>: public BaseNonlinearTerm<PulsedBeam<Medium>>  {
 public:
     Plasma();
-    explicit Plasma(PulsedBeam<Medium>* _pulsed_beam, bool _T);
+    explicit Plasma(std::shared_ptr<PulsedBeam<Medium>> _pulsed_beam, bool _T);
 
     ~Plasma();
 };

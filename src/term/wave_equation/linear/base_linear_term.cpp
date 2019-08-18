@@ -9,7 +9,7 @@ BaseLinearTerm<PulsedBeam<Medium>>::BaseLinearTerm() = default;
 
 
 template<template<typename, typename...> class PulsedBeam, typename Medium>
-BaseLinearTerm<PulsedBeam<Medium>>::BaseLinearTerm(PulsedBeam<Medium>* _pulsed_beam, bool _T)
+BaseLinearTerm<PulsedBeam<Medium>>::BaseLinearTerm(std::shared_ptr<PulsedBeam<Medium>> _pulsed_beam, bool _T)
 : BaseTerm<PulsedBeam <Medium>>(_pulsed_beam, _T) {
 
 

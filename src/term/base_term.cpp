@@ -9,10 +9,9 @@ BaseTerm<PulsedBeam<Medium>>::BaseTerm() = default;
 
 
 template<template<typename, typename...> class PulsedBeam, typename Medium>
-BaseTerm<PulsedBeam<Medium>>::BaseTerm(PulsedBeam<Medium>* _pulsed_beam, bool _T)
+BaseTerm<PulsedBeam<Medium>>::BaseTerm(std::shared_ptr<PulsedBeam<Medium>> _pulsed_beam, bool _T)
 : pulsed_beam(_pulsed_beam)
 , T(_T){
-    std::cout << "ADDRESS OF PULSED BEAM IN BASE TERM: " << &(*pulsed_beam) << std::endl;
 }
 
 

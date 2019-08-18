@@ -11,15 +11,15 @@ template<typename Medium>
 class Vortex : public BasePulsedBeam<Medium> {
 public:
     Vortex();
-    Vortex(Medium& _medium,
-           double _lambda_0,
-           size_t _M,
-           size_t _m,
-           double _r_0,
-           size_t _n_r,
-           double _t_0,
-           size_t _n_t,
-           double _p0_to_p_cr);
+    explicit Vortex(std::shared_ptr<Medium> _medium,
+                    double _lambda_0,
+                    size_t _M,
+                    size_t _m,
+                    double _r_0,
+                    size_t _n_r,
+                    double _t_0,
+                    size_t _n_t,
+                    double _p0_to_p_cr);
 
     ~Vortex() override;
 

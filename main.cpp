@@ -5,11 +5,11 @@
 #include <map>
 #include <string>
 #include <omp.h>
+#include <memory>
 
 #include "pulsed_beam/base_pulsed_beam/base_pulsed_beam.h"
 #include "manager/config_manager.h"
 #include "propagator.h"
-
 
 
 int main(int argc, char** argv) {
@@ -39,9 +39,9 @@ int main(int argc, char** argv) {
 #endif
     }
 
-    MEDIUM medium(config_manager.lambda_0);
+    auto medium = std::make_shared<MEDIUM>(config_manager.lambda_0);
 
-    std::cout << "MEDIUM in main: " << &(medium) << std::endl;
+//    func_example(medium);
 
     // pulsed_beam
 
@@ -50,7 +50,7 @@ int main(int argc, char** argv) {
 #define PULSED_BEAM Gauss
 #endif
 
-        Gauss<MEDIUM> pulsed_beam(
+        auto pulsed_beam = std::make_shared<Gauss<MEDIUM>>(
             medium,
             config_manager.lambda_0,
             config_manager.r_0,
@@ -58,8 +58,6 @@ int main(int argc, char** argv) {
             config_manager.t_0,
             config_manager.n_t,
             config_manager.p_0_to_p_cr);
-
-        std::cout << "PB in main: " << &(pulsed_beam) << std::endl;
 
         // propagator
         Propagator<Gauss<MEDIUM>> propagator(
@@ -74,7 +72,7 @@ int main(int argc, char** argv) {
 #define PULSED_BEAM Ring
 #endif
 
-        Ring<MEDIUM> pulsed_beam(
+        auto pulsed_beam = std::make_shared<Ring<MEDIUM>>(
             medium,
             config_manager.lambda_0,
             config_manager.M,
@@ -89,7 +87,7 @@ int main(int argc, char** argv) {
                 config_manager,
                 pulsed_beam);
 
-        //propagator.propagate();
+        propagator.propagate();
 
     }
     else {
@@ -97,7 +95,7 @@ int main(int argc, char** argv) {
 #define PULSED_BEAM Vortex
 #endif
 
-        Vortex<MEDIUM> pulsed_beam(
+        auto pulsed_beam = std::make_shared<Vortex<MEDIUM>>(
                 medium,
                 config_manager.lambda_0,
                 config_manager.M,

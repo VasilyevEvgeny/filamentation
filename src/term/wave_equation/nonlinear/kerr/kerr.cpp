@@ -25,7 +25,7 @@ Kerr<PulsedBeam<Medium>>::Kerr() = default;
 
 
 template<template<typename, typename...> class PulsedBeam, typename Medium>
-Kerr<PulsedBeam<Medium>>::Kerr(PulsedBeam<Medium>* _pulsed_beam, std::map<std::string, bool>& _kerr_info, bool _T)
+Kerr<PulsedBeam<Medium>>::Kerr(std::shared_ptr<PulsedBeam<Medium>> _pulsed_beam, std::map<std::string, bool>& _kerr_info, bool _T)
 : BaseNonlinearTerm<PulsedBeam<Medium>>(_pulsed_beam, _T)
 , kerr_info(_kerr_info) {
 

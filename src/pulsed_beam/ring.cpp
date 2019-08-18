@@ -8,7 +8,7 @@ template<typename Medium>
 Ring<Medium>::Ring() = default;
 
 template<typename Medium>
-Ring<Medium>::Ring(Medium& medium,
+Ring<Medium>::Ring(std::shared_ptr<Medium> medium,
                    double _lambda_0,
                    size_t _M,
                    double _r_0,

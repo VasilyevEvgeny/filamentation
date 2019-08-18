@@ -7,6 +7,7 @@
 
 #include <vector>
 #include <complex>
+#include <memory>
 
 #include "../../m_constants.h"
 #include "../../medium/SiO2.h"
@@ -19,21 +20,20 @@ template <typename Medium>
 class BasePulsedBeam {
 public:
     BasePulsedBeam();
-    BasePulsedBeam(
-            Medium& _medium,
-            double _lambda_0,
-            double _r_0,
-            size_t _n_r,
-            double _t_0,
-            size_t _n_t,
-            double _p_0_to_p_cr);
+    explicit BasePulsedBeam(std::shared_ptr<Medium> _medium,
+                            double _lambda_0,
+                            double _r_0,
+                            size_t _n_r,
+                            double _t_0,
+                            size_t _n_t,
+                            double _p_0_to_p_cr);
     virtual ~BasePulsedBeam();
 
     void initialize_field();
 
     std::string info;
 
-    Medium* medium;
+    std::shared_ptr<Medium> medium;
 
     double lambda_0;
     double omega_0;

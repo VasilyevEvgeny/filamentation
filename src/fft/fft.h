@@ -14,11 +14,11 @@ template<template<typename, typename...> class PulsedBeam, typename Medium>
 class FastFourierTransform<PulsedBeam<Medium>> {
 public:
     FastFourierTransform();
-    explicit FastFourierTransform(PulsedBeam<Medium>* _pulsed_beam);
+    explicit FastFourierTransform(std::shared_ptr<PulsedBeam<Medium>> _pulsed_beam);
 
     ~FastFourierTransform();
 
-    PulsedBeam<Medium>* pulsed_beam;
+    std::shared_ptr<PulsedBeam<Medium>> pulsed_beam;
 
     void forward();
     void backward();

@@ -13,7 +13,7 @@ template<template<typename, typename...> class PulsedBeam, typename Medium>
 class Dissipation<PulsedBeam<Medium>> : public BaseNonlinearTerm<PulsedBeam<Medium>>  {
 public:
     Dissipation();
-    explicit Dissipation(PulsedBeam<Medium>* _pulsed_beam);
+    explicit Dissipation(std::shared_ptr<PulsedBeam<Medium>> _pulsed_beam);
 
     ~Dissipation();
 

@@ -13,11 +13,9 @@ LinearExecutor<PulsedBeam<Medium>>::LinearExecutor() = default;
 
 template<template<typename, typename...> class PulsedBeam, typename Medium>
 LinearExecutor<PulsedBeam<Medium>>::LinearExecutor(ConfigManager& _config_manager,
-                                                   PulsedBeam<Medium>* _pulsed_beam)
+                                                   std::shared_ptr<PulsedBeam<Medium>> _pulsed_beam)
 : BaseExecutor<PulsedBeam<Medium>>(_pulsed_beam)
 , config_manager(_config_manager) {
-
-    std::cout << "PB in linear executor:" << &(*base::pulsed_beam) << std::endl;
 
     fft = FastFourierTransform<PulsedBeam<Medium>>(base::pulsed_beam);
 

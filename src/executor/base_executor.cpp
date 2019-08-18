@@ -9,7 +9,7 @@ BaseExecutor<PulsedBeam<Medium>>::BaseExecutor() = default;
 
 
 template<template<typename, typename...> class PulsedBeam, typename Medium>
-BaseExecutor<PulsedBeam<Medium>>::BaseExecutor(PulsedBeam<Medium>* _pulsed_beam)
+BaseExecutor<PulsedBeam<Medium>>::BaseExecutor(std::shared_ptr<PulsedBeam<Medium>> _pulsed_beam)
 : pulsed_beam(_pulsed_beam) {
 
 }

@@ -22,9 +22,8 @@ template<template<typename, typename...> class PulsedBeam, typename Medium>
 class LinearExecutor<PulsedBeam<Medium>> : public BaseExecutor<PulsedBeam<Medium>> {
 public:
     LinearExecutor();
-    explicit LinearExecutor(
-            ConfigManager& _config_manager,
-            PulsedBeam<Medium>* _pulsed_beam);
+    explicit LinearExecutor(ConfigManager& _config_manager,
+                            std::shared_ptr<PulsedBeam<Medium>> _pulsed_beam);
     ~LinearExecutor();
 
     ConfigManager config_manager;

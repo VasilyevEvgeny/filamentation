@@ -13,7 +13,7 @@ template<template<typename, typename...> class PulsedBeam, typename Medium>
 class BaseNonlinearTerm<PulsedBeam<Medium>> : public BaseTerm<PulsedBeam<Medium>> {
 public:
     BaseNonlinearTerm();
-    explicit BaseNonlinearTerm(PulsedBeam<Medium>* _pulsed_beam, bool _T);
+    explicit BaseNonlinearTerm(std::shared_ptr<PulsedBeam<Medium>> _pulsed_beam, bool _T);
 
     virtual ~BaseNonlinearTerm();
 

@@ -14,17 +14,15 @@
 
 template <typename Medium>
 BasePulsedBeam<Medium>::BasePulsedBeam(
-        Medium& _medium,
+        std::shared_ptr<Medium> _medium,
         double _lambda_0,
         double _r_0,
         size_t _n_r,
         double _t_0,
         size_t _n_t,
         double _p_0_to_p_cr) :
-        medium(&_medium), lambda_0(_lambda_0), r_0(_r_0), n_r(_n_r), t_0(_t_0), n_t(_n_t),
+        medium(_medium), lambda_0(_lambda_0), r_0(_r_0), n_r(_n_r), t_0(_t_0), n_t(_n_t),
         p_0_to_p_cr(_p_0_to_p_cr) {
-
-    std::cout << "MEDIUM in pulsed_beam: " << &(*medium) << std::endl;
 
     omega_0 = 2 * M_PI * medium->math_constants.c / lambda_0;
 

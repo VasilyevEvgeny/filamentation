@@ -11,7 +11,7 @@ Gauss<Medium>::Gauss() = default;
 
 
 template<typename Medium>
-Gauss<Medium>::Gauss(Medium& _medium,
+Gauss<Medium>::Gauss(std::shared_ptr<Medium> _medium,
                      double _lambda_0,
                      double _r_0,
                      size_t _n_r,

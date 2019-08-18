@@ -8,6 +8,7 @@
 #include <map>
 #include <string>
 #include <chrono>
+#include <memory>
 
 #include "pulsed_beam/base_pulsed_beam/base_pulsed_beam.h"
 #include "logger/logger.h"
@@ -34,8 +35,8 @@ template<template<typename, typename...> class PulsedBeam, typename Medium>
 class Propagator<PulsedBeam<Medium>> {
 public:
     Propagator();
-    Propagator(ConfigManager& config_manager,
-               PulsedBeam<Medium>& _pulsed_beam);
+    explicit Propagator(ConfigManager& config_manager,
+               std::shared_ptr<PulsedBeam<Medium>> _pulsed_beam);
     ~Propagator();
 
     ConfigManager config_manager;
@@ -43,11 +44,11 @@ public:
     Processor processor;
     Logger<PulsedBeam<Medium>, Processor> logger;
 
-    PulsedBeam<Medium>* pulsed_beam;
+    std::shared_ptr<PulsedBeam<Medium>> pulsed_beam;
 
     // executors
-    LinearExecutor<PulsedBeam<Medium>> linear_executor;
-    NonlinearExecutor<PulsedBeam<Medium>> nonlinear_executor;
+    std::shared_ptr<LinearExecutor<PulsedBeam<Medium>>> linear_executor;
+    std::shared_ptr<NonlinearExecutor<PulsedBeam<Medium>>> nonlinear_executor;
 
     void propagate();
 

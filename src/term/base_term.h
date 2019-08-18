@@ -21,10 +21,10 @@ template<template<typename, typename...> class PulsedBeam, typename Medium>
 class BaseTerm<PulsedBeam<Medium>> {
 public:
     BaseTerm();
-    explicit BaseTerm(PulsedBeam<Medium>* _pulsed_beam, bool _T);
+    explicit BaseTerm(std::shared_ptr<PulsedBeam<Medium>> _pulsed_beam, bool _T);
     virtual ~BaseTerm();
 
-    PulsedBeam<Medium>* pulsed_beam;
+    std::shared_ptr<PulsedBeam<Medium>> pulsed_beam;
 
     bool T;
 

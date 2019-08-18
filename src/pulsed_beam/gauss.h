@@ -11,13 +11,13 @@ template<typename Medium>
 class Gauss : public BasePulsedBeam<Medium> {
 public:
     Gauss();
-    Gauss(Medium& _medium,
-          double _lambda_0,
-          double _r_0,
-          size_t _n_r,
-          double _t_0,
-          size_t _n_t,
-          double _p0_to_p_cr);
+    explicit Gauss(std::shared_ptr<Medium> _medium,
+                   double _lambda_0,
+                   double _r_0,
+                   size_t _n_r,
+                   double _t_0,
+                   size_t _n_t,
+                   double _p0_to_p_cr);
 
     ~Gauss() override;
 

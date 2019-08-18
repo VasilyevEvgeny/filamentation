@@ -9,7 +9,7 @@ BaseDispersion<PulsedBeam<Medium>>::BaseDispersion() = default;
 
 
 template<template<typename, typename...> class PulsedBeam, typename Medium>
-BaseDispersion<PulsedBeam<Medium>>::BaseDispersion(PulsedBeam<Medium>* _pulsed_beam, bool _T)
+BaseDispersion<PulsedBeam<Medium>>::BaseDispersion(std::shared_ptr<PulsedBeam<Medium>> _pulsed_beam, bool _T)
 : BaseLinearTerm<PulsedBeam <Medium>>(_pulsed_beam, _T) {
 
 

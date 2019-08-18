@@ -13,7 +13,7 @@ template<template<typename, typename...> class PulsedBeam, typename Medium>
 class DispersionFull<PulsedBeam<Medium>> : public BaseDispersion<PulsedBeam<Medium>> {
 public:
     DispersionFull();
-    explicit DispersionFull(PulsedBeam<Medium>* _pulsed_beam, bool _T);
+    explicit DispersionFull(std::shared_ptr<PulsedBeam<Medium>> _pulsed_beam, bool _T);
 
     ~DispersionFull();
 

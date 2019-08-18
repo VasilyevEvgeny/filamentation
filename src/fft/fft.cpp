@@ -11,7 +11,7 @@ FastFourierTransform<PulsedBeam<Medium>>::FastFourierTransform() = default;
 
 
 template<template<typename, typename...> class PulsedBeam, typename Medium>
-FastFourierTransform<PulsedBeam<Medium>>::FastFourierTransform(PulsedBeam<Medium>* _pulsed_beam)
+FastFourierTransform<PulsedBeam<Medium>>::FastFourierTransform(std::shared_ptr<PulsedBeam<Medium>> _pulsed_beam)
 : pulsed_beam(_pulsed_beam) {
 
 

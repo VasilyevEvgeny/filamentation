@@ -9,7 +9,7 @@ BaseNonlinearTerm<PulsedBeam<Medium>>::BaseNonlinearTerm() = default;
 
 
 template<template<typename, typename...> class PulsedBeam, typename Medium>
-BaseNonlinearTerm<PulsedBeam<Medium>>::BaseNonlinearTerm(PulsedBeam<Medium>* _pulsed_beam, bool _T)
+BaseNonlinearTerm<PulsedBeam<Medium>>::BaseNonlinearTerm(std::shared_ptr<PulsedBeam<Medium>> _pulsed_beam, bool _T)
 : BaseTerm<PulsedBeam <Medium>>(_pulsed_beam, _T)
 , R_kerr_instant(0)
 , R_kerr_instant_T(0)

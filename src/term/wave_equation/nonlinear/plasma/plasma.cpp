@@ -25,7 +25,7 @@ Plasma<PulsedBeam<Medium>>::Plasma() = default;
 
 
 template<template<typename, typename...> class PulsedBeam, typename Medium>
-Plasma<PulsedBeam<Medium>>::Plasma(PulsedBeam<Medium>* _pulsed_beam, bool _T)
+Plasma<PulsedBeam<Medium>>::Plasma(std::shared_ptr<PulsedBeam<Medium>> _pulsed_beam, bool _T)
 : BaseNonlinearTerm<PulsedBeam<Medium>>(_pulsed_beam, _T) {
 
     base::name = "plasma";

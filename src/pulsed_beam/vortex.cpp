@@ -10,7 +10,7 @@ Vortex<Medium>::Vortex() = default;
 
 
 template<typename Medium>
-Vortex<Medium>::Vortex(Medium& _medium,
+Vortex<Medium>::Vortex(std::shared_ptr<Medium> _medium,
                        double _lambda_0,
                        size_t _M,
                        size_t _m,

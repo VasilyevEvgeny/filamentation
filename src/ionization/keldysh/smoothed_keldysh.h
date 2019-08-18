@@ -10,10 +10,10 @@
 class SmoothedKeldysh : public BaseKeldysh {
 public:
     SmoothedKeldysh();
-    SmoothedKeldysh(double _omega_0,
-                              double _U_i,
-                              double _N_0,
-                              double _n_0);
+    explicit SmoothedKeldysh(double _omega_0,
+                             double _U_i,
+                             double _N_0,
+                             double _n_0);
     ~SmoothedKeldysh() override;
 
     double calculate_x_plus_1(double x) override;
