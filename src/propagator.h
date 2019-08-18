@@ -45,34 +45,9 @@ public:
 
     PulsedBeam<Medium>* pulsed_beam;
 
-    // linear terms
-    Diffraction<PulsedBeam<Medium>> diffraction;
-    DispersionFull<PulsedBeam<Medium>> dispersion_full;
-    DispersionGVD<PulsedBeam<Medium>> dispersion_gvd;
-
-    // nonlinear terms
-    Kerr<PulsedBeam<Medium>> kerr;
-    Plasma<PulsedBeam<Medium>> plasma;
-    Bremsstrahlung<PulsedBeam<Medium>> bremsstrahlung;
-    Dissipation<PulsedBeam<Medium>> dissipation;
-
     // executors
     LinearExecutor<PulsedBeam<Medium>> linear_executor;
     NonlinearExecutor<PulsedBeam<Medium>> nonlinear_executor;
-
-    // containers for terms
-    std::map<std::string, BaseLinearTerm<PulsedBeam<Medium>>*> linear_terms_pool;
-    std::map<std::string, BaseNonlinearTerm<PulsedBeam<Medium>>*> nonlinear_terms_pool;
-    std::vector<std::string> active_linear_terms;
-    std::vector<std::string> active_nonlinear_terms;
-
-    size_t n_z;
-    size_t print_current_state_every;
-    size_t save_field_every;
-
-    std::map<std::string, double> track_info;
-
-
 
     void propagate();
 

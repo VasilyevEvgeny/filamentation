@@ -17,6 +17,8 @@
 #include "term/wave_equation/linear/base_linear_term.h"
 #include "term/wave_equation/nonlinear/base_nonlinear_term.h"
 #include "term/kinetic_equation/kinetic_equation.h"
+#include "executor/linear_executor.h"
+#include "executor/nonlinear_executor.h"
 
 #include "diffraction/processor_diffraction.h"
 #include "dispersion/processor_dispersion.h"
@@ -32,11 +34,8 @@ public:
             DirManager& _dir_manager,
             Processor& _processor,
             PulsedBeam<Medium>* _pulsed_beam,
-            std::map<std::string, BaseLinearTerm<PulsedBeam<Medium>>*>& _linear_terms_pool,
-            std::map<std::string, BaseNonlinearTerm<PulsedBeam<Medium>>*>& _nonlinear_terms_pool,
-            std::vector<std::string>& _active_linear_terms,
-            std::vector<std::string>& _active_nonlinear_terms,
-            KineticEquation<PulsedBeam<Medium>>& _kinetic_equation);
+            LinearExecutor<PulsedBeam<Medium>>* _linear_executor,
+            NonlinearExecutor<PulsedBeam<Medium>>* _nonlinear_executor);
     ~Logger();
 
     ConfigManager config_manager;
@@ -45,14 +44,11 @@ public:
 
     PulsedBeam<Medium>* pulsed_beam;
 
+    LinearExecutor<PulsedBeam<Medium>>* linear_executor;
+    NonlinearExecutor<PulsedBeam<Medium>>* nonlinear_executor;
+
     std::vector<std::string> states_columns;
     std::vector<std::vector<double>> states;
-
-    std::map<std::string, BaseLinearTerm<PulsedBeam<Medium>>*> linear_terms_pool;
-    std::map<std::string, BaseNonlinearTerm<PulsedBeam<Medium>>*> nonlinear_terms_pool;
-    std::vector<std::string> active_linear_terms;
-    std::vector<std::string> active_nonlinear_terms;
-    KineticEquation<PulsedBeam<Medium>> kinetic_equation;
 
     void add_start(std::string& tex_file_data);
     void add_end(std::string& tex_file_data);

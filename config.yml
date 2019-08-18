@@ -11,17 +11,17 @@ equation:
   dispersion_full: true
   dispersion_gvd: false
   kerr_instant: true
-  kerr_inertial: true
-  plasma: true
-  bremsstrahlung: true
-  dissipation: true
+  kerr_inertial: false
+  plasma: false
+  bremsstrahlung: false
+  dissipation: false
 
 T:
-  diffraction: true
-  dispersion: true
-  kerr: true
-  plasma: true
-  bremsstrahlung: true
+  diffraction: false
+  dispersion: false
+  kerr: false
+  plasma: false
+  bremsstrahlung: false
 
 medium:
   type: LiF
@@ -39,11 +39,11 @@ grid:
   n_t: 512
 
 track:
-  n_z: 1000
+  n_z: 100
   dz_0: 1e-5
   constant_dz: true
   print_current_state_every: 10
-  save_every: 100
+  save_every: 50
   save_field: true
   save_plasma: true
 

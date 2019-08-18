@@ -12,13 +12,23 @@ LinearExecutor<PulsedBeam<Medium>>::LinearExecutor() = default;
 
 
 template<template<typename, typename...> class PulsedBeam, typename Medium>
-LinearExecutor<PulsedBeam<Medium>>::LinearExecutor(PulsedBeam<Medium>* _pulsed_beam,
-                                                   std::vector<std::string>& _active_linear_terms,
-                                                   std::map<std::string, BaseLinearTerm<PulsedBeam<Medium>>*>& _linear_terms_pool)
-: BaseExecutor<PulsedBeam<Medium>>(_pulsed_beam, _active_linear_terms)
-, linear_terms_pool(_linear_terms_pool) {
+LinearExecutor<PulsedBeam<Medium>>::LinearExecutor(ConfigManager& _config_manager,
+                                                   PulsedBeam<Medium>* _pulsed_beam)
+: BaseExecutor<PulsedBeam<Medium>>(_pulsed_beam)
+, config_manager(_config_manager) {
+
+    std::cout << "PB in linear executor:" << &(*base::pulsed_beam) << std::endl;
 
     fft = FastFourierTransform<PulsedBeam<Medium>>(base::pulsed_beam);
+
+    diffraction = std::make_shared<Diffraction<PulsedBeam<Medium>>>(base::pulsed_beam, config_manager.T.at("diffraction"));
+    dispersion_full = std::make_shared<DispersionFull<PulsedBeam<Medium>>>(base::pulsed_beam, config_manager.T.at("dispersion"));
+    dispersion_gvd = std::make_shared<DispersionGVD<PulsedBeam<Medium>>>(base::pulsed_beam);
+
+    // container for linear terms
+    terms_pool.insert(std::pair<std::string, std::shared_ptr<BaseLinearTerm<PulsedBeam<Medium>>>>(diffraction->name, diffraction));
+    terms_pool.insert(std::pair<std::string, std::shared_ptr<BaseLinearTerm<PulsedBeam<Medium>>>>(dispersion_full->name, dispersion_full));
+    terms_pool.insert(std::pair<std::string, std::shared_ptr<BaseLinearTerm<PulsedBeam<Medium>>>>(dispersion_gvd->name, dispersion_gvd));
 
 }
 
@@ -32,8 +42,8 @@ void LinearExecutor<PulsedBeam<Medium>>::execute(double dz) {
 
     fft.forward();
 
-    for(auto& linear_term_name : base::active_terms) {
-        linear_terms_pool[linear_term_name]->process(dz);
+    for(auto& linear_term_name : config_manager.active_linear_terms) {
+        terms_pool[linear_term_name]->process(dz);
     }
 
     fft.backward();

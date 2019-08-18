@@ -17,20 +17,18 @@ Logger<PulsedBeam<Medium>, Processor>::Logger(
         DirManager& _dir_manager,
         Processor& _processor,
         PulsedBeam<Medium>* _pulsed_beam,
-        std::map<std::string, BaseLinearTerm<PulsedBeam<Medium>>*>& _linear_terms_pool,
-        std::map<std::string, BaseNonlinearTerm<PulsedBeam<Medium>>*>& _nonlinear_terms_pool,
-        std::vector<std::string>& _active_linear_terms,
-        std::vector<std::string>& _active_nonlinear_terms,
-        KineticEquation<PulsedBeam<Medium>>& _kinetic_equation)
+        LinearExecutor<PulsedBeam<Medium>>* _linear_executor,
+        NonlinearExecutor<PulsedBeam<Medium>>* _nonlinear_executor)
 : config_manager(_config_manager)
 , dir_manager(_dir_manager)
 , processor(_processor)
 , pulsed_beam(_pulsed_beam)
-, linear_terms_pool(_linear_terms_pool)
-, nonlinear_terms_pool(_nonlinear_terms_pool)
-, active_linear_terms(_active_linear_terms)
-, active_nonlinear_terms(_active_nonlinear_terms)
-, kinetic_equation(_kinetic_equation) {
+, linear_executor(_linear_executor)
+, nonlinear_executor(_nonlinear_executor) {
+
+
+    std::cout << "PB in Logger: " << &(*pulsed_beam) << std::endl;
+    std::cout << "Linear executor in Logger: " << &(*linear_executor) << std::endl;
 
     states_columns = {"step", "z, [m]", "h_z, [m]", "i_max, [W/m^2]"};
     states = std::vector<std::vector<double>>(config_manager.n_z + 1,
@@ -143,7 +141,7 @@ void Logger<PulsedBeam<Medium>, Processor>::save_states_to_csv() {
 
     //f << "\n";
 
-    for (size_t step = 0; step < config_manager.n_z; ++step) {
+    for (size_t step = 0; step < config_manager.n_z + 1; ++step) {
         f << std::setw(w1) << std::setfill('0') << std::fixed << std::setprecision(0) << states[step][0] << sep;
         f << std::setw(w2) << std::setfill(' ') << std::scientific << std::setprecision(5) << states[step][1] << sep;
         f << std::setw(w3) << std::setfill(' ') << std::scientific << std::setprecision(5) << states[step][2] << sep;

@@ -5,7 +5,11 @@
 #include <fstream>
 #include <cstdlib>
 
+
+
 #include "logger.h"
+
+#define base BaseTerm<PulsedBeam<Medium>>
 
 template<template<typename, typename...> class PulsedBeam, typename Medium, typename Processor>
 void Logger<PulsedBeam<Medium>, Processor>::add_start(std::string& tex_file_data) {
@@ -113,21 +117,19 @@ void Logger<PulsedBeam<Medium>, Processor>::save_initial_parameters_to_pdf(bool 
 
     add_start(tex_file_data);
 
-
-
     //
     //  EQUATION
     //
 
     std::string equation = R"(2 i k_0 \frac{\partial A(r,t,z)}{\partial z} = )";
-    for (auto& term_name : active_linear_terms) {
-        equation += "&" + linear_terms_pool[term_name]->formula + R"(\\)";
+    for (auto& term_name : config_manager.active_linear_terms) {
+        equation += "&" + linear_executor->terms_pool.at(term_name)->formula + R"(\\)";
     }
-    for (auto& term_name : active_nonlinear_terms) {
-        equation += "&" + nonlinear_terms_pool[term_name]->formula + R"(\\)";
+    for (auto& term_name : config_manager.active_nonlinear_terms) {
+        equation += "&" + nonlinear_executor->terms_pool.at(term_name)->formula + R"(\\)";
     }
 
-    equation += kinetic_equation.formula;
+    equation += nonlinear_executor->kinetic_equation->formula;
 
     std::string equation_data = R"(
 \midrule[2pt]

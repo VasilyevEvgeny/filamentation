@@ -13,18 +13,29 @@ NonlinearExecutor<PulsedBeam<Medium>>::NonlinearExecutor() = default;
 
 
 template<template<typename, typename...> class PulsedBeam, typename Medium>
-NonlinearExecutor<PulsedBeam<Medium>>::NonlinearExecutor(PulsedBeam<Medium>* _pulsed_beam,
-                                                         std::vector<std::string>& _active_nonlinear_terms,
-                                                         std::map<std::string, BaseNonlinearTerm<PulsedBeam<Medium>>*>& _nonlinear_terms_pool,
-                                                         Dissipation<PulsedBeam<Medium>>* _dissipation)
-: BaseExecutor<PulsedBeam<Medium>>(_pulsed_beam, _active_nonlinear_terms)
-, nonlinear_terms_pool(_nonlinear_terms_pool)
-, dissipation(_dissipation) {
+NonlinearExecutor<PulsedBeam<Medium>>::NonlinearExecutor(
+        ConfigManager& _config_manager,
+        PulsedBeam<Medium>* _pulsed_beam)
+: BaseExecutor<PulsedBeam<Medium>>(_pulsed_beam)
+, config_manager(_config_manager) {
 
-        kinetic_equation = KineticEquation<PulsedBeam<Medium>>(
-                base::pulsed_beam,
-                base::pulsed_beam->medium->v_i_const,
-                base::pulsed_beam->medium->beta);
+    // nonlinear terms
+    kerr = std::make_shared<Kerr<PulsedBeam<Medium>>>(base::pulsed_beam, config_manager.kerr_info, config_manager.T.at("kerr"));
+    plasma = std::make_shared<Plasma<PulsedBeam<Medium>>>(base::pulsed_beam, config_manager.T.at("plasma"));
+    bremsstrahlung = std::make_shared<Bremsstrahlung<PulsedBeam<Medium>>>(base::pulsed_beam, config_manager.T.at("bremsstrahlung"));
+    dissipation = std::make_shared<Dissipation<PulsedBeam<Medium>>>(base::pulsed_beam);
+
+    kinetic_equation = std::make_shared<KineticEquation<PulsedBeam<Medium>>>(
+            base::pulsed_beam,
+            base::pulsed_beam->medium->v_i_const,
+            base::pulsed_beam->medium->beta);
+
+    // container for nonlinear terms
+    terms_pool.insert(std::pair<std::string, std::shared_ptr<BaseNonlinearTerm<PulsedBeam<Medium>>>>(kerr->name, kerr));
+    terms_pool.insert(std::pair<std::string, std::shared_ptr<BaseNonlinearTerm<PulsedBeam<Medium>>>>(plasma->name, plasma));
+    terms_pool.insert(std::pair<std::string, std::shared_ptr<BaseNonlinearTerm<PulsedBeam<Medium>>>>(bremsstrahlung->name, bremsstrahlung));
+    terms_pool.insert(std::pair<std::string, std::shared_ptr<BaseNonlinearTerm<PulsedBeam<Medium>>>>(dissipation->name, dissipation));
+
 
 }
 
@@ -56,19 +67,19 @@ void NonlinearExecutor<PulsedBeam<Medium>>::execute(double dz) {
             double dNe = Ne - Ne_prev;
 
             // dissipation
-            double Ne_increase_field = kinetic_equation.calculate_plasma_increase_field(Ne, R);
+            double Ne_increase_field = kinetic_equation->calculate_plasma_increase_field(Ne, R);
             dissipation->update_R_dissipation(I, Ne_increase_field);
 
             std::complex<double> increment = std::complex<double>(0.0, 0.0);
-            for(auto& nonlinear_term_name : base::active_terms) {
+            for(auto& nonlinear_term_name : config_manager.active_nonlinear_terms) {
 
-                increment +=   nonlinear_terms_pool[nonlinear_term_name]->R_kerr_instant * I
-                             + nonlinear_terms_pool[nonlinear_term_name]->R_kerr_instant_T * dI / dt
-                             + nonlinear_terms_pool[nonlinear_term_name]->R_plasma * Ne
-                             + nonlinear_terms_pool[nonlinear_term_name]->R_plasma_T * dNe / dt
-                             + nonlinear_terms_pool[nonlinear_term_name]->R_bremsstrahlung * Ne
-                             + nonlinear_terms_pool[nonlinear_term_name]->R_bremsstrahlung_T * dNe / dt
-                             + nonlinear_terms_pool[nonlinear_term_name]->R_dissipation;
+                increment +=   terms_pool[nonlinear_term_name]->R_kerr_instant * I
+                             + terms_pool[nonlinear_term_name]->R_kerr_instant_T * dI / dt
+                             + terms_pool[nonlinear_term_name]->R_plasma * Ne
+                             + terms_pool[nonlinear_term_name]->R_plasma_T * dNe / dt
+                             + terms_pool[nonlinear_term_name]->R_bremsstrahlung * Ne
+                             + terms_pool[nonlinear_term_name]->R_bremsstrahlung_T * dNe / dt
+                             + terms_pool[nonlinear_term_name]->R_dissipation;
             }
 
             pb->field[k][s] *= exp(increment * dz);
@@ -76,7 +87,7 @@ void NonlinearExecutor<PulsedBeam<Medium>>::execute(double dz) {
 
 
             // plasma increase
-            double Ne_increase_full = kinetic_equation.calculate_plasma_increase_full(I, Ne, R);
+            double Ne_increase_full = kinetic_equation->calculate_plasma_increase_full(I, Ne, R);
             pb->plasma[k][s + 1] = Ne + Ne_increase_full;
         }
     }

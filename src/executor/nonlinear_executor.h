@@ -9,8 +9,13 @@
 #include "term/wave_equation/nonlinear/base_nonlinear_term.h"
 #include "term/kinetic_equation/kinetic_equation.h"
 #include "term/wave_equation/nonlinear/dissipation/dissipation.h"
+#include "term/wave_equation/nonlinear/kerr/kerr.h"
+#include "term/wave_equation/nonlinear/plasma/plasma.h"
+#include "term/wave_equation/nonlinear/bremsstrahlung/bremsstrahlung.h"
+#include "term/wave_equation/nonlinear/dissipation/dissipation.h"
 
 #include <map>
+#include <memory>
 
 template<typename T> class NonlinearExecutor;
 
@@ -18,18 +23,23 @@ template<template<typename, typename...> class PulsedBeam, typename Medium>
 class NonlinearExecutor<PulsedBeam<Medium>> : public BaseExecutor<PulsedBeam<Medium>> {
 public:
     NonlinearExecutor();
-    explicit NonlinearExecutor(PulsedBeam<Medium>* _pulsed_beam,
-                               std::vector<std::string>& _active_nonlinear_terms,
-                               std::map<std::string, BaseNonlinearTerm<PulsedBeam<Medium>>*>& _nonlinear_terms_pool,
-                               Dissipation<PulsedBeam<Medium>>* _dissipation);
+    explicit NonlinearExecutor(
+            ConfigManager& _config_manager,
+            PulsedBeam<Medium>* _pulsed_beam);
     ~NonlinearExecutor();
 
-    std::map<std::string, BaseNonlinearTerm<PulsedBeam<Medium>>*> nonlinear_terms_pool;
+    ConfigManager config_manager;
+
+    std::map<std::string, std::shared_ptr<BaseNonlinearTerm<PulsedBeam<Medium>>>> terms_pool;
+
+    // nonlinear terms
+    std::shared_ptr<Kerr<PulsedBeam<Medium>>> kerr;
+    std::shared_ptr<Plasma<PulsedBeam<Medium>>> plasma;
+    std::shared_ptr<Bremsstrahlung<PulsedBeam<Medium>>> bremsstrahlung;
+    std::shared_ptr<Dissipation<PulsedBeam<Medium>>> dissipation;
 
     // kinetic equation
-    KineticEquation<PulsedBeam<Medium>> kinetic_equation;
-
-    Dissipation<PulsedBeam<Medium>>* dissipation;
+    std::shared_ptr<KineticEquation<PulsedBeam<Medium>>> kinetic_equation;
 
     void execute(double dz) override;
 };

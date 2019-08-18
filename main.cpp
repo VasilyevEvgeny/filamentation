@@ -41,7 +41,7 @@ int main(int argc, char** argv) {
 
     MEDIUM medium(config_manager.lambda_0);
 
-
+    std::cout << "MEDIUM in main: " << &(medium) << std::endl;
 
     // pulsed_beam
 
@@ -58,6 +58,8 @@ int main(int argc, char** argv) {
             config_manager.t_0,
             config_manager.n_t,
             config_manager.p_0_to_p_cr);
+
+        std::cout << "PB in main: " << &(pulsed_beam) << std::endl;
 
         // propagator
         Propagator<Gauss<MEDIUM>> propagator(
@@ -87,7 +89,7 @@ int main(int argc, char** argv) {
                 config_manager,
                 pulsed_beam);
 
-        propagator.propagate();
+        //propagator.propagate();
 
     }
     else {
@@ -114,9 +116,6 @@ int main(int argc, char** argv) {
         propagator.propagate();
 
     }
-
-
-
 
 
     return 0;

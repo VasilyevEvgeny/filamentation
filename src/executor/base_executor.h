@@ -22,13 +22,10 @@ template<template<typename, typename...> class PulsedBeam, typename Medium>
 class BaseExecutor<PulsedBeam<Medium>> {
 public:
     BaseExecutor();
-    explicit BaseExecutor(PulsedBeam<Medium>* _pulsed_beam,
-                          std::vector<std::string>& active_terms);
+    explicit BaseExecutor(PulsedBeam<Medium>* _pulsed_beam);
     virtual ~BaseExecutor();
 
     PulsedBeam<Medium>* pulsed_beam;
-
-    std::vector<std::string> active_terms;
 
     virtual void execute(double dz) = 0;
 };
