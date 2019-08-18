@@ -20,6 +20,8 @@ Propagator<PulsedBeam<Medium>>::Propagator(
 : config_manager(_config_manager)
 , pulsed_beam(_pulsed_beam) {
 
+    std::cout << pulsed_beam->info << std::endl;
+
     dir_manager = DirManager(config_manager);
     processor = Processor(config_manager,
                           dir_manager);
@@ -114,3 +116,5 @@ template class Propagator<Ring<LiF>>;
 template class Propagator<Vortex<SiO2>>;
 template class Propagator<Vortex<CaF2>>;
 template class Propagator<Vortex<LiF>>;
+
+template class Propagator<BasePulsedBeam<BaseMedium>>;

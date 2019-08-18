@@ -28,3 +28,5 @@ template class BaseExecutor<Ring<LiF>>;
 template class BaseExecutor<Vortex<SiO2>>;
 template class BaseExecutor<Vortex<CaF2>>;
 template class BaseExecutor<Vortex<LiF>>;
+
+template class BaseExecutor<BasePulsedBeam<BaseMedium>>;

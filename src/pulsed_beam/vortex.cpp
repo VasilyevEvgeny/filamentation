@@ -45,9 +45,7 @@ Vortex<Medium>::Vortex(std::shared_ptr<Medium> _medium,
 template<typename Medium>
 Vortex<Medium>::~Vortex() = default;
 
-template class Vortex<SiO2>;
-template class Vortex<CaF2>;
-template class Vortex<LiF>;
+
 
 
 template<typename Medium>
@@ -57,5 +55,11 @@ double Vortex<Medium>::calculate_p_cr_to_p_g() {
 }
 
 
+
+template class Vortex<SiO2>;
+template class Vortex<CaF2>;
+template class Vortex<LiF>;
+
+template class Vortex<BaseMedium>;
 
 

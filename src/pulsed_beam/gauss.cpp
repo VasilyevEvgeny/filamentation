@@ -54,3 +54,5 @@ double Gauss<Medium>::calculate_p_cr_to_p_g() {
 template class Gauss<SiO2>;
 template class Gauss<CaF2>;
 template class Gauss<LiF>;
+
+template class Gauss<BaseMedium>;

@@ -59,3 +59,5 @@ template class Plasma<Ring<LiF>>;
 template class Plasma<Vortex<SiO2>>;
 template class Plasma<Vortex<CaF2>>;
 template class Plasma<Vortex<LiF>>;
+
+template class Plasma<BasePulsedBeam<BaseMedium>>;

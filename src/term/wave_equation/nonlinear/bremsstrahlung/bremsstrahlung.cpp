@@ -61,3 +61,5 @@ template class Bremsstrahlung<Ring<LiF>>;
 template class Bremsstrahlung<Vortex<SiO2>>;
 template class Bremsstrahlung<Vortex<CaF2>>;
 template class Bremsstrahlung<Vortex<LiF>>;
+
+template class Bremsstrahlung<BasePulsedBeam<BaseMedium>>;

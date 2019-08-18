@@ -17,7 +17,6 @@ public:
 
     ~BaseDispersion();
 
-    void process(double dz) override;
 };
 
 

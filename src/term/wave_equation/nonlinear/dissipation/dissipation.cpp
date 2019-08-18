@@ -65,3 +65,5 @@ template class Dissipation<Ring<LiF>>;
 template class Dissipation<Vortex<SiO2>>;
 template class Dissipation<Vortex<CaF2>>;
 template class Dissipation<Vortex<LiF>>;
+
+template class Dissipation<BasePulsedBeam<BaseMedium>>;

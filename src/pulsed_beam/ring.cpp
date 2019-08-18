@@ -55,3 +55,5 @@ double Ring<Medium>::calculate_p_cr_to_p_g() {
 template class Ring<SiO2>;
 template class Ring<CaF2>;
 template class Ring<LiF>;
+
+template class Ring<BaseMedium>;

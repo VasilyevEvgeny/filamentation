@@ -103,3 +103,5 @@ template class NonlinearExecutor<Ring<LiF>>;
 template class NonlinearExecutor<Vortex<SiO2>>;
 template class NonlinearExecutor<Vortex<CaF2>>;
 template class NonlinearExecutor<Vortex<LiF>>;
+
+template class NonlinearExecutor<BasePulsedBeam<BaseMedium>>;

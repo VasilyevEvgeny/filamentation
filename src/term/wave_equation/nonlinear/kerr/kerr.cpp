@@ -80,3 +80,5 @@ template class Kerr<Ring<LiF>>;
 template class Kerr<Vortex<SiO2>>;
 template class Kerr<Vortex<CaF2>>;
 template class Kerr<Vortex<LiF>>;
+
+template class Kerr<BasePulsedBeam<BaseMedium>>;

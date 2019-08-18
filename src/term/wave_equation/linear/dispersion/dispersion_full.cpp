@@ -62,3 +62,5 @@ template class DispersionFull<Ring<LiF>>;
 template class DispersionFull<Vortex<SiO2>>;
 template class DispersionFull<Vortex<CaF2>>;
 template class DispersionFull<Vortex<LiF>>;
+
+template class DispersionFull<BasePulsedBeam<BaseMedium>>;

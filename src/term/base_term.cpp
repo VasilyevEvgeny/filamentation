@@ -29,3 +29,5 @@ template class BaseTerm<Ring<LiF>>;
 template class BaseTerm<Vortex<SiO2>>;
 template class BaseTerm<Vortex<CaF2>>;
 template class BaseTerm<Vortex<LiF>>;
+
+template class BaseTerm<BasePulsedBeam<BaseMedium>>;

@@ -38,4 +38,6 @@ template class BaseNonlinearTerm<Vortex<SiO2>>;
 template class BaseNonlinearTerm<Vortex<CaF2>>;
 template class BaseNonlinearTerm<Vortex<LiF>>;
 
+template class BaseNonlinearTerm<BasePulsedBeam<BaseMedium>>;
+
 

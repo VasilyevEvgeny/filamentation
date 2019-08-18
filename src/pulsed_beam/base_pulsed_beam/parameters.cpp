@@ -130,3 +130,5 @@ double BasePulsedBeam<Medium>::calculate_i_0() {
 template class BasePulsedBeam<SiO2>;
 template class BasePulsedBeam<CaF2>;
 template class BasePulsedBeam<LiF>;
+
+template class BasePulsedBeam<BaseMedium>;

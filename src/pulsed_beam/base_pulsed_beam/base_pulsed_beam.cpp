@@ -93,3 +93,5 @@ template class BasePulsedBeam<SiO2>;
 template class BasePulsedBeam<CaF2>;
 template class BasePulsedBeam<LiF>;
 
+template class BasePulsedBeam<BaseMedium>;
+

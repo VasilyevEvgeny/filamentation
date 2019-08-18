@@ -58,3 +58,5 @@ template class LinearExecutor<Ring<LiF>>;
 template class LinearExecutor<Vortex<SiO2>>;
 template class LinearExecutor<Vortex<CaF2>>;
 template class LinearExecutor<Vortex<LiF>>;
+
+template class LinearExecutor<BasePulsedBeam<BaseMedium>>;

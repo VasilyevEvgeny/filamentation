@@ -9,7 +9,9 @@ BaseDispersion<PulsedBeam<Medium>>::BaseDispersion() = default;
 
 
 template<template<typename, typename...> class PulsedBeam, typename Medium>
-BaseDispersion<PulsedBeam<Medium>>::BaseDispersion(std::shared_ptr<PulsedBeam<Medium>> _pulsed_beam, bool _T)
+BaseDispersion<PulsedBeam<Medium>>::BaseDispersion(
+        std::shared_ptr<PulsedBeam<Medium>> _pulsed_beam,
+        bool _T)
 : BaseLinearTerm<PulsedBeam <Medium>>(_pulsed_beam, _T) {
 
 
@@ -17,16 +19,6 @@ BaseDispersion<PulsedBeam<Medium>>::BaseDispersion(std::shared_ptr<PulsedBeam<Me
 
 template<template<typename, typename...> class PulsedBeam, typename Medium>
 BaseDispersion<PulsedBeam<Medium>>::~BaseDispersion() = default;
-
-
-
-
-template<template<typename, typename...> class PulsedBeam, typename Medium>
-void BaseDispersion<PulsedBeam<Medium>>::process(double dz) {
-
-
-}
-
 
 
 
@@ -39,5 +31,7 @@ template class BaseDispersion<Ring<LiF>>;
 template class BaseDispersion<Vortex<SiO2>>;
 template class BaseDispersion<Vortex<CaF2>>;
 template class BaseDispersion<Vortex<LiF>>;
+
+template class BaseDispersion<BasePulsedBeam<BaseMedium>>;
 
 

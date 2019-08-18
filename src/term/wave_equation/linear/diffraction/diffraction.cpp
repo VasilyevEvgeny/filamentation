@@ -116,3 +116,5 @@ template class Diffraction<Gauss<LiF>>;
 template class Diffraction<Ring<LiF>>;
 template class Diffraction<Vortex<LiF>>;
 
+template class Diffraction<BasePulsedBeam<BaseMedium>>;
+

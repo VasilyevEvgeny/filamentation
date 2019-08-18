@@ -32,3 +32,5 @@ template class BaseLinearTerm<Vortex<CaF2>>;
 template class BaseLinearTerm<Gauss<LiF>>;
 template class BaseLinearTerm<Ring<LiF>>;
 template class BaseLinearTerm<Vortex<LiF>>;
+
+template class BaseLinearTerm<BasePulsedBeam<BaseMedium>>;

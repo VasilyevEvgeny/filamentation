@@ -81,3 +81,5 @@ template class FastFourierTransform<Vortex<SiO2>>;
 template class FastFourierTransform<Vortex<CaF2>>;
 template class FastFourierTransform<Vortex<LiF>>;
 
+template class FastFourierTransform<BasePulsedBeam<BaseMedium>>;
+

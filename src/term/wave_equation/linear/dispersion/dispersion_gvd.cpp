@@ -116,3 +116,5 @@ template class DispersionGVD<Ring<LiF>>;
 template class DispersionGVD<Vortex<SiO2>>;
 template class DispersionGVD<Vortex<CaF2>>;
 template class DispersionGVD<Vortex<LiF>>;
+
+template class DispersionGVD<BasePulsedBeam<BaseMedium>>;

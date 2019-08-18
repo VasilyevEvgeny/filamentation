@@ -64,3 +64,5 @@ template class KineticEquation<Ring<LiF>>;
 template class KineticEquation<Vortex<SiO2>>;
 template class KineticEquation<Vortex<CaF2>>;
 template class KineticEquation<Vortex<LiF>>;
+
+template class KineticEquation<BasePulsedBeam<BaseMedium>>;

@@ -175,3 +175,7 @@ template class Logger<Ring<LiF>, ProcessorDispersion>;
 template class Logger<Vortex<SiO2>, ProcessorDispersion>;
 template class Logger<Vortex<CaF2>, ProcessorDispersion>;
 template class Logger<Vortex<LiF>, ProcessorDispersion>;
+
+template class Logger<BasePulsedBeam<BaseMedium>, Processor>;
+template class Logger<BasePulsedBeam<BaseMedium>, ProcessorDiffraction>;
+template class Logger<BasePulsedBeam<BaseMedium>, ProcessorDispersion>;
