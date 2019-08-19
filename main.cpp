@@ -7,9 +7,9 @@
 #include <omp.h>
 #include <memory>
 
-#include "pulsed_beam/base_pulsed_beam/base_pulsed_beam.h"
-#include "manager/config_manager.h"
-#include "propagator.h"
+#include "pulsed_beam/base_pulsed_beam.h"
+#include "manager/config_manager/config_manager.h"
+#include "propagator/propagator.h"
 
 
 int main(int argc, char** argv) {

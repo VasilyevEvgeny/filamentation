@@ -8,13 +8,13 @@
 #include <vector>
 #include <string>
 
-#include "pulsed_beam/gauss.h"
-#include "pulsed_beam/ring.h"
-#include "pulsed_beam/vortex.h"
+#include "pulsed_beam/gauss/gauss.h"
+#include "pulsed_beam/ring/ring.h"
+#include "pulsed_beam/vortex/vortex.h"
 
-#include "medium/SiO2.h"
-#include "medium/CaF2.h"
-#include "medium/LiF.h"
+#include "medium/materials/SiO2/SiO2.h"
+#include "medium/materials/CaF2/CaF2.h"
+#include "medium/materials/LiF/LiF.h"
 
 template<typename T> class BaseExecutor;
 

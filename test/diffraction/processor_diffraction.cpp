@@ -7,8 +7,8 @@
 
 ProcessorDiffraction::ProcessorDiffraction() = default;
 
-ProcessorDiffraction::ProcessorDiffraction(ConfigManager& _config_manager, DirManager& _dir_manager) :
-Processor(_config_manager, _dir_manager){
+ProcessorDiffraction::ProcessorDiffraction(ConfigManager& _config_manager, DirManager& _dir_manager)
+: Postprocessor(_config_manager, _dir_manager){
 
     path_to_test_script = "/processing/test/diffraction.py";
 

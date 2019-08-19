@@ -7,21 +7,21 @@
 
 #include "logger.h"
 
-template<template<typename, typename...> class PulsedBeam, typename Medium, typename Processor>
-Logger<PulsedBeam<Medium>, Processor>::Logger() = default;
+template<template<typename, typename...> class PulsedBeam, typename Medium, typename Postprocessor>
+Logger<PulsedBeam<Medium>, Postprocessor>::Logger() = default;
 
 
-template<template<typename, typename...> class PulsedBeam, typename Medium, typename Processor>
-Logger<PulsedBeam<Medium>, Processor>::Logger(
+template<template<typename, typename...> class PulsedBeam, typename Medium, typename Postprocessor>
+Logger<PulsedBeam<Medium>, Postprocessor>::Logger(
         ConfigManager& _config_manager,
         DirManager& _dir_manager,
-        Processor& _processor,
+        Postprocessor& _postprocessor,
         std::shared_ptr<PulsedBeam<Medium>> _pulsed_beam,
         std::shared_ptr<LinearExecutor<PulsedBeam<Medium>>> _linear_executor,
         std::shared_ptr<NonlinearExecutor<PulsedBeam<Medium>>> _nonlinear_executor)
 : config_manager(_config_manager)
 , dir_manager(_dir_manager)
-, processor(_processor)
+, postprocessor(_postprocessor)
 , pulsed_beam(_pulsed_beam)
 , linear_executor(_linear_executor)
 , nonlinear_executor(_nonlinear_executor) {
@@ -32,13 +32,13 @@ Logger<PulsedBeam<Medium>, Processor>::Logger(
 
 }
 
-template<template<typename, typename...> class PulsedBeam, typename Medium, typename Processor>
-Logger<PulsedBeam<Medium>, Processor>::~Logger() {
+template<template<typename, typename...> class PulsedBeam, typename Medium, typename Postprocessor>
+Logger<PulsedBeam<Medium>, Postprocessor>::~Logger() {
     states.erase(states.begin(), states.end());
 }
 
-template<template<typename, typename...> class PulsedBeam, typename Medium, typename Processor>
-void Logger<PulsedBeam<Medium>, Processor>::print_current_state(size_t step, double z, double dz) {
+template<template<typename, typename...> class PulsedBeam, typename Medium, typename Postprocessor>
+void Logger<PulsedBeam<Medium>, Postprocessor>::print_current_state(size_t step, double z, double dz) {
     size_t w1 = 7;
     size_t w2 = 20;
     size_t w3 = 20;
@@ -62,8 +62,8 @@ void Logger<PulsedBeam<Medium>, Processor>::print_current_state(size_t step, dou
     std::cout << std::endl;
 }
 
-template<template<typename, typename...> class PulsedBeam, typename Medium, typename Processor>
-void Logger<PulsedBeam<Medium>, Processor>::flush_current_state(size_t step, double z, double dz) {
+template<template<typename, typename...> class PulsedBeam, typename Medium, typename Postprocessor>
+void Logger<PulsedBeam<Medium>, Postprocessor>::flush_current_state(size_t step, double z, double dz) {
     states[step][0] = (double)step;
     states[step][1] = z;
     states[step][2] = dz;
@@ -71,8 +71,8 @@ void Logger<PulsedBeam<Medium>, Processor>::flush_current_state(size_t step, dou
 }
 
 
-template<template<typename, typename...> class PulsedBeam, typename Medium, typename Processor>
-void Logger<PulsedBeam<Medium>, Processor>::save_field(int step) {
+template<template<typename, typename...> class PulsedBeam, typename Medium, typename Postprocessor>
+void Logger<PulsedBeam<Medium>, Postprocessor>::save_field(int step) {
     std::stringstream ss;
     ss << std::setw(5) << std::setfill('0') << step;
     std::string filename = dir_manager.field_dir + "/" + ss.str();
@@ -94,8 +94,8 @@ void Logger<PulsedBeam<Medium>, Processor>::save_field(int step) {
 }
 
 
-template<template<typename, typename...> class PulsedBeam, typename Medium, typename Processor>
-void Logger<PulsedBeam<Medium>, Processor>::save_plasma(int step) {
+template<template<typename, typename...> class PulsedBeam, typename Medium, typename Postprocessor>
+void Logger<PulsedBeam<Medium>, Postprocessor>::save_plasma(int step) {
     std::stringstream ss;
     ss << std::setw(5) << std::setfill('0') << step;
     std::string filename = dir_manager.plasma_dir + "/" + ss.str();
@@ -117,8 +117,8 @@ void Logger<PulsedBeam<Medium>, Processor>::save_plasma(int step) {
 }
 
 
-template<template<typename, typename...> class PulsedBeam, typename Medium, typename Processor>
-void Logger<PulsedBeam<Medium>, Processor>::save_states_to_csv() {
+template<template<typename, typename...> class PulsedBeam, typename Medium, typename Postprocessor>
+void Logger<PulsedBeam<Medium>, Postprocessor>::save_states_to_csv() {
 
     std::string filename = "propagation.csv";
     std::string path_to_save = dir_manager.current_results_dir + "/" + filename;
@@ -146,15 +146,15 @@ void Logger<PulsedBeam<Medium>, Processor>::save_states_to_csv() {
     f.close();
 }
 
-template class Logger<Gauss<SiO2>, Processor>;
-template class Logger<Gauss<CaF2>, Processor>;
-template class Logger<Gauss<LiF>, Processor>;
-template class Logger<Ring<SiO2>, Processor>;
-template class Logger<Ring<CaF2>, Processor>;
-template class Logger<Ring<LiF>, Processor>;
-template class Logger<Vortex<SiO2>, Processor>;
-template class Logger<Vortex<CaF2>, Processor>;
-template class Logger<Vortex<LiF>, Processor>;
+template class Logger<Gauss<SiO2>, Postprocessor>;
+template class Logger<Gauss<CaF2>, Postprocessor>;
+template class Logger<Gauss<LiF>, Postprocessor>;
+template class Logger<Ring<SiO2>, Postprocessor>;
+template class Logger<Ring<CaF2>, Postprocessor>;
+template class Logger<Ring<LiF>, Postprocessor>;
+template class Logger<Vortex<SiO2>, Postprocessor>;
+template class Logger<Vortex<CaF2>, Postprocessor>;
+template class Logger<Vortex<LiF>, Postprocessor>;
 
 template class Logger<Gauss<SiO2>, ProcessorDiffraction>;
 template class Logger<Gauss<CaF2>, ProcessorDiffraction>;
@@ -176,6 +176,6 @@ template class Logger<Vortex<SiO2>, ProcessorDispersion>;
 template class Logger<Vortex<CaF2>, ProcessorDispersion>;
 template class Logger<Vortex<LiF>, ProcessorDispersion>;
 
-template class Logger<BasePulsedBeam<BaseMedium>, Processor>;
+template class Logger<BasePulsedBeam<BaseMedium>, Postprocessor>;
 template class Logger<BasePulsedBeam<BaseMedium>, ProcessorDiffraction>;
 template class Logger<BasePulsedBeam<BaseMedium>, ProcessorDispersion>;

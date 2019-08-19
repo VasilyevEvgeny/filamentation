@@ -8,8 +8,8 @@
 
 #include "term/base_term.h"
 #include "term/wave_equation/linear/base_linear_term.h"
-#include "pulsed_beam/base_pulsed_beam/base_pulsed_beam.h"
-#include "medium/base_medium.h"
+#include "pulsed_beam/base_pulsed_beam.h"
+#include "medium/materials/base_medium.h"
 
 template<typename T> class Diffraction;
 

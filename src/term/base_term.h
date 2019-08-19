@@ -5,14 +5,14 @@
 #ifndef FILAMENTATION_BASETERM_H
 #define FILAMENTATION_BASETERM_H
 
-#include "../pulsed_beam/base_pulsed_beam/base_pulsed_beam.h"
-#include "../pulsed_beam/gauss.h"
-#include "../pulsed_beam/ring.h"
-#include "../pulsed_beam/vortex.h"
-#include "../medium/base_medium.h"
-#include "../medium/SiO2.h"
-#include "../medium/CaF2.h"
-#include "../medium/LiF.h"
+#include "pulsed_beam/base_pulsed_beam.h"
+#include "pulsed_beam/gauss/gauss.h"
+#include "pulsed_beam/ring/ring.h"
+#include "pulsed_beam/vortex/vortex.h"
+#include "medium/materials/base_medium.h"
+#include "medium/materials/SiO2/SiO2.h"
+#include "medium/materials/CaF2/CaF2.h"
+#include "medium/materials//LiF/LiF.h"
 
 
 template<typename T> class BaseTerm;

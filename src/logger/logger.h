@@ -8,30 +8,30 @@
 #include <map>
 #include <vector>
 
-#include "../pulsed_beam/gauss.h"
-#include "../pulsed_beam/ring.h"
-#include "../pulsed_beam/vortex.h"
-#include "manager/dir_manager.h"
-#include "manager/config_manager.h"
-#include "../processor.h"
+#include "pulsed_beam/gauss/gauss.h"
+#include "pulsed_beam/ring/ring.h"
+#include "pulsed_beam/vortex/vortex.h"
+#include "manager/dir_manager/dir_manager.h"
+#include "manager/config_manager/config_manager.h"
+#include "logger/postprocessor/postprocessor.h"
 #include "term/wave_equation/linear/base_linear_term.h"
 #include "term/wave_equation/nonlinear/base_nonlinear_term.h"
 #include "term/kinetic_equation/kinetic_equation.h"
-#include "executor/linear_executor.h"
-#include "executor/nonlinear_executor.h"
+#include "executor/linear_executor/linear_executor.h"
+#include "executor/nonlinear_executor/nonlinear_executor.h"
 
 #include "diffraction/processor_diffraction.h"
 #include "dispersion/processor_dispersion.h"
 
 template<typename PB, typename P> class Logger;
 
-template<template<typename, typename...> class PulsedBeam, typename Medium, typename Processor>
-class Logger<PulsedBeam<Medium>, Processor> {
+template<template<typename, typename...> class PulsedBeam, typename Medium, typename Postprocessor>
+class Logger<PulsedBeam<Medium>, Postprocessor> {
 public:
     Logger();
     explicit Logger(ConfigManager& _config_manager,
                     DirManager& _dir_manager,
-                    Processor& _processor,
+                    Postprocessor& _postprocessor,
                     std::shared_ptr<PulsedBeam<Medium>> _pulsed_beam,
                     std::shared_ptr<LinearExecutor<PulsedBeam<Medium>>> _linear_executor,
                     std::shared_ptr<NonlinearExecutor<PulsedBeam<Medium>>> _nonlinear_executor);
@@ -39,7 +39,7 @@ public:
 
     ConfigManager config_manager;
     DirManager dir_manager;
-    Processor processor;
+    Postprocessor postprocessor;
 
     std::shared_ptr<PulsedBeam<Medium>> pulsed_beam;
 

@@ -5,10 +5,10 @@
 #ifndef FILAMENTATION_PROCESSORDISPERSION_H
 #define FILAMENTATION_PROCESSORDISPERSION_H
 
-#include "processor.h"
-#include "manager/config_manager.h"
+#include "logger/postprocessor/postprocessor.h"
+#include "manager/config_manager/config_manager.h"
 
-class ProcessorDispersion : public Processor {
+class ProcessorDispersion : public Postprocessor {
 public:
     ProcessorDispersion();
     ProcessorDispersion(ConfigManager& _config_manager, DirManager& _dir_manager);
