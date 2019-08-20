@@ -5,7 +5,7 @@
 #include <cmath>
 
 #include "base_medium.h"
-#include "misc_functions.h"
+#include "misc/misc.h"
 
 
 BaseMedium::BaseMedium() {

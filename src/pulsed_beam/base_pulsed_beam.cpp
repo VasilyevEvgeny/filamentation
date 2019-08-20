@@ -10,7 +10,7 @@
 #include <iomanip>
 #include <memory>
 
-#include "misc_functions.h"
+#include "misc/misc.h"
 #include "base_pulsed_beam.h"
 #include "logger/logger.h"
 

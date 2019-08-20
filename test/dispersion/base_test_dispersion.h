@@ -22,7 +22,7 @@
 #include "equation_terms/dispersion/dispersion_executor_full.h"
 #include "equation_terms/dispersion/dispersion_executor_gvd.h"
 #include "saver/saver.h"
-#include "misc_functions.h"
+#include "misc/misc.h"
 
 #include "processor_dispersion.h"
 

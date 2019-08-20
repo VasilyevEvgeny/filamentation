@@ -8,7 +8,7 @@
 #include <iostream>
 #include <memory>
 
-#include "misc_functions.h"
+#include "misc/misc.h"
 
 #include "logger/logger.h"
 #include "manager/config_manager/config_manager.h"

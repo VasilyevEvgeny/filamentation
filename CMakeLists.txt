@@ -115,8 +115,8 @@ add_executable(filamentation
         src/logger/logger.cpp
         src/logger/logger.h
 
-        src/misc_functions.cpp
-        src/misc_functions.h
+        src/misc/misc.cpp
+        src/misc/misc.h
 
         # alglib
         lib/alglib/src/alglibinternal.cpp
@@ -206,8 +206,8 @@ add_executable(test_diffraction
         src/term/wave_equation/linear/dispersion/dispersion_gvd.cpp
         src/term/wave_equation/linear/dispersion/dispersion_gvd.h
 
-        src/misc_functions.cpp
-        src/misc_functions.h
+        src/misc/misc.cpp
+        src/misc/misc.h
 
         # alglib
         lib/alglib/src/alglibinternal.cpp
@@ -306,8 +306,8 @@ add_executable(test_dispersion
         lib/alglib/src/solvers.cpp
         lib/alglib/src/specialfunctions.cpp
         lib/alglib/src/statistics.cpp
-        src/misc_functions.cpp
-        src/misc_functions.h test/dispersion/test_dispersion_gvd.cpp test/dispersion/test_dispersion_gvd.h)
+        src/misc/misc.cpp
+        src/misc/misc.h test/dispersion/test_dispersion_gvd.cpp test/dispersion/test_dispersion_gvd.h)
 
 
 #find_library(lib/fftw/libfftw3-3.dll fftw)

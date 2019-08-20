@@ -21,7 +21,7 @@
 #include "fft/fft.h"
 #include "term/linear/diffraction/diffraction.h"
 #include "saver/saver.h"
-#include "misc_functions.h"
+#include "misc/misc.h"
 
 #include "processor_diffraction.h"
 
