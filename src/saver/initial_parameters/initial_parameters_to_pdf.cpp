@@ -102,6 +102,8 @@ void Saver::add_to_tex_file_data(std::string& tex_file_data, std::string& str, s
 
 void Saver::save_initial_parameters_to_pdf(bool delete_tmp_files, bool delete_tex_file) {
 
+    logger->add_propagation_event(std::string("....saving initial parameters to pdf"));
+
     std::string tex_file_data;
 
     std::string tex_file_name = "parameters";

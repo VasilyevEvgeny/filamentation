@@ -25,10 +25,10 @@ Propagator::Propagator(
     logger->add_propagation_event(std::string("creating propagator"));
 
     // executors
-    linear_executor = std::make_shared<LinearExecutor>(config_manager, pulsed_beam);
-    nonlinear_executor = std::make_shared<NonlinearExecutor>(config_manager, pulsed_beam);
+    linear_executor = std::make_shared<LinearExecutor>(pulsed_beam, config_manager, logger);
+    nonlinear_executor = std::make_shared<NonlinearExecutor>(pulsed_beam, config_manager, logger);
 
-    saver = Saver(pulsed_beam, linear_executor, nonlinear_executor, config_manager, dir_manager, postprocessor);
+    saver = Saver(pulsed_beam, linear_executor, nonlinear_executor, config_manager, dir_manager, postprocessor, logger);
 
     saver.save_initial_parameters_to_pdf(true, false);
     saver.save_initial_parameters_to_yml();
@@ -39,6 +39,9 @@ Propagator::~Propagator() = default;
 
 
 void Propagator::propagate() {
+
+    logger->add_propagation_event(std::string("starting propagation!\n"));
+
     /*
      * Main cycle
      */
@@ -85,4 +88,6 @@ void Propagator::propagate() {
 
     saver.save_states_to_csv();
     saver.postprocessor.go();
+
+    logger->add_propagation_event(std::string("end"));
 }

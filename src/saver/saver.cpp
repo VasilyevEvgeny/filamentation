@@ -16,13 +16,17 @@ Saver::Saver(std::shared_ptr<BasePulsedBeam>& _pulsed_beam,
              std::shared_ptr<NonlinearExecutor>& _nonlinear_executor,
              ConfigManager& _config_manager,
              DirManager& _dir_manager,
-             Postprocessor& _postprocessor)
+             Postprocessor& _postprocessor,
+             std::shared_ptr<Logger>& _logger)
 : pulsed_beam(_pulsed_beam)
 , linear_executor(_linear_executor)
 , nonlinear_executor(_nonlinear_executor)
 , config_manager(_config_manager)
 , dir_manager(_dir_manager)
-, postprocessor(_postprocessor) {
+, postprocessor(_postprocessor)
+, logger(_logger) {
+
+    logger->add_propagation_event(std::string("creating saver"));
 
     states_columns = {"step", "z, [m]", "h_z, [m]", "i_max, [W/m^2]"};
     states = std::vector<std::vector<double>>(config_manager.n_z + 1,
@@ -112,6 +116,8 @@ void Saver::save_plasma(int step) {
 }
 
 void Saver::save_states_to_csv() {
+
+    logger->add_propagation_event(std::string("saving states to csv"));
 
     std::string filename = "propagation.csv";
     std::string path_to_save = dir_manager.current_results_dir + "/" + filename;

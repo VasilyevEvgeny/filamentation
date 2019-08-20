@@ -39,6 +39,8 @@ void Saver::add_to_yml_file_data(std::string& yml_file_data, std::string& str, s
 
 void Saver::save_initial_parameters_to_yml() {
 
+    logger->add_propagation_event(std::string("....saving initial parameters to yml"));
+
     std::string yml_file_data;
 
     std::string yml_file_name = "parameters";

@@ -20,9 +20,10 @@
 class LinearExecutor : public BaseExecutor {
 public:
     LinearExecutor();
-    explicit LinearExecutor(ConfigManager& _config_manager,
-                            std::shared_ptr<BasePulsedBeam>& _pulsed_beam);
-    ~LinearExecutor();
+    explicit LinearExecutor(std::shared_ptr<BasePulsedBeam>& _pulsed_beam,
+                            ConfigManager& _config_manager,
+                            std::shared_ptr<Logger>& logger);
+    ~LinearExecutor() override;
 
     ConfigManager config_manager;
 

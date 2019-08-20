@@ -21,9 +21,10 @@
 class NonlinearExecutor : public BaseExecutor {
 public:
     NonlinearExecutor();
-    explicit NonlinearExecutor(ConfigManager& _config_manager,
-                               std::shared_ptr<BasePulsedBeam>& _pulsed_beam);
-    ~NonlinearExecutor();
+    explicit NonlinearExecutor(std::shared_ptr<BasePulsedBeam>& _pulsed_beam,
+                               ConfigManager& _config_manager,
+                               std::shared_ptr<Logger>& logger);
+    ~NonlinearExecutor() override;
 
     ConfigManager config_manager;
 

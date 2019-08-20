@@ -10,10 +10,13 @@
 
 LinearExecutor::LinearExecutor() = default;
 
-LinearExecutor::LinearExecutor(ConfigManager& _config_manager,
-                                std::shared_ptr<BasePulsedBeam>& _pulsed_beam)
-: BaseExecutor(_pulsed_beam)
+LinearExecutor::LinearExecutor(std::shared_ptr<BasePulsedBeam>& _pulsed_beam,
+                               ConfigManager& _config_manager,
+                               std::shared_ptr<Logger>& _logger)
+: BaseExecutor(_pulsed_beam, _logger)
 , config_manager(_config_manager) {
+
+    logger->add_propagation_event(std::string("....creating linear executor"));
 
     fft = FastFourierTransform(base::pulsed_beam);
 

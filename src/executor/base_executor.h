@@ -7,6 +7,7 @@
 
 #include <vector>
 #include <string>
+#include <memory>
 
 #include "pulsed_beam/gauss/gauss.h"
 #include "pulsed_beam/ring/ring.h"
@@ -20,10 +21,13 @@
 class BaseExecutor {
 public:
     BaseExecutor();
-    explicit BaseExecutor(std::shared_ptr<BasePulsedBeam>& _pulsed_beam);
+    explicit BaseExecutor(std::shared_ptr<BasePulsedBeam>& _pulsed_beam,
+                          std::shared_ptr<Logger>& _logger);
     virtual ~BaseExecutor();
 
     std::shared_ptr<BasePulsedBeam> pulsed_beam;
+
+    std::shared_ptr<Logger> logger;
 
     virtual void execute(double dz) = 0;
 };

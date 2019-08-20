@@ -16,10 +16,8 @@ static struct Constants {
     const double m_e = 9.1093829140e-31;
     const double epsilon_0 = 8.85418781762039e-12;
     const double mu_0 = 4.0 * M_PI * 1e-7;
-    std::complex<double> M_COMPLEX_I = std::complex<double>(0.0, 1.0);
+    const std::complex<double> M_COMPLEX_I = std::complex<double>(0.0, 1.0);
 } constants;
-
-
 
 
 #endif //FILAMENTATION_FUNCTIONS_H

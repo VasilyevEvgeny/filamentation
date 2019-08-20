@@ -7,6 +7,7 @@
 
 #include <map>
 #include <vector>
+#include <memory>
 
 #include "pulsed_beam/gauss/gauss.h"
 #include "pulsed_beam/ring/ring.h"
@@ -31,17 +32,19 @@ public:
                    std::shared_ptr<NonlinearExecutor>& _nonlinear_executor,
                    ConfigManager& _config_manager,
                    DirManager& _dir_manager,
-                   Postprocessor& _postprocessor);
+                   Postprocessor& _postprocessor,
+                   std::shared_ptr<Logger>& _logger);
     ~Saver();
-
-    ConfigManager config_manager;
-    DirManager dir_manager;
-    Postprocessor postprocessor;
 
     std::shared_ptr<BasePulsedBeam> pulsed_beam;
 
     std::shared_ptr<LinearExecutor> linear_executor;
     std::shared_ptr<NonlinearExecutor> nonlinear_executor;
+
+    ConfigManager config_manager;
+    DirManager dir_manager;
+    Postprocessor postprocessor;
+    std::shared_ptr<Logger> logger;
 
     std::vector<std::string> states_columns;
     std::vector<std::vector<double>> states;

@@ -12,13 +12,14 @@
 NonlinearExecutor::NonlinearExecutor() = default;
 
 
-NonlinearExecutor::NonlinearExecutor(
-        ConfigManager& _config_manager,
-        std::shared_ptr<BasePulsedBeam>& _pulsed_beam)
-: BaseExecutor(_pulsed_beam)
+NonlinearExecutor::NonlinearExecutor(std::shared_ptr<BasePulsedBeam>& _pulsed_beam,
+                                     ConfigManager& _config_manager,
+                                     std::shared_ptr<Logger>& _logger)
+: BaseExecutor(_pulsed_beam, _logger)
 , config_manager(_config_manager) {
 
-    // nonlinear terms
+    logger->add_propagation_event(std::string("....creating nonlinear executor"));
+
     kerr = std::make_shared<Kerr>(base::pulsed_beam, config_manager.kerr_info, config_manager.T.at("kerr"));
     plasma = std::make_shared<Plasma>(base::pulsed_beam, config_manager.T.at("plasma"));
     bremsstrahlung = std::make_shared<Bremsstrahlung>(base::pulsed_beam, config_manager.T.at("bremsstrahlung"));
@@ -29,7 +30,7 @@ NonlinearExecutor::NonlinearExecutor(
             base::pulsed_beam->medium->v_i_const,
             base::pulsed_beam->medium->beta);
 
-    // container for nonlinear terms
+
     terms_pool.insert(std::pair<std::string, std::shared_ptr<BaseNonlinearTerm>>(kerr->name, kerr));
     terms_pool.insert(std::pair<std::string, std::shared_ptr<BaseNonlinearTerm>>(plasma->name, plasma));
     terms_pool.insert(std::pair<std::string, std::shared_ptr<BaseNonlinearTerm>>(bremsstrahlung->name, bremsstrahlung));
