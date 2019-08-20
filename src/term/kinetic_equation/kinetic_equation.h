@@ -7,15 +7,11 @@
 
 #include "term/base_term.h"
 
-template<typename T> class KineticEquation;
-
-template<template<typename, typename...> class PulsedBeam, typename Medium>
-class KineticEquation<PulsedBeam<Medium>>: public BaseTerm<PulsedBeam<Medium>> {
+class KineticEquation : public BaseTerm {
 public:
     KineticEquation();
-    explicit KineticEquation(std::shared_ptr<PulsedBeam<Medium>> _pulsed_beam, double _v_i_const, double _beta);
+    explicit KineticEquation(std::shared_ptr<BasePulsedBeam>& _pulsed_beam, double _v_i_const, double _beta);
     ~KineticEquation();
-
 
     double v_i_const;
     double beta;

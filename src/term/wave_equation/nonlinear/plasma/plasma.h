@@ -8,18 +8,13 @@
 
 #include "term/wave_equation/nonlinear/base_nonlinear_term.h"
 
-template<typename T> class Plasma;
-
-template<template<typename, typename...> class PulsedBeam, typename Medium>
-class Plasma<PulsedBeam<Medium>>: public BaseNonlinearTerm<PulsedBeam<Medium>>  {
+class Plasma : public BaseNonlinearTerm {
 public:
     Plasma();
-    explicit Plasma(std::shared_ptr<PulsedBeam<Medium>> _pulsed_beam, bool _T);
+    explicit Plasma(std::shared_ptr<BasePulsedBeam>& _pulsed_beam, bool _T);
 
     ~Plasma();
 };
-
-
 
 
 #endif //FILAMENTATION_PLASMA_H

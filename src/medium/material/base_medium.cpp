@@ -5,6 +5,7 @@
 #include <cmath>
 
 #include "base_medium.h"
+#include "misc_functions.h"
 
 
 BaseMedium::BaseMedium() {
@@ -54,11 +55,16 @@ BaseMedium::BaseMedium() {
     delta = 0;
 }
 
-BaseMedium::BaseMedium(double _lambda_0)
-: lambda_0(_lambda_0) {
+BaseMedium::BaseMedium(ConfigManager& _config_manager, std::shared_ptr<Logger>& _logger)
+: config_manager(_config_manager)
+, logger(_logger) {
+
+    logger->add_propagation_event(std::string("creating medium"));
+
+    lambda_0 = config_manager.lambda_0;
 
     // light speed
-    c = math_constants.c;
+    c = constants.c;
 
     info = "";
 
@@ -213,14 +219,33 @@ double BaseMedium::calculate_conv_kernel_const() {
 }
 
 double BaseMedium::calculate_ItoA_const() {
-    return 2.0 / (c * n_0 * math_constants.epsilon_0);
+    return 2.0 / (c * n_0 * constants.epsilon_0);
 }
 
 double BaseMedium::calculate_v_i_const() {
-    return pow(math_constants.e, 2) * v_ei / (U_i * 2.0 * math_constants.m_e * (pow(omega_0, 2) + pow(v_ei, 2))) * ItoA_const;
+    return pow(constants.e, 2) * v_ei / (U_i * 2.0 * constants.m_e * (pow(omega_0, 2) + pow(v_ei, 2))) * ItoA_const;
 }
 
 int BaseMedium::calculate_K() {
-    return (int)(U_i / (math_constants.h_bar * omega_0) + 1);
+    return (int)(U_i / (constants.h_bar * omega_0) + 1);
 }
 
+void BaseMedium::initialize_ionization() {
+    if (config_manager.ionization == "OriginalKeldysh") {
+        ionization = std::make_shared<OriginalKeldysh>(omega_0,
+                                                       U_i,
+                                                       N_0,
+                                                       n_0,
+                                                       logger);
+    }
+    else if (config_manager.ionization == "SmoothedKeldysh") {
+        ionization = std::make_shared<SmoothedKeldysh>(omega_0,
+                                                       U_i,
+                                                       N_0,
+                                                       n_0,
+                                                       logger);
+    }
+
+    logger->add_propagation_event(std::string("....checking ionization table"));
+    ionization->initialize_ionization_table(config_manager, lambda_0);
+}

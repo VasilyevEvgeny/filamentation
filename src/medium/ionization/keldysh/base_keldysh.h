@@ -6,16 +6,15 @@
 #define FILAMENTATION_BASE_KELDYSH_IONIZATION_H
 
 #include "medium/ionization/base_ionization.h"
-#include "medium/m_constants/m_constants.h"
 
 class BaseKeldysh : public BaseIonization {
 public:
     BaseKeldysh();
-    explicit BaseKeldysh(MathConstants& _math_constants,
-                         double _omega_0,
+    explicit BaseKeldysh(double _omega_0,
                          double _U_i,
                          double _N_0,
-                         double _n_0);
+                         double _n_0,
+                         std::shared_ptr<Logger>& _logger);
 
     ~BaseKeldysh() override;
 

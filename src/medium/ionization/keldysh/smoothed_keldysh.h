@@ -10,11 +10,11 @@
 class SmoothedKeldysh : public BaseKeldysh {
 public:
     SmoothedKeldysh();
-    explicit SmoothedKeldysh(MathConstants& _math_constants,
-                             double _omega_0,
+    explicit SmoothedKeldysh(double _omega_0,
                              double _U_i,
                              double _N_0,
-                             double _n_0);
+                             double _n_0,
+                             std::shared_ptr<Logger>& _logger);
     ~SmoothedKeldysh() override;
 
     double calculate_x_plus_1(double x) override;

@@ -4,29 +4,29 @@
 
 #include "kerr.h"
 
-#define base BaseTerm<PulsedBeam<Medium>>
-#define base_nonlinear BaseNonlinearTerm<PulsedBeam<Medium>>
+#define base BaseTerm
+#define base_nonlinear BaseNonlinearTerm
 
-#define ii BaseTerm<PulsedBeam<Medium>>::pulsed_beam->medium->math_constants.M_COMPLEX_I
-#define m_e BaseTerm<PulsedBeam<Medium>>::pulsed_beam->medium->math_constants.m_e
-#define eps_0 BaseTerm<PulsedBeam<Medium>>::pulsed_beam->medium->math_constants.epsilon_0
-#define e BaseTerm<PulsedBeam<Medium>>::pulsed_beam->medium->math_constants.e
+#define ii constants.M_COMPLEX_I
+#define m_e constants.m_e
+#define eps_0 constants.epsilon_0
+#define e constants.e
+#define c constants.c
 
-#define omega_0 BaseTerm<PulsedBeam<Medium>>::pulsed_beam->omega_0
-#define i_0 BaseTerm<PulsedBeam<Medium>>::pulsed_beam->i_0
-
-#define k_0 BaseTerm<PulsedBeam<Medium>>::pulsed_beam->medium->k_0
-#define n_0 BaseTerm<PulsedBeam<Medium>>::pulsed_beam->medium->n_0
-#define n_2 BaseTerm<PulsedBeam<Medium>>::pulsed_beam->medium->n_2
+#define omega_0 BaseTerm::pulsed_beam->omega_0
+#define i_0 BaseTerm::pulsed_beam->i_0
 
 
-template<template<typename, typename...> class PulsedBeam, typename Medium>
-Kerr<PulsedBeam<Medium>>::Kerr() = default;
+#define k_0 BaseTerm::pulsed_beam->medium->k_0
+#define n_0 BaseTerm::pulsed_beam->medium->n_0
+#define n_2 BaseTerm::pulsed_beam->medium->n_2
 
 
-template<template<typename, typename...> class PulsedBeam, typename Medium>
-Kerr<PulsedBeam<Medium>>::Kerr(std::shared_ptr<PulsedBeam<Medium>> _pulsed_beam, std::map<std::string, bool>& _kerr_info, bool _T)
-: BaseNonlinearTerm<PulsedBeam<Medium>>(_pulsed_beam, _T)
+Kerr::Kerr() = default;
+
+
+Kerr::Kerr(std::shared_ptr<BasePulsedBeam>& _pulsed_beam, std::map<std::string, bool>& _kerr_info, bool _T)
+: BaseNonlinearTerm(_pulsed_beam, _T)
 , kerr_info(_kerr_info) {
 
     base::name = "kerr";
@@ -67,18 +67,4 @@ Kerr<PulsedBeam<Medium>>::Kerr(std::shared_ptr<PulsedBeam<Medium>> _pulsed_beam,
 
 }
 
-template<template<typename, typename...> class PulsedBeam, typename Medium>
-Kerr<PulsedBeam<Medium>>::~Kerr() = default;
-
-
-template class Kerr<Gauss<SiO2>>;
-template class Kerr<Gauss<CaF2>>;
-template class Kerr<Gauss<LiF>>;
-template class Kerr<Ring<SiO2>>;
-template class Kerr<Ring<CaF2>>;
-template class Kerr<Ring<LiF>>;
-template class Kerr<Vortex<SiO2>>;
-template class Kerr<Vortex<CaF2>>;
-template class Kerr<Vortex<LiF>>;
-
-template class Kerr<BasePulsedBeam<BaseMedium>>;
+Kerr::~Kerr() = default;

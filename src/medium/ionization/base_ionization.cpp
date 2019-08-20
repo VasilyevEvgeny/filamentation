@@ -12,8 +12,8 @@
 
 BaseIonization::BaseIonization() = default;
 
-BaseIonization::BaseIonization(MathConstants& _math_constants)
-: math_constants(_math_constants) {
+BaseIonization::BaseIonization(std::shared_ptr<Logger>& _logger)
+: logger(_logger) {
 
     n_i = 500000;
     i_start = 5e14;
@@ -49,16 +49,16 @@ void BaseIonization::make_ionization_table(std::string& path_to_ionization_table
 }
 
 
-void BaseIonization::process_ionization_table(
+void BaseIonization::plot_ionization_table (
         ConfigManager& config_manager,
-        std::string& path_to_ionization_table) {
+        std::string& path_to_ionization_table) const {
 
     std::string path_to_project = config_manager.path_to_project;
     std::string path_to_python_interpreter = config_manager.path_to_python_interpreter;
 
     std::string execute = path_to_python_interpreter + " " + path_to_project + "/processing/scripts/ionization.py " +
             "--path_to_ionization_table=" + path_to_ionization_table;
-    std::cout << execute << std::endl;
+
     std::system(execute.c_str());
 
 }
@@ -72,17 +72,22 @@ void BaseIonization::initialize_ionization_table(ConfigManager& config_manager,
 
     std::ifstream f(path_to_ionization_table.c_str());
     if (f.good()) {
-        std::cout << "ionization table exists!" << std::endl;
+        logger->add_propagation_event(std::string("........ionization table exists!"));
     }
     else {
-        std::cout << "ionization table doesn't exist!" << std::endl;
+        logger->add_propagation_event(std::string("........ionization table doesn't exist!"));
+        logger->add_propagation_event(std::string("........creating ionization table"));
         make_ionization_table(path_to_ionization_table);
 
         // create new plot of ionization rates
-        process_ionization_table(config_manager, path_to_ionization_table);
+        logger->add_propagation_event(std::string("........plotting R(I)"));
+        plot_ionization_table(config_manager, path_to_ionization_table);
     }
 
     // create data structure with rates array
+
+    logger->add_propagation_event(std::string("........ionization table readout"));
+
     rates = std::vector<double>(n_i, 0.0);
     std::string line;
     size_t i = 0;

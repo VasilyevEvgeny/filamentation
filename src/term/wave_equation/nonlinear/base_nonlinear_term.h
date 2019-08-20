@@ -7,13 +7,10 @@
 
 #include "term/base_term.h"
 
-template<typename T> class BaseNonlinearTerm;
-
-template<template<typename, typename...> class PulsedBeam, typename Medium>
-class BaseNonlinearTerm<PulsedBeam<Medium>> : public BaseTerm<PulsedBeam<Medium>> {
+class BaseNonlinearTerm : public BaseTerm {
 public:
     BaseNonlinearTerm();
-    explicit BaseNonlinearTerm(std::shared_ptr<PulsedBeam<Medium>> _pulsed_beam, bool _T);
+    explicit BaseNonlinearTerm(std::shared_ptr<BasePulsedBeam>& _pulsed_beam, bool _T);
 
     virtual ~BaseNonlinearTerm();
 

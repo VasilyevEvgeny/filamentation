@@ -5,6 +5,7 @@
 #include <iostream>
 
 #include "base_keldysh.h"
+#include "misc_functions.h"
 
 #include "specialfunctions.h"
 
@@ -19,19 +20,19 @@ BaseKeldysh::BaseKeldysh()
 
 
 BaseKeldysh::BaseKeldysh(
-        MathConstants& _math_constants,
         double _omega_0,
         double _U_i,
         double _N_0,
-        double _n_0)
-: BaseIonization(_math_constants)
+        double _n_0,
+        std::shared_ptr<Logger>& _logger)
+: BaseIonization(_logger)
 , omega_0(_omega_0)
 , U_i(_U_i)
 , N_0(_N_0)
 , n_0(_n_0){
 
     kappa = 0.64;
-    m_efficient = kappa * math_constants.m_e;
+    m_efficient = kappa * constants.m_e;
 
 }
 
@@ -40,11 +41,11 @@ BaseKeldysh::~BaseKeldysh() = default;
 
 
 double BaseKeldysh::calculate_E(double i) {
-    return sqrt(sqrt(math_constants.mu_0 / math_constants.epsilon_0) * 2.0 * i / n_0);
+    return sqrt(sqrt(constants.mu_0 / constants.epsilon_0) * 2.0 * i / n_0);
 }
 
 double BaseKeldysh::calculate_gamma(double E) {
-    return omega_0 * sqrt(m_efficient * U_i) / (math_constants.e * E);
+    return omega_0 * sqrt(m_efficient * U_i) / (constants.e * E);
 }
 
 double BaseKeldysh::calculate_Gamma(double gamma) {
@@ -64,7 +65,7 @@ double BaseKeldysh::calculate_beta(double Xi) {
 }
 
 double BaseKeldysh::calculate_x(double Gamma, double Xi) {
-    return 2.0 * U_i * alglib::ellipticintegrale(Xi) / (M_PI * math_constants.h_bar * omega_0 * sqrt(Gamma));
+    return 2.0 * U_i * alglib::ellipticintegrale(Xi) / (M_PI * constants.h_bar * omega_0 * sqrt(Gamma));
 }
 
 double BaseKeldysh::calculate_v(double x_plus_1, double x) {
@@ -75,14 +76,13 @@ double BaseKeldysh::calculate_Q(double alpha, double beta, double v, double Xi) 
     double sum = 0.0;
     for (size_t n = 0; n < 100; ++n) {
         sum += exp(-alpha * n) * alglib::dawsonintegral(sqrt(beta * (n + 2 * v)));
-//        std::cout << "sum = " << sum << std::endl;
     }
 
     return sqrt(M_PI / (2.0 * alglib::ellipticintegralk(Xi))) * sum;
 }
 
 double BaseKeldysh::calculate_W(double x_plus_1, double alpha, double Gamma, double Q) {
-    return (2.0 * omega_0 / (9.0 * M_PI)) * pow(m_efficient * omega_0 / (math_constants.h_bar * sqrt(Gamma)), 1.5) *
+    return (2.0 * omega_0 / (9.0 * M_PI)) * pow(m_efficient * omega_0 / (constants.h_bar * sqrt(Gamma)), 1.5) *
            Q * exp(-alpha * x_plus_1);
 }
 

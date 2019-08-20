@@ -4,16 +4,14 @@
 
 #include "kinetic_equation.h"
 
-#define base BaseTerm<PulsedBeam<Medium>>
+#define base BaseTerm
 
 
-template<template<typename, typename...> class PulsedBeam, typename Medium>
-KineticEquation<PulsedBeam<Medium>>::KineticEquation() = default;
+KineticEquation::KineticEquation() = default;
 
 
-template<template<typename, typename...> class PulsedBeam, typename Medium>
-KineticEquation<PulsedBeam<Medium>>::KineticEquation(std::shared_ptr<PulsedBeam<Medium>> _pulsed_beam, double _v_i_const, double _beta)
-: BaseTerm<PulsedBeam<Medium>>(_pulsed_beam, false)
+KineticEquation::KineticEquation(std::shared_ptr<BasePulsedBeam>& _pulsed_beam, double _v_i_const, double _beta)
+: BaseTerm(_pulsed_beam, false)
 , v_i_const(_v_i_const)
 , beta(_beta){
 
@@ -23,14 +21,11 @@ KineticEquation<PulsedBeam<Medium>>::KineticEquation(std::shared_ptr<PulsedBeam<
 
 }
 
-template<template<typename, typename...> class PulsedBeam, typename Medium>
-KineticEquation<PulsedBeam<Medium>>::~KineticEquation() = default;
+
+KineticEquation::~KineticEquation() = default;
 
 
-
-
-template<template<typename, typename...> class PulsedBeam, typename Medium>
-double KineticEquation<PulsedBeam<Medium>>::calculate_plasma_increase_full(double I_current, double Ne_current, double R) {
+double KineticEquation::calculate_plasma_increase_full(double I_current, double Ne_current, double R) {
     double N0 = base::pulsed_beam->medium->N_0;
     double dt = base::pulsed_beam->dt;
 
@@ -45,24 +40,10 @@ double KineticEquation<PulsedBeam<Medium>>::calculate_plasma_increase_full(doubl
 }
 
 
-template<template<typename, typename...> class PulsedBeam, typename Medium>
-double KineticEquation<PulsedBeam<Medium>>::calculate_plasma_increase_field(double Ne, double R) {
+double KineticEquation::calculate_plasma_increase_field(double Ne, double R) {
     double N0 = base::pulsed_beam->medium->N_0;
     double dt = base::pulsed_beam->dt;
 
     return (N0 - Ne) * (1.0 - exp(-R * dt));
 }
 
-
-
-template class KineticEquation<Gauss<SiO2>>;
-template class KineticEquation<Gauss<CaF2>>;
-template class KineticEquation<Gauss<LiF>>;
-template class KineticEquation<Ring<SiO2>>;
-template class KineticEquation<Ring<CaF2>>;
-template class KineticEquation<Ring<LiF>>;
-template class KineticEquation<Vortex<SiO2>>;
-template class KineticEquation<Vortex<CaF2>>;
-template class KineticEquation<Vortex<LiF>>;
-
-template class KineticEquation<BasePulsedBeam<BaseMedium>>;

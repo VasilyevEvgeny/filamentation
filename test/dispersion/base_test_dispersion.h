@@ -7,10 +7,10 @@
 
 #include <memory>
 
-#include "medium/base_medium/base_medium.h"
-#include "medium/SiO2/SiO2.h"
-#include "medium/CaF2/CaF2.h"
-#include "medium/LiF/LiF.h"
+#include "medium/material/base_medium.h"
+#include "medium/material/SiO2/SiO2.h"
+#include "medium/material/CaF2/CaF2.h"
+#include "medium/material/LiF/LiF.h"
 
 #include "pulsed_beam/base_pulsed_beam.h"
 #include "pulsed_beam/gauss/gauss.h"
@@ -21,7 +21,7 @@
 #include "fft/fft.h"
 #include "equation_terms/dispersion/dispersion_executor_full.h"
 #include "equation_terms/dispersion/dispersion_executor_gvd.h"
-#include "logger/logger.h"
+#include "saver/saver.h"
 #include "misc_functions.h"
 
 #include "processor_dispersion.h"

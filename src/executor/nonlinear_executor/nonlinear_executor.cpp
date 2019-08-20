@@ -4,51 +4,44 @@
 
 #include "nonlinear_executor.h"
 
-#define base BaseExecutor<PulsedBeam<Medium>>
-#define pb BaseExecutor<PulsedBeam<Medium>>::pulsed_beam
-#define dt BaseExecutor<PulsedBeam<Medium>>::pulsed_beam->dt
-
-template<template<typename, typename...> class PulsedBeam, typename Medium>
-NonlinearExecutor<PulsedBeam<Medium>>::NonlinearExecutor() = default;
+#define base BaseExecutor
+#define pb BaseExecutor::pulsed_beam
+#define dt BaseExecutor::pulsed_beam->dt
 
 
-template<template<typename, typename...> class PulsedBeam, typename Medium>
-NonlinearExecutor<PulsedBeam<Medium>>::NonlinearExecutor(
+NonlinearExecutor::NonlinearExecutor() = default;
+
+
+NonlinearExecutor::NonlinearExecutor(
         ConfigManager& _config_manager,
-        std::shared_ptr<PulsedBeam<Medium>> _pulsed_beam)
-: BaseExecutor<PulsedBeam<Medium>>(_pulsed_beam)
+        std::shared_ptr<BasePulsedBeam>& _pulsed_beam)
+: BaseExecutor(_pulsed_beam)
 , config_manager(_config_manager) {
 
     // nonlinear terms
-    kerr = std::make_shared<Kerr<PulsedBeam<Medium>>>(base::pulsed_beam, config_manager.kerr_info, config_manager.T.at("kerr"));
-    plasma = std::make_shared<Plasma<PulsedBeam<Medium>>>(base::pulsed_beam, config_manager.T.at("plasma"));
-    bremsstrahlung = std::make_shared<Bremsstrahlung<PulsedBeam<Medium>>>(base::pulsed_beam, config_manager.T.at("bremsstrahlung"));
-    dissipation = std::make_shared<Dissipation<PulsedBeam<Medium>>>(base::pulsed_beam);
+    kerr = std::make_shared<Kerr>(base::pulsed_beam, config_manager.kerr_info, config_manager.T.at("kerr"));
+    plasma = std::make_shared<Plasma>(base::pulsed_beam, config_manager.T.at("plasma"));
+    bremsstrahlung = std::make_shared<Bremsstrahlung>(base::pulsed_beam, config_manager.T.at("bremsstrahlung"));
+    dissipation = std::make_shared<Dissipation>(base::pulsed_beam);
 
-    kinetic_equation = std::make_shared<KineticEquation<PulsedBeam<Medium>>>(
+    kinetic_equation = std::make_shared<KineticEquation>(
             base::pulsed_beam,
             base::pulsed_beam->medium->v_i_const,
             base::pulsed_beam->medium->beta);
 
     // container for nonlinear terms
-    terms_pool.insert(std::pair<std::string, std::shared_ptr<BaseNonlinearTerm<PulsedBeam<Medium>>>>(kerr->name, kerr));
-    terms_pool.insert(std::pair<std::string, std::shared_ptr<BaseNonlinearTerm<PulsedBeam<Medium>>>>(plasma->name, plasma));
-    terms_pool.insert(std::pair<std::string, std::shared_ptr<BaseNonlinearTerm<PulsedBeam<Medium>>>>(bremsstrahlung->name, bremsstrahlung));
-    terms_pool.insert(std::pair<std::string, std::shared_ptr<BaseNonlinearTerm<PulsedBeam<Medium>>>>(dissipation->name, dissipation));
-
+    terms_pool.insert(std::pair<std::string, std::shared_ptr<BaseNonlinearTerm>>(kerr->name, kerr));
+    terms_pool.insert(std::pair<std::string, std::shared_ptr<BaseNonlinearTerm>>(plasma->name, plasma));
+    terms_pool.insert(std::pair<std::string, std::shared_ptr<BaseNonlinearTerm>>(bremsstrahlung->name, bremsstrahlung));
+    terms_pool.insert(std::pair<std::string, std::shared_ptr<BaseNonlinearTerm>>(dissipation->name, dissipation));
 
 }
 
 
-template<template<typename, typename...> class PulsedBeam, typename Medium>
-NonlinearExecutor<PulsedBeam<Medium>>::~NonlinearExecutor() = default;
+NonlinearExecutor::~NonlinearExecutor() = default;
 
 
-
-
-
-template<template<typename, typename...> class PulsedBeam, typename Medium>
-void NonlinearExecutor<PulsedBeam<Medium>>::execute(double dz) {
+void NonlinearExecutor::execute(double dz) {
 
     for(size_t k = 0; k < pb->n_r; ++k) {
         for(size_t s = 1; s < pb->n_t - 1; ++s) {
@@ -59,7 +52,7 @@ void NonlinearExecutor<PulsedBeam<Medium>>::execute(double dz) {
             double dI = I - I_prev;
 
             // ionization rate
-            double R = pb->medium->ionization.R(I);
+            double R = pb->medium->ionization->R(I);
 
             // plasma
             double Ne = pb->plasma[k][s];
@@ -91,17 +84,5 @@ void NonlinearExecutor<PulsedBeam<Medium>>::execute(double dz) {
             pb->plasma[k][s + 1] = Ne + Ne_increase_full;
         }
     }
-
 }
 
-template class NonlinearExecutor<Gauss<SiO2>>;
-template class NonlinearExecutor<Gauss<CaF2>>;
-template class NonlinearExecutor<Gauss<LiF>>;
-template class NonlinearExecutor<Ring<SiO2>>;
-template class NonlinearExecutor<Ring<CaF2>>;
-template class NonlinearExecutor<Ring<LiF>>;
-template class NonlinearExecutor<Vortex<SiO2>>;
-template class NonlinearExecutor<Vortex<CaF2>>;
-template class NonlinearExecutor<Vortex<LiF>>;
-
-template class NonlinearExecutor<BasePulsedBeam<BaseMedium>>;

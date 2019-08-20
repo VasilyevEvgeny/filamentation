@@ -4,56 +4,38 @@
 
 #include "ring.h"
 
-template<typename Medium>
-Ring<Medium>::Ring() = default;
 
-template<typename Medium>
-Ring<Medium>::Ring(std::shared_ptr<Medium> medium,
-                   double _lambda_0,
-                   size_t _M,
-                   double _r_0,
-                   size_t _n_r,
-                   double _t_0,
-                   size_t _n_t,
-                   double _p0_to_p_cr) : BasePulsedBeam<Medium>(medium,
-                                                                _lambda_0,
-                                                                _r_0,
-                                                                _n_r,
-                                                                _t_0,
-                                                                _n_t,
-                                                                _p0_to_p_cr) {
-
-    Ring<Medium>::info = "ring";
-
-    Ring<Medium>::M = _M;
+Ring::Ring() = default;
 
 
-    Ring<Medium>::p_cr_to_p_g = Ring<Medium>::calculate_p_cr_to_p_g();
-    Ring<Medium>::p_0 = BasePulsedBeam<Medium>::calculate_p_0();
+Ring::Ring(std::shared_ptr<BaseMedium>& _medium,
+           ConfigManager& _config_manager,
+           std::shared_ptr<Logger>& _logger)
+: BasePulsedBeam(_medium,
+                 _config_manager,
+                 _logger) {
 
-    Ring<Medium>::i_0 = BasePulsedBeam<Medium>::calculate_i_0();
+    info = "ring";
 
-    BasePulsedBeam<Medium>::initialize_field();
+    M = _config_manager.M;
 
-    Ring<Medium>::e_0 = BasePulsedBeam<Medium>::calculate_e_0();
-}
+    logger->add_propagation_event(std::string("....calculating initial parameters in pulsed_beam"));
 
-template<typename Medium>
-Ring<Medium>::~Ring() = default;
+    p_cr_to_p_g = calculate_p_cr_to_p_g();
+    p_0 = calculate_p_0();
+    i_0 = calculate_i_0();
+    e_0 = calculate_e_0();
 
+    logger->add_propagation_event(std::string("....initialization of field in pulsed_beam"));
+    initialize_field();
 
-template<typename Medium>
-double Ring<Medium>::calculate_p_cr_to_p_g() {
-    return 0.120 * Ring<Medium>::M + 1.012;
 }
 
 
+Ring::~Ring() = default;
 
 
+double Ring::calculate_p_cr_to_p_g() {
+    return 0.120 * Ring::M + 1.012;
+}
 
-
-template class Ring<SiO2>;
-template class Ring<CaF2>;
-template class Ring<LiF>;
-
-template class Ring<BaseMedium>;

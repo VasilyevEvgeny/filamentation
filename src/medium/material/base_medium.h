@@ -6,8 +6,12 @@
 #define FILAMENTATION_MEDIUM_H
 
 #include <iostream>
+#include <memory>
 
-#include "medium/m_constants/m_constants.h"
+#include "misc_functions.h"
+
+#include "logger/logger.h"
+#include "manager/config_manager/config_manager.h"
 #include "medium/ionization/keldysh/original_keldysh.h"
 #include "medium/ionization/keldysh/smoothed_keldysh.h"
 
@@ -15,17 +19,21 @@ class BaseMedium {
 
 public:
     BaseMedium();
-    explicit BaseMedium(double _lambda_0);
+    explicit BaseMedium(ConfigManager& _config_manager, std::shared_ptr<Logger>& _logger);
     virtual ~BaseMedium() = 0;
 
-    MathConstants math_constants;
+    std::shared_ptr<Logger> logger;
+
+    ConfigManager config_manager;
+
+
+    std::shared_ptr<BaseIonization> ionization;
 
     std::string info;
     std::string name;
 
     // central wavelength
     double lambda_0;
-
     double omega_0;
 
     // light speed
@@ -72,7 +80,7 @@ public:
     //extinction
     double delta;
 
-    OriginalKeldysh ionization;
+
 
     void initialize_omegas();
     void initialize_dispersion_parameters();
@@ -89,15 +97,11 @@ public:
     double calculate_v_i_const();
     int calculate_K();
 
+    void initialize_ionization();
+
 private:
 
 };
-
-
-
-
-
-
 
 
 #endif //FILAMENTATION_MEDIUM_H

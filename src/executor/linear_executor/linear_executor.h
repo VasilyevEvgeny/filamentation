@@ -16,26 +16,24 @@
 #include "term/wave_equation/linear/dispersion/dispersion_gvd.h"
 #include "executor/linear_executor/fft/fft.h"
 
-template<typename T> class LinearExecutor;
 
-template<template<typename, typename...> class PulsedBeam, typename Medium>
-class LinearExecutor<PulsedBeam<Medium>> : public BaseExecutor<PulsedBeam<Medium>> {
+class LinearExecutor : public BaseExecutor {
 public:
     LinearExecutor();
     explicit LinearExecutor(ConfigManager& _config_manager,
-                            std::shared_ptr<PulsedBeam<Medium>> _pulsed_beam);
+                            std::shared_ptr<BasePulsedBeam>& _pulsed_beam);
     ~LinearExecutor();
 
     ConfigManager config_manager;
 
-    FastFourierTransform<PulsedBeam<Medium>> fft;
+    FastFourierTransform fft;
 
     // linear terms
-    std::shared_ptr<Diffraction<PulsedBeam<Medium>>> diffraction;
-    std::shared_ptr<DispersionFull<PulsedBeam<Medium>>> dispersion_full;
-    std::shared_ptr<DispersionGVD<PulsedBeam<Medium>>> dispersion_gvd;
+    std::shared_ptr<Diffraction> diffraction;
+    std::shared_ptr<DispersionFull> dispersion_full;
+    std::shared_ptr<DispersionGVD> dispersion_gvd;
 
-    std::map<std::string, std::shared_ptr<BaseLinearTerm<PulsedBeam<Medium>>>> terms_pool;
+    std::map<std::string, std::shared_ptr<BaseLinearTerm>> terms_pool;
 
     void execute(double dz) override;
 };

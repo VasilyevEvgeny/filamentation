@@ -8,13 +8,10 @@
 
 #include "base_dispersion.h"
 
-template<typename T> class DispersionGVD;
-
-template<template<typename, typename...> class PulsedBeam, typename Medium>
-class DispersionGVD<PulsedBeam<Medium>> : public BaseDispersion<PulsedBeam<Medium>>  {
+class DispersionGVD : public BaseDispersion {
 public:
     DispersionGVD();
-    explicit DispersionGVD(std::shared_ptr<PulsedBeam<Medium>> _pulsed_beam);
+    explicit DispersionGVD(std::shared_ptr<BasePulsedBeam>& _pulsed_beam);
 
     ~DispersionGVD();
 

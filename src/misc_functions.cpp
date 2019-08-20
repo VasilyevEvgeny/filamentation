@@ -2,7 +2,12 @@
 // Created by vasilyev on 22.07.2019.
 //
 
+#include <random>
+#include <map>
+
+
 #include "misc_functions.h"
+#include <ctime>
 
 
 
@@ -13,4 +18,9 @@ int generate_random_number(int min, int max) {
 
     return uni(rng);
 }
+
+
+
+
+
 

@@ -8,6 +8,8 @@
 #include <fstream>
 #include <omp.h>
 
+
+
 ConfigManager::ConfigManager() = default;
 
 ConfigManager::ConfigManager(std::string& _path_to_config)
@@ -305,10 +307,16 @@ void ConfigManager::validate_config() {
          * MEDIUM
          */
 
-        medium = config.at("medium").at("type");
+        medium = config.at("medium").at("material");
         if (medium != "SiO2" && medium != "CaF2" && medium != "LiF") {
             throw std::runtime_error("Wrong medium!");
         }
+
+        ionization = config.at("medium").at("ionization");
+        if (ionization != "OriginalKeldysh" && ionization != "SmoothedKeldysh") {
+            throw std::runtime_error("Wrong ionization!");
+        }
+
 
         /*
          * PULSED_BEAM

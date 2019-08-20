@@ -4,17 +4,16 @@
 
 #include "dispersion_full.h"
 
-#define base BaseLinearTerm<PulsedBeam<Medium>>
-#define pb BaseTerm<PulsedBeam<Medium>>::pulsed_beam
+#define base BaseLinearTerm
+#define pb BaseTerm::pulsed_beam
 
 
-template<template<typename, typename...> class PulsedBeam, typename Medium>
-DispersionFull<PulsedBeam<Medium>>::DispersionFull() = default;
+DispersionFull::DispersionFull() = default;
 
 
-template<template<typename, typename...> class PulsedBeam, typename Medium>
-DispersionFull<PulsedBeam<Medium>>::DispersionFull(std::shared_ptr<PulsedBeam<Medium>> _pulsed_beam, bool _T) :
-        BaseDispersion<PulsedBeam <Medium>>(_pulsed_beam, _T) {
+DispersionFull::DispersionFull(std::shared_ptr<BasePulsedBeam>& _pulsed_beam,
+                               bool _T)
+: BaseDispersion(_pulsed_beam, _T) {
 
     base::name = "dispersion_full";
 
@@ -30,13 +29,10 @@ DispersionFull<PulsedBeam<Medium>>::DispersionFull(std::shared_ptr<PulsedBeam<Me
 
     }
 
-template<template<typename, typename...> class PulsedBeam, typename Medium>
-DispersionFull<PulsedBeam<Medium>>::~DispersionFull() = default;
+DispersionFull::~DispersionFull() = default;
 
 
-
-template<template<typename, typename...> class PulsedBeam, typename Medium>
-void DispersionFull<PulsedBeam<Medium>>::process(double dz) {
+void DispersionFull::process(double dz) {
 
 #pragma omp parallel
     {
@@ -52,15 +48,3 @@ void DispersionFull<PulsedBeam<Medium>>::process(double dz) {
     }
 }
 
-
-template class DispersionFull<Gauss<SiO2>>;
-template class DispersionFull<Gauss<CaF2>>;
-template class DispersionFull<Gauss<LiF>>;
-template class DispersionFull<Ring<SiO2>>;
-template class DispersionFull<Ring<CaF2>>;
-template class DispersionFull<Ring<LiF>>;
-template class DispersionFull<Vortex<SiO2>>;
-template class DispersionFull<Vortex<CaF2>>;
-template class DispersionFull<Vortex<LiF>>;
-
-template class DispersionFull<BasePulsedBeam<BaseMedium>>;

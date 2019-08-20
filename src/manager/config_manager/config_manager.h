@@ -9,6 +9,7 @@
 #include <map>
 #include <vector>
 
+
 class ConfigManager {
 public:
     ConfigManager();
@@ -40,6 +41,7 @@ public:
 
     //medium
     std::string medium;
+    std::string ionization;
 
     // pulsed_beam
     double lambda_0;

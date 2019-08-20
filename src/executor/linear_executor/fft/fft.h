@@ -8,21 +8,17 @@
 #include "term/base_term.h"
 
 
-template<typename T> class FastFourierTransform;
-
-template<template<typename, typename...> class PulsedBeam, typename Medium>
-class FastFourierTransform<PulsedBeam<Medium>> {
+class FastFourierTransform {
 public:
     FastFourierTransform();
-    explicit FastFourierTransform(std::shared_ptr<PulsedBeam<Medium>> _pulsed_beam);
+    explicit FastFourierTransform(std::shared_ptr<BasePulsedBeam>& _pulsed_beam);
 
     ~FastFourierTransform();
 
-    std::shared_ptr<PulsedBeam<Medium>> pulsed_beam;
+    std::shared_ptr<BasePulsedBeam> pulsed_beam;
 
     void forward();
     void backward();
-
 
 };
 

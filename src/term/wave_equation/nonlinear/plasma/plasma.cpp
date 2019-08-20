@@ -4,29 +4,30 @@
 
 #include "plasma.h"
 
-#define base BaseTerm<PulsedBeam<Medium>>
-#define base_nonlinear BaseNonlinearTerm<PulsedBeam<Medium>>
+#define base BaseTerm
+#define base_nonlinear BaseNonlinearTerm
 
-#define ii BaseTerm<PulsedBeam<Medium>>::pulsed_beam->medium->math_constants.M_COMPLEX_I
-#define m_e BaseTerm<PulsedBeam<Medium>>::pulsed_beam->medium->math_constants.m_e
-#define eps_0 BaseTerm<PulsedBeam<Medium>>::pulsed_beam->medium->math_constants.epsilon_0
-#define e BaseTerm<PulsedBeam<Medium>>::pulsed_beam->medium->math_constants.e
+#define ii constants.M_COMPLEX_I
+#define m_e constants.m_e
+#define eps_0 constants.epsilon_0
+#define e constants.e
+#define c constants.c
 
-#define omega_0 BaseTerm<PulsedBeam<Medium>>::pulsed_beam->omega_0
-#define i_0 BaseTerm<PulsedBeam<Medium>>::pulsed_beam->i_0
+#define omega_0 BaseTerm::pulsed_beam->omega_0
+#define i_0 BaseTerm::pulsed_beam->i_0
 
-#define k_0 BaseTerm<PulsedBeam<Medium>>::pulsed_beam->medium->k_0
-#define n_0 BaseTerm<PulsedBeam<Medium>>::pulsed_beam->medium->n_0
-#define n_2 BaseTerm<PulsedBeam<Medium>>::pulsed_beam->medium->n_2
-
-
-template<template<typename, typename...> class PulsedBeam, typename Medium>
-Plasma<PulsedBeam<Medium>>::Plasma() = default;
+#define k_0 BaseTerm::pulsed_beam->medium->k_0
+#define n_0 BaseTerm::pulsed_beam->medium->n_0
+#define n_2 BaseTerm::pulsed_beam->medium->n_2
 
 
-template<template<typename, typename...> class PulsedBeam, typename Medium>
-Plasma<PulsedBeam<Medium>>::Plasma(std::shared_ptr<PulsedBeam<Medium>> _pulsed_beam, bool _T)
-: BaseNonlinearTerm<PulsedBeam<Medium>>(_pulsed_beam, _T) {
+
+Plasma::Plasma() = default;
+
+
+Plasma::Plasma(std::shared_ptr<BasePulsedBeam>& _pulsed_beam,
+               bool _T)
+: BaseNonlinearTerm(_pulsed_beam, _T) {
 
     base::name = "plasma";
 
@@ -46,18 +47,4 @@ Plasma<PulsedBeam<Medium>>::Plasma(std::shared_ptr<PulsedBeam<Medium>> _pulsed_b
 }
 
 
-template<template<typename, typename...> class PulsedBeam, typename Medium>
-Plasma<PulsedBeam<Medium>>::~Plasma() = default;
-
-
-template class Plasma<Gauss<SiO2>>;
-template class Plasma<Gauss<CaF2>>;
-template class Plasma<Gauss<LiF>>;
-template class Plasma<Ring<SiO2>>;
-template class Plasma<Ring<CaF2>>;
-template class Plasma<Ring<LiF>>;
-template class Plasma<Vortex<SiO2>>;
-template class Plasma<Vortex<CaF2>>;
-template class Plasma<Vortex<LiF>>;
-
-template class Plasma<BasePulsedBeam<BaseMedium>>;
+Plasma::~Plasma() = default;

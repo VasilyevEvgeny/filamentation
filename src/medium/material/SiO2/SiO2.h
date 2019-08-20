@@ -5,12 +5,12 @@
 #ifndef FILAMENTATION_SIO2_H
 #define FILAMENTATION_SIO2_H
 
-#include "medium/materials/base_medium.h"
+#include "medium/material/base_medium.h"
 
 class SiO2 : public BaseMedium {
 public:
     SiO2();
-    explicit SiO2(double _lambda_0);
+    explicit SiO2(ConfigManager& _config_manager, std::shared_ptr<Logger>& _logger);
     ~SiO2() override;
 
     void initialize_kerr_parameters() override;

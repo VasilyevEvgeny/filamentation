@@ -24,7 +24,8 @@ T:
   bremsstrahlung: false
 
 medium:
-  type: CaF2
+  material: CaF2
+  ionization: SmoothedKeldysh
 
 pulsed_beam:
   lambda_0: 1800e-9

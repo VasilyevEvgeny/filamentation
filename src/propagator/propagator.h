@@ -11,10 +11,13 @@
 #include <memory>
 
 #include "pulsed_beam/base_pulsed_beam.h"
-#include "logger/logger.h"
-#include "medium/materials/base_medium.h"
-#include "manager/dir_manager/dir_manager.h"
+#include "medium/material/base_medium.h"
+
 #include "manager/config_manager/config_manager.h"
+#include "manager/dir_manager/dir_manager.h"
+#include "postprocessor/postprocessor.h"
+#include "saver/saver.h"
+#include "logger/logger.h"
 
 #include "term/wave_equation/linear/diffraction/diffraction.h"
 #include "term/wave_equation/linear/dispersion/dispersion_full.h"
@@ -29,35 +32,34 @@
 #include "executor/linear_executor/linear_executor.h"
 #include "executor/nonlinear_executor/nonlinear_executor.h"
 
-template<typename T> class Propagator;
 
-template<template<typename, typename...> class PulsedBeam, typename Medium>
-class Propagator<PulsedBeam<Medium>> {
+class Propagator {
 public:
     Propagator();
-    explicit Propagator(ConfigManager& config_manager,
-               std::shared_ptr<PulsedBeam<Medium>> _pulsed_beam);
+    explicit Propagator(std::shared_ptr<BasePulsedBeam>& _pulsed_beam,
+                        ConfigManager& _config_manager,
+                        DirManager& _dir_manager,
+                        Postprocessor& _postprocessor,
+                        std::shared_ptr<Logger>& _logger);
     ~Propagator();
+
+    std::shared_ptr<BasePulsedBeam> pulsed_beam;
 
     ConfigManager config_manager;
     DirManager dir_manager;
-    Postprocessor processor;
-    Logger<PulsedBeam<Medium>, Postprocessor> logger;
+    Postprocessor postprocessor;
+    std::shared_ptr<Logger> logger;
 
-    std::shared_ptr<PulsedBeam<Medium>> pulsed_beam;
+    Saver saver;
 
     // executors
-    std::shared_ptr<LinearExecutor<PulsedBeam<Medium>>> linear_executor;
-    std::shared_ptr<NonlinearExecutor<PulsedBeam<Medium>>> nonlinear_executor;
+    std::shared_ptr<LinearExecutor> linear_executor;
+    std::shared_ptr<NonlinearExecutor> nonlinear_executor;
 
     void propagate();
 
 private:
 
 };
-
-
-
-
 
 #endif //FILAMENTATION_PROPAGATOR_H

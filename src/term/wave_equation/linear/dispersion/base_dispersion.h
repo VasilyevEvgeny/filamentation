@@ -7,13 +7,11 @@
 
 #include "term/wave_equation/linear/base_linear_term.h"
 
-template<typename T> class BaseDispersion;
 
-template<template<typename, typename...> class PulsedBeam, typename Medium>
-class BaseDispersion<PulsedBeam<Medium>> : public BaseLinearTerm<PulsedBeam<Medium>> {
+class BaseDispersion : public BaseLinearTerm {
 public:
     BaseDispersion();
-    explicit BaseDispersion(std::shared_ptr<PulsedBeam<Medium>> _pulsed_beam, bool _T);
+    explicit BaseDispersion(std::shared_ptr<BasePulsedBeam>& _pulsed_beam, bool _T);
 
     ~BaseDispersion();
 

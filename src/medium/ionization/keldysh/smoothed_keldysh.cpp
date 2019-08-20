@@ -11,16 +11,16 @@ SmoothedKeldysh::SmoothedKeldysh() = default;
 
 
 SmoothedKeldysh::SmoothedKeldysh(
-        MathConstants& _math_constants,
         double _omega_0,
         double _U_i,
         double _N_0,
-        double _n_0)
-        : BaseKeldysh(_math_constants,
-                      _omega_0,
+        double _n_0,
+        std::shared_ptr<Logger>& _logger)
+        : BaseKeldysh(_omega_0,
                       _U_i,
                       _N_0,
-                      _n_0) {
+                      _n_0,
+                      _logger) {
     name = "smoothed";
 
 }

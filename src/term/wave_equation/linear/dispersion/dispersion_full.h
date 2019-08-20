@@ -7,13 +7,10 @@
 
 #include "base_dispersion.h"
 
-template<typename T> class DispersionFull;
-
-template<template<typename, typename...> class PulsedBeam, typename Medium>
-class DispersionFull<PulsedBeam<Medium>> : public BaseDispersion<PulsedBeam<Medium>> {
+class DispersionFull : public BaseDispersion {
 public:
     DispersionFull();
-    explicit DispersionFull(std::shared_ptr<PulsedBeam<Medium>> _pulsed_beam, bool _T);
+    explicit DispersionFull(std::shared_ptr<BasePulsedBeam>& _pulsed_beam, bool _T);
 
     ~DispersionFull();
 

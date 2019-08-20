@@ -5,54 +5,34 @@
 #include "gauss.h"
 
 
-
-template<typename Medium>
-Gauss<Medium>::Gauss() = default;
+Gauss::Gauss() = default;
 
 
-template<typename Medium>
-Gauss<Medium>::Gauss(std::shared_ptr<Medium> _medium,
-                     double _lambda_0,
-                     double _r_0,
-                     size_t _n_r,
-                     double _t_0,
-                     size_t _n_t,
-                     double _p0_to_p_cr) : BasePulsedBeam<Medium>(_medium,
-                                                                  _lambda_0,
-                                                                  _r_0,
-                                                                  _n_r,
-                                                                  _t_0,
-                                                                  _n_t,
-                                                                  _p0_to_p_cr) {
+Gauss::Gauss(std::shared_ptr<BaseMedium>& _medium,
+             ConfigManager& _config_manager,
+             std::shared_ptr<Logger>& _logger)
+: BasePulsedBeam(_medium,
+                 _config_manager,
+                 _logger) {
 
-    Gauss<Medium>::info = "gauss";
+    info = "gauss";
 
+    logger->add_propagation_event(std::string("....calculating initial parameters in pulsed_beam"));
 
-    Gauss<Medium>::p_cr_to_p_g = Gauss<Medium>::calculate_p_cr_to_p_g();
-    Gauss<Medium>::p_0 = BasePulsedBeam<Medium>::calculate_p_0();
+    p_cr_to_p_g = calculate_p_cr_to_p_g();
+    p_0 = calculate_p_0();
+    i_0 = calculate_i_0();
+    e_0 = calculate_e_0();
 
-    Gauss<Medium>::i_0 = BasePulsedBeam<Medium>::calculate_i_0();
-
-    BasePulsedBeam<Medium>::initialize_field();
-
-    Gauss<Medium>::e_0 = BasePulsedBeam<Medium>::calculate_e_0();
+    logger->add_propagation_event(std::string("....initialization of field in pulsed_beam"));
+    initialize_field();
 
 }
 
-template<typename Medium>
-Gauss<Medium>::~Gauss() = default;
+Gauss::~Gauss() = default;
 
 
-template<typename Medium>
-double Gauss<Medium>::calculate_p_cr_to_p_g() {
+double Gauss::calculate_p_cr_to_p_g() {
     return 1.0;
 }
 
-
-
-
-template class Gauss<SiO2>;
-template class Gauss<CaF2>;
-template class Gauss<LiF>;
-
-template class Gauss<BaseMedium>;

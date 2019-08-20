@@ -3,28 +3,22 @@
 //
 
 #include "fasttransforms.h"
-
 #include "fft.h"
 
-template<template<typename, typename...> class PulsedBeam, typename Medium>
-FastFourierTransform<PulsedBeam<Medium>>::FastFourierTransform() = default;
+
+FastFourierTransform::FastFourierTransform() = default;
 
 
-template<template<typename, typename...> class PulsedBeam, typename Medium>
-FastFourierTransform<PulsedBeam<Medium>>::FastFourierTransform(std::shared_ptr<PulsedBeam<Medium>> _pulsed_beam)
+FastFourierTransform::FastFourierTransform(std::shared_ptr<BasePulsedBeam>& _pulsed_beam)
 : pulsed_beam(_pulsed_beam) {
-
 
 }
 
 
-template<template<typename, typename...> class PulsedBeam, typename Medium>
-FastFourierTransform<PulsedBeam<Medium>>::~FastFourierTransform() = default;
+FastFourierTransform::~FastFourierTransform() = default;
 
 
-
-template<template<typename, typename...> class PulsedBeam, typename Medium>
-void FastFourierTransform<PulsedBeam<Medium>>::forward() {
+void FastFourierTransform::forward() {
 
     alglib::complex_1d_array slice;
 
@@ -47,8 +41,8 @@ void FastFourierTransform<PulsedBeam<Medium>>::forward() {
     }
 }
 
-template<template<typename, typename...> class PulsedBeam, typename Medium>
-void FastFourierTransform<PulsedBeam<Medium>>::backward() {
+
+void FastFourierTransform::backward() {
     alglib::complex_1d_array slice;
 
 #pragma omp parallel private(slice)
@@ -69,17 +63,4 @@ void FastFourierTransform<PulsedBeam<Medium>>::backward() {
         }
     }
 }
-
-
-template class FastFourierTransform<Gauss<SiO2>>;
-template class FastFourierTransform<Gauss<CaF2>>;
-template class FastFourierTransform<Gauss<LiF>>;
-template class FastFourierTransform<Ring<SiO2>>;
-template class FastFourierTransform<Ring<CaF2>>;
-template class FastFourierTransform<Ring<LiF>>;
-template class FastFourierTransform<Vortex<SiO2>>;
-template class FastFourierTransform<Vortex<CaF2>>;
-template class FastFourierTransform<Vortex<LiF>>;
-
-template class FastFourierTransform<BasePulsedBeam<BaseMedium>>;
 

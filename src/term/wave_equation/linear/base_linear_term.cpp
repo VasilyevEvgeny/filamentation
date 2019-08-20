@@ -4,33 +4,14 @@
 
 #include "base_linear_term.h"
 
-template<template<typename, typename...> class PulsedBeam, typename Medium>
-BaseLinearTerm<PulsedBeam<Medium>>::BaseLinearTerm() = default;
+BaseLinearTerm::BaseLinearTerm() = default;
 
 
-template<template<typename, typename...> class PulsedBeam, typename Medium>
-BaseLinearTerm<PulsedBeam<Medium>>::BaseLinearTerm(std::shared_ptr<PulsedBeam<Medium>> _pulsed_beam, bool _T)
-: BaseTerm<PulsedBeam <Medium>>(_pulsed_beam, _T) {
-
-
+BaseLinearTerm::BaseLinearTerm(std::shared_ptr<BasePulsedBeam>& _pulsed_beam,
+                               bool _T)
+: BaseTerm(_pulsed_beam, _T) {
 
 }
 
+BaseLinearTerm::~BaseLinearTerm() = default;
 
-template<template<typename, typename...> class PulsedBeam, typename Medium>
-BaseLinearTerm<PulsedBeam<Medium>>::~BaseLinearTerm() = default;
-
-
-
-
-template class BaseLinearTerm<Gauss<SiO2>>;
-template class BaseLinearTerm<Ring<SiO2>>;
-template class BaseLinearTerm<Vortex<SiO2>>;
-template class BaseLinearTerm<Gauss<CaF2>>;
-template class BaseLinearTerm<Ring<CaF2>>;
-template class BaseLinearTerm<Vortex<CaF2>>;
-template class BaseLinearTerm<Gauss<LiF>>;
-template class BaseLinearTerm<Ring<LiF>>;
-template class BaseLinearTerm<Vortex<LiF>>;
-
-template class BaseLinearTerm<BasePulsedBeam<BaseMedium>>;

@@ -8,23 +8,33 @@
 #include <fstream>
 #include <sstream>
 #include <iomanip>
+#include <memory>
 
+#include "misc_functions.h"
 #include "base_pulsed_beam.h"
+#include "logger/logger.h"
+
+//template<typename Medium>
+BasePulsedBeam::BasePulsedBeam() = default;
 
 
-template <typename Medium>
-BasePulsedBeam<Medium>::BasePulsedBeam(
-        std::shared_ptr<Medium> _medium,
-        double _lambda_0,
-        double _r_0,
-        size_t _n_r,
-        double _t_0,
-        size_t _n_t,
-        double _p_0_to_p_cr) :
-        medium(_medium), lambda_0(_lambda_0), r_0(_r_0), n_r(_n_r), t_0(_t_0), n_t(_n_t),
-        p_0_to_p_cr(_p_0_to_p_cr) {
+//template <typename Medium>
+BasePulsedBeam::BasePulsedBeam(
+        std::shared_ptr<BaseMedium>& _medium,
+        ConfigManager& _config_manager,
+        std::shared_ptr<Logger>& _logger)
+: medium(_medium)
+, lambda_0(_config_manager.lambda_0)
+, r_0(_config_manager.r_0)
+, n_r(_config_manager.n_r)
+, t_0(_config_manager.t_0)
+, n_t(_config_manager.n_t)
+, p_0_to_p_cr(_config_manager.p_0_to_p_cr)
+, logger(_logger) {
 
-    omega_0 = 2 * M_PI * medium->math_constants.c / lambda_0;
+    logger->add_propagation_event(std::string("creating pulsed_beam"));
+
+    omega_0 = 2 * M_PI * constants.c / lambda_0;
 
     M = 0;
     m = 0;
@@ -81,17 +91,18 @@ BasePulsedBeam<Medium>::BasePulsedBeam(
 
 
 
-template<typename Medium>
-BasePulsedBeam<Medium>::BasePulsedBeam() = default;
 
-template<typename Medium>
-BasePulsedBeam<Medium>::~BasePulsedBeam() {
+
+//template<typename Medium>
+BasePulsedBeam::~BasePulsedBeam() {
     field.erase(field.begin(), field.end());
+    spectrum.erase(spectrum.begin(), spectrum.end());
+    plasma.erase(plasma.begin(), plasma.end());
 }
 
-template class BasePulsedBeam<SiO2>;
-template class BasePulsedBeam<CaF2>;
-template class BasePulsedBeam<LiF>;
-
-template class BasePulsedBeam<BaseMedium>;
+//template class BasePulsedBeam<SiO2>;
+//template class BasePulsedBeam<CaF2>;
+//template class BasePulsedBeam<LiF>;
+//
+//template class BasePulsedBeam<BaseMedium>;
 

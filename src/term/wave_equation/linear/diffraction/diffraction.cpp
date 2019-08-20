@@ -9,16 +9,15 @@
 #include "diffraction.h"
 
 
-#define base BaseLinearTerm<PulsedBeam<Medium>>
-#define pb BaseTerm<PulsedBeam<Medium>>::pulsed_beam
-
-template<template<typename, typename...> class PulsedBeam, typename Medium>
-Diffraction<PulsedBeam<Medium>>::Diffraction() = default;
+#define base BaseLinearTerm
+#define pb BaseTerm::pulsed_beam
 
 
-template<template<typename, typename...> class PulsedBeam, typename Medium>
-Diffraction<PulsedBeam<Medium>>::Diffraction(std::shared_ptr<PulsedBeam<Medium>> _pulsed_beam, bool _T)
-: BaseLinearTerm<PulsedBeam <Medium>>(_pulsed_beam, _T) {
+Diffraction::Diffraction() = default;
+
+
+Diffraction::Diffraction(std::shared_ptr<BasePulsedBeam>& _pulsed_beam, bool _T)
+: BaseLinearTerm(_pulsed_beam, _T) {
 
     base::name = "diffraction";
 
@@ -37,8 +36,7 @@ Diffraction<PulsedBeam<Medium>>::Diffraction(std::shared_ptr<PulsedBeam<Medium>>
 }
 
 
-template<template<typename, typename...> class PulsedBeam, typename Medium>
-void Diffraction<PulsedBeam<Medium>>::process(double dz) {
+void Diffraction::process(double dz) {
 
 #pragma omp parallel
     {
@@ -102,19 +100,6 @@ void Diffraction<PulsedBeam<Medium>>::process(double dz) {
 }
 
 
-template<template<typename, typename...> class PulsedBeam, typename Medium>
-Diffraction<PulsedBeam<Medium>>::~Diffraction() = default;
+Diffraction::~Diffraction() = default;
 
-
-template class Diffraction<Gauss<SiO2>>;
-template class Diffraction<Ring<SiO2>>;
-template class Diffraction<Vortex<SiO2>>;
-template class Diffraction<Gauss<CaF2>>;
-template class Diffraction<Ring<CaF2>>;
-template class Diffraction<Vortex<CaF2>>;
-template class Diffraction<Gauss<LiF>>;
-template class Diffraction<Ring<LiF>>;
-template class Diffraction<Vortex<LiF>>;
-
-template class Diffraction<BasePulsedBeam<BaseMedium>>;
 

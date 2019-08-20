@@ -7,12 +7,12 @@
 
 
 
-#include "logger/logger.h"
+#include "saver/saver.h"
 
-#define base BaseTerm<PulsedBeam<Medium>>
+#define base BaseTerm
 
-template<template<typename, typename...> class PulsedBeam, typename Medium, typename Processor>
-void Logger<PulsedBeam<Medium>, Processor>::add_start(std::string& tex_file_data) {
+
+void Saver::add_start(std::string& tex_file_data) {
 
     tex_file_data += R"(
 \documentclass[10pt]{extarticle}
@@ -36,16 +36,16 @@ void Logger<PulsedBeam<Medium>, Processor>::add_start(std::string& tex_file_data
 
 }
 
-template<template<typename, typename...> class PulsedBeam, typename Medium, typename Processor>
-void Logger<PulsedBeam<Medium>, Processor>::add_end(std::string& tex_file_data) {
+
+void Saver::add_end(std::string& tex_file_data) {
     tex_file_data += R"(
 \end{tabular}
 \end{center}
 \end{document})";
 }
 
-template<template<typename, typename...> class PulsedBeam, typename Medium, typename Processor>
-void Logger<PulsedBeam<Medium>, Processor>::add_to_tex_file_data(std::string& tex_file_data, std::string& str, std::vector<size_t>& params) {
+
+void Saver::add_to_tex_file_data(std::string& tex_file_data, std::string& str, std::vector<size_t>& params) {
     char buffer [10000];
     if (params.size() == 1) {
         sprintf(buffer, str.c_str(), params[0]);
@@ -57,8 +57,8 @@ void Logger<PulsedBeam<Medium>, Processor>::add_to_tex_file_data(std::string& te
     tex_file_data += std::string(buffer);
 }
 
-template<template<typename, typename...> class PulsedBeam, typename Medium, typename Processor>
-void Logger<PulsedBeam<Medium>, Processor>::add_to_tex_file_data(std::string& tex_file_data, std::string& str, std::vector<double>& params) {
+
+void Saver::add_to_tex_file_data(std::string& tex_file_data, std::string& str, std::vector<double>& params) {
     char buffer [10000];
     if (params.size() == 1) {
         sprintf(buffer, str.c_str(), params[0]);
@@ -86,8 +86,8 @@ void Logger<PulsedBeam<Medium>, Processor>::add_to_tex_file_data(std::string& te
     tex_file_data += std::string(buffer);
 }
 
-template<template<typename, typename...> class PulsedBeam, typename Medium, typename Processor>
-void Logger<PulsedBeam<Medium>, Processor>::add_to_tex_file_data(std::string& tex_file_data, std::string& str, std::vector<std::string>& params) {
+
+void Saver::add_to_tex_file_data(std::string& tex_file_data, std::string& str, std::vector<std::string>& params) {
     char buffer [10000];
     if (params.size() == 1) {
         sprintf(buffer, str.c_str(), params[0].c_str());
@@ -99,8 +99,8 @@ void Logger<PulsedBeam<Medium>, Processor>::add_to_tex_file_data(std::string& te
     tex_file_data += std::string(buffer);
 }
 
-template<template<typename, typename...> class PulsedBeam, typename Medium, typename Processor>
-void Logger<PulsedBeam<Medium>, Processor>::save_initial_parameters_to_pdf(bool delete_tmp_files, bool delete_tex_file) {
+
+void Saver::save_initial_parameters_to_pdf(bool delete_tmp_files, bool delete_tex_file) {
 
     std::string tex_file_data;
 
@@ -149,7 +149,7 @@ void Logger<PulsedBeam<Medium>, Processor>::save_initial_parameters_to_pdf(bool 
 )";
     std::vector<std::string> equation_params = {equation};
 
-    Logger::add_to_tex_file_data(tex_file_data, equation_data, equation_params);
+    Saver::add_to_tex_file_data(tex_file_data, equation_data, equation_params);
 
 
     //
@@ -167,7 +167,7 @@ void Logger<PulsedBeam<Medium>, Processor>::save_initial_parameters_to_pdf(bool 
 )";
     std::vector<std::string> initial_params = {initial};
 
-    Logger::add_to_tex_file_data(tex_file_data, initial_data, initial_params);
+    Saver::add_to_tex_file_data(tex_file_data, initial_data, initial_params);
 
 
     //
@@ -192,7 +192,7 @@ void Logger<PulsedBeam<Medium>, Processor>::save_initial_parameters_to_pdf(bool 
                                             pulsed_beam->medium->C_3,
                                             pulsed_beam->medium->lambda_3 * 1e6};
 
-    Logger::add_to_tex_file_data(tex_file_data, sellmeyer_data, sellmeyer_params);
+    Saver::add_to_tex_file_data(tex_file_data, sellmeyer_data, sellmeyer_params);
 
     //
     //  MEDIUM
@@ -207,7 +207,7 @@ material & %s & -- \tabularnewline
 \hline
 )";
     std::vector<std::string> medium_params_1 = {pulsed_beam->medium->info};
-    Logger::add_to_tex_file_data(tex_file_data, medium_data_1, medium_params_1);
+    Saver::add_to_tex_file_data(tex_file_data, medium_data_1, medium_params_1);
 
 
     std::string medium_data_2 = R"(
@@ -258,7 +258,7 @@ $\delta$ & %.1f & cm$^{-1}$ \tabularnewline
                                            (double)pulsed_beam->medium->K,
                                            pulsed_beam->medium->delta * 1e2};
 
-    Logger::add_to_tex_file_data(tex_file_data, medium_data_2, medium_params_2);
+    Saver::add_to_tex_file_data(tex_file_data, medium_data_2, medium_params_2);
 
 
     //
@@ -273,7 +273,7 @@ space distribution & %s & -- \tabularnewline
 )";
     std::vector<std::string> pulsed_beam_params_1 = {pulsed_beam->info};
 
-    Logger::add_to_tex_file_data(tex_file_data, pulsed_beam_data_1, pulsed_beam_params_1);
+    Saver::add_to_tex_file_data(tex_file_data, pulsed_beam_data_1, pulsed_beam_params_1);
 
 
     std::string pulsed_beam_data_2 = R"(
@@ -285,7 +285,7 @@ $m$ & %d & -- \tabularnewline
     std::vector<std::size_t> pulsed_beam_params_2 = {pulsed_beam->M,
                                                      pulsed_beam->m};
 
-    Logger::add_to_tex_file_data(tex_file_data, pulsed_beam_data_2, pulsed_beam_params_2);
+    Saver::add_to_tex_file_data(tex_file_data, pulsed_beam_data_2, pulsed_beam_params_2);
 
 
 
@@ -328,7 +328,7 @@ $E_0$ & %.2f & $\mu$J \tabularnewline
                                                 pulsed_beam->i_0 * 1e-16,
                                                 pulsed_beam->e_0 * 1e6};
 
-    Logger::add_to_tex_file_data(tex_file_data, pulsed_beam_data_3, pulsed_beam_params_3);
+    Saver::add_to_tex_file_data(tex_file_data, pulsed_beam_data_3, pulsed_beam_params_3);
 
     //
     //  GRID
@@ -342,7 +342,7 @@ $r_{max}$ & %.1f & $\mu$m \tabularnewline
 )";
     std::vector<double> grid_params_1 = {pulsed_beam->r_max * 1e6};
 
-    Logger::add_to_tex_file_data(tex_file_data, grid_data_1, grid_params_1);
+    Saver::add_to_tex_file_data(tex_file_data, grid_data_1, grid_params_1);
 
 
     std::string grid_data_2 = R"(
@@ -351,7 +351,7 @@ $n_{r}$ & %d & -- \tabularnewline
 )";
     std::vector<size_t> grid_params_2 = {pulsed_beam->n_r};
 
-    Logger::add_to_tex_file_data(tex_file_data, grid_data_2, grid_params_2);
+    Saver::add_to_tex_file_data(tex_file_data, grid_data_2, grid_params_2);
 
 
     std::string grid_data_3 = R"(
@@ -363,7 +363,7 @@ $t_{max}$ & %.1f & fs \tabularnewline
     std::vector<double> grid_params_3 = {pulsed_beam->dr * 1e6,
                                          pulsed_beam->t_max * 1e15};
 
-    Logger::add_to_tex_file_data(tex_file_data, grid_data_3, grid_params_3);
+    Saver::add_to_tex_file_data(tex_file_data, grid_data_3, grid_params_3);
 
 
     std::string grid_data_4 = R"(
@@ -372,7 +372,7 @@ $n_t$ & %d & -- \tabularnewline
 )";
     std::vector<size_t> grid_params_4 = {pulsed_beam->n_t};
 
-    Logger::add_to_tex_file_data(tex_file_data, grid_data_4, grid_params_4);
+    Saver::add_to_tex_file_data(tex_file_data, grid_data_4, grid_params_4);
 
 
     std::string grid_data_5 = R"(
@@ -381,7 +381,7 @@ $h_t$ & %.1f & fs \tabularnewline
 )";
     std::vector<double> grid_params_5 = {pulsed_beam->dt * 1e15};
 
-    Logger::add_to_tex_file_data(tex_file_data, grid_data_5, grid_params_5);
+    Saver::add_to_tex_file_data(tex_file_data, grid_data_5, grid_params_5);
 
     /*
      * TRACK
@@ -398,7 +398,7 @@ $h_z(z=0)$ & %.1f & $\mu$m \tabularnewline
     std::vector<double> track_params = {(double)config_manager.n_z,
                                         config_manager.dz_0 * 1e6};
 
-    Logger::add_to_tex_file_data(tex_file_data, track_data, track_params);
+    Saver::add_to_tex_file_data(tex_file_data, track_data, track_params);
 
 
     //
@@ -430,36 +430,3 @@ $h_z(z=0)$ & %.1f & $\mu$m \tabularnewline
     }
 }
 
-template class Logger<Gauss<SiO2>, Postprocessor>;
-template class Logger<Gauss<CaF2>, Postprocessor>;
-template class Logger<Gauss<LiF>, Postprocessor>;
-template class Logger<Ring<SiO2>, Postprocessor>;
-template class Logger<Ring<CaF2>, Postprocessor>;
-template class Logger<Ring<LiF>, Postprocessor>;
-template class Logger<Vortex<SiO2>, Postprocessor>;
-template class Logger<Vortex<CaF2>, Postprocessor>;
-template class Logger<Vortex<LiF>, Postprocessor>;
-
-template class Logger<Gauss<SiO2>, ProcessorDiffraction>;
-template class Logger<Gauss<CaF2>, ProcessorDiffraction>;
-template class Logger<Gauss<LiF>, ProcessorDiffraction>;
-template class Logger<Ring<SiO2>, ProcessorDiffraction>;
-template class Logger<Ring<CaF2>, ProcessorDiffraction>;
-template class Logger<Ring<LiF>, ProcessorDiffraction>;
-template class Logger<Vortex<SiO2>, ProcessorDiffraction>;
-template class Logger<Vortex<CaF2>, ProcessorDiffraction>;
-template class Logger<Vortex<LiF>, ProcessorDiffraction>;
-
-template class Logger<Gauss<SiO2>, ProcessorDispersion>;
-template class Logger<Gauss<CaF2>, ProcessorDispersion>;
-template class Logger<Gauss<LiF>, ProcessorDispersion>;
-template class Logger<Ring<SiO2>, ProcessorDispersion>;
-template class Logger<Ring<CaF2>, ProcessorDispersion>;
-template class Logger<Ring<LiF>, ProcessorDispersion>;
-template class Logger<Vortex<SiO2>, ProcessorDispersion>;
-template class Logger<Vortex<CaF2>, ProcessorDispersion>;
-template class Logger<Vortex<LiF>, ProcessorDispersion>;
-
-template class Logger<BasePulsedBeam<BaseMedium>, Postprocessor>;
-template class Logger<BasePulsedBeam<BaseMedium>, ProcessorDiffraction>;
-template class Logger<BasePulsedBeam<BaseMedium>, ProcessorDispersion>;

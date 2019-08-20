@@ -7,6 +7,7 @@
 #include <omp.h>
 #include <memory>
 
+#include "logger/logger.h"
 #include "pulsed_beam/base_pulsed_beam.h"
 #include "manager/config_manager/config_manager.h"
 #include "propagator/propagator.h"
@@ -15,20 +16,42 @@
 int main(int argc, char** argv) {
 
     /*
-     * config
+     * config manager
      */
 
     std::string path_to_config = "config.yml";
-    ConfigManager config_manager = ConfigManager(path_to_config);
+    ConfigManager config_manager(path_to_config);
     config_manager.parse_and_validate_config();
 
+    /*
+     * dir manager
+     */
+
+    DirManager dir_manager(config_manager);
+
+
+    /*
+     * logger
+     */
+
+    bool verbose = true;
+    auto logger = std::make_shared<Logger>(dir_manager, verbose);
+
+    /*
+     * postprocessor
+     */
+
+    Postprocessor postprocessor(config_manager,
+                                dir_manager,
+                                logger);
 
     /*
      * threads
      */
 
+    std::string omp_info = "number of threads: " + std::to_string(config_manager.num_threads);
+    logger->add_propagation_event(omp_info);
     omp_set_num_threads(config_manager.num_threads);
-
 
     /*
      * medium
@@ -37,57 +60,47 @@ int main(int argc, char** argv) {
     std::shared_ptr<BaseMedium> medium;
 
     if (config_manager.medium == "SiO2") {
-        medium = std::make_shared<SiO2>(config_manager.lambda_0);
+        medium = std::make_shared<SiO2>(config_manager, logger);
     } else if (config_manager.medium == "CaF2") {
-        medium = std::make_shared<CaF2>(config_manager.lambda_0);
+        medium = std::make_shared<CaF2>(config_manager, logger);
     } else {
-        medium = std::make_shared<LiF>(config_manager.lambda_0);
+        medium = std::make_shared<LiF>(config_manager, logger);
     }
 
     /*
      * pulsed_beam
      */
 
-    std::shared_ptr<BasePulsedBeam<BaseMedium>> pulsed_beam;
+    std::shared_ptr<BasePulsedBeam> pulsed_beam;
 
     if (config_manager.M == 0 && config_manager.m == 0) {
-        pulsed_beam = std::make_shared<Gauss<BaseMedium>>(medium,
-                                                          config_manager.lambda_0,
-                                                          config_manager.r_0,
-                                                          config_manager.n_r,
-                                                          config_manager.t_0,
-                                                          config_manager.n_t,
-                                                          config_manager.p_0_to_p_cr);
+        pulsed_beam = std::make_shared<Gauss>(medium,
+                                              config_manager,
+                                              logger);
     } else if (config_manager.m == 0) {
-        pulsed_beam = std::make_shared<Ring<BaseMedium>>(medium,
-                                                          config_manager.lambda_0,
-                                                          config_manager.M,
-                                                          config_manager.r_0,
-                                                          config_manager.n_r,
-                                                          config_manager.t_0,
-                                                          config_manager.n_t,
-                                                          config_manager.p_0_to_p_cr);
+        pulsed_beam = std::make_shared<Ring>(medium,
+                                             config_manager,
+                                             logger);
     } else {
-        pulsed_beam = std::make_shared<Vortex<BaseMedium>>(medium,
-                                                           config_manager.lambda_0,
-                                                           config_manager.M,
-                                                           config_manager.m,
-                                                           config_manager.r_0,
-                                                           config_manager.n_r,
-                                                           config_manager.t_0,
-                                                           config_manager.n_t,
-                                                           config_manager.p_0_to_p_cr);
+        pulsed_beam = std::make_shared<Vortex>(medium,
+                                               config_manager,
+                                               logger);
     }
+
 
     /*
      * propagator
      */
 
-    Propagator<BasePulsedBeam<BaseMedium>> propagator(
+    auto propagator = std::make_shared<Propagator>(
+            pulsed_beam,
             config_manager,
-            pulsed_beam);
+            dir_manager,
+            postprocessor,
+            logger
+            );
 
-    propagator.propagate();
+    propagator->propagate();
 
 
     return 0;

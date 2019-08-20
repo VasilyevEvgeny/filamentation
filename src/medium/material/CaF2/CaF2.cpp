@@ -6,7 +6,8 @@
 
 CaF2::CaF2() = default;
 
-CaF2::CaF2(double _lambda_0) : BaseMedium(_lambda_0) {
+CaF2::CaF2(ConfigManager& _config_manager, std::shared_ptr<Logger>& _logger)
+: BaseMedium(_config_manager, _logger) {
 
     info = "CaF$_2$";
     name = "CaF2";
@@ -27,12 +28,7 @@ CaF2::CaF2(double _lambda_0) : BaseMedium(_lambda_0) {
 
     delta = 0;
 
-    ionization = OriginalKeldysh(
-            math_constants,
-            omega_0,
-            U_i,
-            N_0,
-            n_0);
+    BaseMedium::initialize_ionization();
 }
 
 CaF2::~CaF2() = default;
@@ -49,7 +45,7 @@ void CaF2::initialize_kerr_parameters() {
 void CaF2::initialize_ionization_parameters() {
     N_0 = 2.46e28;
     U_i_in_eV = 10;
-    U_i = U_i_in_eV * math_constants.e;
+    U_i = U_i_in_eV * constants.e;
     ItoA_const = calculate_ItoA_const();
     v_ei = 1e14;
     v_i_const = calculate_v_i_const();

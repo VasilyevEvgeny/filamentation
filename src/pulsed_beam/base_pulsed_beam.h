@@ -9,31 +9,28 @@
 #include <complex>
 #include <memory>
 
-#include "medium/m_constants/m_constants.h"
-#include "medium/materials/SiO2/SiO2.h"
-#include "medium/materials/CaF2/CaF2.h"
-#include "medium/materials/LiF/LiF.h"
+#include "medium/material/SiO2/SiO2.h"
+#include "medium/material/CaF2/CaF2.h"
+#include "medium/material/LiF/LiF.h"
 #include "specialfunctions.h"
+#include "manager/config_manager/config_manager.h"
 
 
-template <typename Medium>
+//template <typename Medium>
 class BasePulsedBeam {
 public:
     BasePulsedBeam();
-    explicit BasePulsedBeam(std::shared_ptr<Medium> _medium,
-                            double _lambda_0,
-                            double _r_0,
-                            size_t _n_r,
-                            double _t_0,
-                            size_t _n_t,
-                            double _p_0_to_p_cr);
+    explicit BasePulsedBeam(std::shared_ptr<BaseMedium>& _medium,
+                            ConfigManager& _config_manager,
+                            std::shared_ptr<Logger>& _logger);
     virtual ~BasePulsedBeam();
 
     void initialize_field();
 
     std::string info;
 
-    std::shared_ptr<Medium> medium;
+    std::shared_ptr<BaseMedium> medium;
+    std::shared_ptr<Logger> logger;
 
     double lambda_0;
     double omega_0;

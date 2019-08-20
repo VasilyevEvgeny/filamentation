@@ -7,13 +7,13 @@
 
 #include "term/wave_equation/nonlinear/base_nonlinear_term.h"
 
-template<typename T> class Dissipation;
+//template<typename T> class Dissipation;
 
-template<template<typename, typename...> class PulsedBeam, typename Medium>
-class Dissipation<PulsedBeam<Medium>> : public BaseNonlinearTerm<PulsedBeam<Medium>>  {
+//template<template<typename, typename...> class PulsedBeam, typename Medium>
+class Dissipation : public BaseNonlinearTerm {
 public:
     Dissipation();
-    explicit Dissipation(std::shared_ptr<PulsedBeam<Medium>> _pulsed_beam);
+    explicit Dissipation(std::shared_ptr<BasePulsedBeam>& _pulsed_beam);
 
     ~Dissipation();
 

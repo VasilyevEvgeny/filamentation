@@ -7,28 +7,18 @@
 
 #include "pulsed_beam/base_pulsed_beam.h"
 
-template<typename Medium>
-class Gauss : public BasePulsedBeam<Medium> {
+class Gauss : public BasePulsedBeam {
 public:
     Gauss();
-    explicit Gauss(std::shared_ptr<Medium> _medium,
-                   double _lambda_0,
-                   double _r_0,
-                   size_t _n_r,
-                   double _t_0,
-                   size_t _n_t,
-                   double _p0_to_p_cr);
+    explicit Gauss(std::shared_ptr<BaseMedium>& _medium,
+                   ConfigManager& _config_manager,
+                   std::shared_ptr<Logger>& _logger);
 
     ~Gauss() override;
 
     double calculate_p_cr_to_p_g() override;
 
-
 };
-
-
-
-
 
 
 #endif //FILAMENTATION_GAUSS_H

@@ -6,7 +6,8 @@
 
 LiF::LiF() = default;
 
-LiF::LiF(double _lambda_0) : BaseMedium(_lambda_0) {
+LiF::LiF(ConfigManager& _config_manager, std::shared_ptr<Logger>& _logger)
+: BaseMedium(_config_manager, _logger) {
 
     info = "LiF";
     name = "LiF";
@@ -27,12 +28,7 @@ LiF::LiF(double _lambda_0) : BaseMedium(_lambda_0) {
 
     delta = 0;
 
-    ionization = OriginalKeldysh(
-            math_constants,
-            omega_0,
-            U_i,
-            N_0,
-            n_0);
+    BaseMedium::initialize_ionization();
 
 }
 
@@ -50,7 +46,7 @@ void LiF::initialize_kerr_parameters() {
 void LiF::initialize_ionization_parameters() {
     N_0 = 6.10e28;
     U_i_in_eV = 13;
-    U_i = U_i_in_eV * math_constants.e;
+    U_i = U_i_in_eV * constants.e;
     ItoA_const = calculate_ItoA_const();
     v_ei = 1e14;
     v_i_const = calculate_v_i_const();

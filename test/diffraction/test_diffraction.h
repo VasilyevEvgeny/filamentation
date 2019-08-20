@@ -20,7 +20,7 @@
 #include "equation_terms/base_term.h"
 #include "fft/fft.h"
 #include "term/linear/diffraction/diffraction.h"
-#include "logger/logger.h"
+#include "saver/saver.h"
 #include "misc_functions.h"
 
 #include "processor_diffraction.h"

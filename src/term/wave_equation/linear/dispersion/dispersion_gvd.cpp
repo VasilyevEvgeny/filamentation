@@ -4,30 +4,25 @@
 
 #include "dispersion_gvd.h"
 
-#define base BaseLinearTerm<PulsedBeam<Medium>>
-#define pb BaseTerm<PulsedBeam<Medium>>::pulsed_beam
+#define base BaseLinearTerm
+#define pb BaseTerm::pulsed_beam
 
 
-template<template<typename, typename...> class PulsedBeam, typename Medium>
-DispersionGVD<PulsedBeam<Medium>>::DispersionGVD() = default;
+DispersionGVD::DispersionGVD() = default;
 
 
-template<template<typename, typename...> class PulsedBeam, typename Medium>
-DispersionGVD<PulsedBeam<Medium>>::DispersionGVD(std::shared_ptr<PulsedBeam<Medium>> _pulsed_beam)
-: BaseDispersion<PulsedBeam <Medium>>(_pulsed_beam, false){
+DispersionGVD::DispersionGVD(std::shared_ptr<BasePulsedBeam>& _pulsed_beam)
+: BaseDispersion(_pulsed_beam, false){
     mode = "sweep";
 
     base::name = "dispersion_gvd";
     base::formula = R"( -k_0 k_2 \frac{\partial^2 A(r,t,z)}{\partial t^2} )";
 }
 
-template<template<typename, typename...> class PulsedBeam, typename Medium>
-DispersionGVD<PulsedBeam<Medium>>::~DispersionGVD() = default;
+DispersionGVD::~DispersionGVD() = default;
 
 
-
-template<template<typename, typename...> class PulsedBeam, typename Medium>
-void DispersionGVD<PulsedBeam<Medium>>::process(double dz) {
+void DispersionGVD::process(double dz) {
     if (mode == "fft") {
         return process_fft(dz);
     }
@@ -37,8 +32,8 @@ void DispersionGVD<PulsedBeam<Medium>>::process(double dz) {
 
 }
 
-template<template<typename, typename...> class PulsedBeam, typename Medium>
-void DispersionGVD<PulsedBeam<Medium>>::process_fft(double dz) {
+
+void DispersionGVD::process_fft(double dz) {
 
 #pragma omp parallel
     {
@@ -55,8 +50,7 @@ void DispersionGVD<PulsedBeam<Medium>>::process_fft(double dz) {
 }
 
 
-template<template<typename, typename...> class PulsedBeam, typename Medium>
-void DispersionGVD<PulsedBeam<Medium>>::process_sweep(double dz) {
+void DispersionGVD::process_sweep(double dz) {
 
 #pragma omp parallel
     {
@@ -105,16 +99,3 @@ void DispersionGVD<PulsedBeam<Medium>>::process_sweep(double dz) {
     }
 }
 
-
-
-template class DispersionGVD<Gauss<SiO2>>;
-template class DispersionGVD<Gauss<CaF2>>;
-template class DispersionGVD<Gauss<LiF>>;
-template class DispersionGVD<Ring<SiO2>>;
-template class DispersionGVD<Ring<CaF2>>;
-template class DispersionGVD<Ring<LiF>>;
-template class DispersionGVD<Vortex<SiO2>>;
-template class DispersionGVD<Vortex<CaF2>>;
-template class DispersionGVD<Vortex<LiF>>;
-
-template class DispersionGVD<BasePulsedBeam<BaseMedium>>;

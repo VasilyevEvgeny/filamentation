@@ -30,8 +30,8 @@ public:
     std::string plasma_dir_name;
     std::string plasma_dir;
 
-private:
     std::string get_current_datetime() const;
+
 };
 
 

@@ -6,8 +6,9 @@
 
 ProcessorDispersion::ProcessorDispersion() = default;
 
-ProcessorDispersion::ProcessorDispersion(ConfigManager& _config_manager, DirManager& _dir_manager)
-: Postprocessor(_config_manager, _dir_manager){
+ProcessorDispersion::ProcessorDispersion(ConfigManager& _config_manager, DirManager& _dir_manager,
+        std::shared_ptr<Logger> _logger)
+: Postprocessor(_config_manager, _dir_manager, _logger){
 
     path_to_test_script = "/processing/test/dispersion.py";
 

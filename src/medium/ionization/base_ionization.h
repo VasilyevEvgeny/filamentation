@@ -8,17 +8,18 @@
 #include <string>
 #include <map>
 #include <vector>
+#include <memory>
 
+#include "logger/logger.h"
 #include "manager/config_manager/config_manager.h"
-#include "medium/m_constants/m_constants.h"
 
 class BaseIonization {
 public:
     BaseIonization();
-    explicit BaseIonization(MathConstants& _math_constants);
+    explicit BaseIonization(std::shared_ptr<Logger>& _logger);
     virtual ~BaseIonization();
 
-    MathConstants math_constants;
+    std::shared_ptr<Logger> logger;
 
     std::string name;
 
@@ -31,11 +32,10 @@ public:
     std::vector<double> rates;
     double R(double i);
 
-
     std::string generate_ionization_table_name(std::string& medium_name, double lambda_0);
     void make_ionization_table(std::string& path_to_ionization_tables_dir);
-    void process_ionization_table(ConfigManager& config_manager,
-                                  std::string& path_to_ionization_table);
+    void plot_ionization_table(ConfigManager& config_manager,
+                               std::string& path_to_ionization_table) const;
 
     void initialize_ionization_table(ConfigManager& config_manager,
                                      double lambda_0);
