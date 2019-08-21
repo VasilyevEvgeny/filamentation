@@ -11,13 +11,12 @@ class PostprocessorDiffraction : public Postprocessor {
 public:
     PostprocessorDiffraction();
 
-    explicit PostprocessorDiffraction(ConfigManager& _config_manager,
-                                      DirManager& _dir_manager,
-                                      std::shared_ptr<Logger>& _logger);
+    explicit PostprocessorDiffraction(ConfigManager& _config_manager);
 
     ~PostprocessorDiffraction();
 
-    void go() override;
+    void go(DirManager& _dir_manager,
+            std::shared_ptr<Logger>& _logger) override;
 
 };
 

@@ -138,8 +138,7 @@ add_executable(filamentation
         lib/alglib/src/optimization.cpp
         lib/alglib/src/solvers.cpp
         lib/alglib/src/specialfunctions.cpp
-        lib/alglib/src/statistics.cpp
-        test/diffraction/postprocessor_diffraction/postprocessor_diffraction.cpp test/diffraction/postprocessor_diffraction/postprocessor_diffraction.h)
+        lib/alglib/src/statistics.cpp)
 
 
 target_link_libraries(filamentation)

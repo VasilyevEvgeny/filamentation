@@ -1,4 +1,5 @@
 info:
+  verbose: true
   prefix: test_diffraction
   multidir: true
   path_to_project: C:/Users/vasilyev/Documents/CLion/filamentation

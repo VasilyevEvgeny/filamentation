@@ -6,21 +6,21 @@
 
 PostprocessorDiffraction::PostprocessorDiffraction() = default;
 
-PostprocessorDiffraction::PostprocessorDiffraction(ConfigManager& _config_manager,
-                                                   DirManager& _dir_manager,
-                                                   std::shared_ptr<Logger>& _logger)
-: Postprocessor(_config_manager, _dir_manager, _logger) {
+PostprocessorDiffraction::PostprocessorDiffraction(ConfigManager& _config_manager)
+: Postprocessor(_config_manager) {
 
 }
 
 PostprocessorDiffraction::~PostprocessorDiffraction() = default;
 
 
-void PostprocessorDiffraction::go() {
+void PostprocessorDiffraction::go(DirManager& dir_manager, std::shared_ptr<Logger>& logger) {
 
     logger->add_propagation_event(std::string("postprocessing"));
 
-    postprocess(std::string("test_diffraction_plot"),
+    postprocess(dir_manager,
+                logger,
+                std::string("test_diffraction_plot"),
                 std::string("processing/test/diffraction.py"),
                 std::string("....plotting test_diffraction"));
 

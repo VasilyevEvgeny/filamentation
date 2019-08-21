@@ -31,8 +31,6 @@ public:
     std::string plasma_dir_name;
     std::string plasma_dir;
 
-    std::string get_current_datetime() const;
-
     void initialize(ConfigManager& config_manager);
 
 };

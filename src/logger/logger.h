@@ -31,7 +31,6 @@ public:
     std::string time_log_filename;
     std::ofstream time_log_handler;
 
-    std::string get_current_datetime() const;
     double duration(std::chrono::time_point<std::chrono::high_resolution_clock> t_start,
                     std::chrono::time_point<std::chrono::high_resolution_clock> t_end) const;
 

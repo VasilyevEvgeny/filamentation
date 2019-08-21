@@ -36,25 +36,32 @@
 class Propagator {
 public:
     Propagator();
-    explicit Propagator(std::shared_ptr<BasePulsedBeam>& _pulsed_beam,
-                        ConfigManager& _config_manager,
-                        DirManager& _dir_manager,
+    explicit Propagator(ConfigManager& _config_manager,
+                        std::shared_ptr<Postprocessor>& _postprocessor);
+    explicit Propagator(ConfigManager& _config_manager,
                         std::shared_ptr<Postprocessor>& _postprocessor,
-                        std::shared_ptr<Logger>& _logger);
+                        std::string& _multidir_name,
+                        std::string& _current_results_dir_name);
     ~Propagator();
 
-    std::shared_ptr<BasePulsedBeam> pulsed_beam;
+    void initialize();
 
     ConfigManager config_manager;
-    DirManager dir_manager;
     std::shared_ptr<Postprocessor> postprocessor;
+
+    DirManager dir_manager;
     std::shared_ptr<Logger> logger;
+
+    std::shared_ptr<BaseMedium> medium;
+    std::shared_ptr<BasePulsedBeam> pulsed_beam;
 
     Saver saver;
 
-    // executors
     std::shared_ptr<LinearExecutor> linear_executor;
     std::shared_ptr<NonlinearExecutor> nonlinear_executor;
+
+    size_t n_z;
+    double dz;
 
     void propagate();
 

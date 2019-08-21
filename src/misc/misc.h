@@ -11,6 +11,8 @@
 
 int generate_random_number(int min, int max);
 
+std::string get_current_datetime(const std::string& mode);
+
 static struct Constants {
     const double h_bar = 1.054571800e-34;
     const double c = 2.9979245799999954e8;

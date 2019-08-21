@@ -1,6 +1,7 @@
 info:
+  verbose: true
   prefix: filament
-  multidir: true
+  multidir: false
   path_to_project: C:/Users/vasilyev/Documents/CLion/filamentation
   path_to_python_interpreter: C:/Users/vasilyev/Documents/venvs/filamentation/Scripts/python.exe
   global_root_dir: L:/Vasilyev

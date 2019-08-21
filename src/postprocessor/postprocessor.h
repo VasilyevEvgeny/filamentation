@@ -17,14 +17,9 @@
 class Postprocessor {
 public:
     Postprocessor();
-    explicit Postprocessor(ConfigManager& _config_manager,
-                           DirManager& _dir_manager,
-                           std::shared_ptr<Logger>& _logger);
+    explicit Postprocessor(ConfigManager& _config_manager);
 
     ~Postprocessor();
-
-    DirManager dir_manager;
-    std::shared_ptr<Logger> logger;
 
     std::string path_to_project;
     std::string path_to_python_interpreter;
@@ -33,8 +28,12 @@ public:
     bool plot_plasma_rt;
     bool plot_track;
 
-    virtual void go();
-    void postprocess (const std::string& module, const std::string& path_to_script, const std::string& log_info);
+    virtual void go(DirManager& dir_manager, std::shared_ptr<Logger>& logger);
+    void postprocess(DirManager& dir_manager,
+                     std::shared_ptr<Logger>& logger,
+                     const std::string& module,
+                     const std::string& path_to_script,
+                     const std::string& log_info);
 };
 
 

@@ -12,101 +12,42 @@
 #include "manager/config_manager/config_manager.h"
 #include "propagator/propagator.h"
 #include "postprocessor_diffraction/postprocessor_diffraction.h"
-
+#include "misc/misc.h"
 
 
 int main(int argc, char** argv) {
 
-    /*
-     * config manager
-     */
+    // config_manager
+    ConfigManager config_manager(std::string("test/diffraction/test_diffraction_config.yml"));
 
-    std::string path_to_config = "test/diffraction/config.yml";
-    ConfigManager config_manager(path_to_config);
-    config_manager.parse_and_validate_config();
+    // multidir_name
+    std::string multidir_name = config_manager.prefix + "_" + get_current_datetime("dir_manager");
 
-    DirManager dir_manager;
-
-    std::string multidir_name = config_manager.prefix + "_" + dir_manager.get_current_datetime();
+    // parameters
     std::vector<std::pair<size_t, size_t>> ms = {std::make_pair(0, 0),
                                                  std::make_pair(1, 1)};
 
-    std::shared_ptr<BasePulsedBeam> pulsed_beam;
-    std::shared_ptr<Propagator> propagator;
+    // main cycle
     for (auto& item : ms) {
 
+        // current_results_dir_name
         config_manager.M = item.first;
         config_manager.m = item.second;
-
         std::string current_results_dir_name = "M=" + std::to_string(config_manager.M) + "_m=" + std::to_string(config_manager.m);
 
-        /*
-        * dir manager
-        */
+        // postprocessor
+        std::shared_ptr<Postprocessor> postprocessor = std::make_shared<PostprocessorDiffraction>(config_manager);
 
-        dir_manager = DirManager(config_manager, multidir_name, current_results_dir_name);
+        // propagator
+        auto propagator = std::make_shared<Propagator>(config_manager,
+                                                       postprocessor,
+                                                       multidir_name,
+                                                       current_results_dir_name);
+        // corrections for test_diffraction
+        propagator->dz = propagator->pulsed_beam->z_diff / propagator->n_z;
 
-        /*
-         * logger
-         */
-
-        auto logger = std::make_shared<Logger>(config_manager, dir_manager, true);
-
-        /*
-         * postprocessor
-         */
-
-        std::shared_ptr<Postprocessor> postprocessor = std::make_shared<PostprocessorDiffraction>(config_manager,
-                                                                                                  dir_manager,
-                                                                                                  logger);
-
-        /*
-         * medium
-         */
-
-        std::shared_ptr<BaseMedium> medium;
-        if (config_manager.medium == "SiO2") {
-            medium = std::make_shared<SiO2>(config_manager, logger);
-        } else if (config_manager.medium == "CaF2") {
-            medium = std::make_shared<CaF2>(config_manager, logger);
-        } else {
-            medium = std::make_shared<LiF>(config_manager, logger);
-        }
-
-
-        /*
-         * pulsed_beam
-         */
-
-        if (config_manager.M == 0 && config_manager.m == 0) {
-            pulsed_beam = std::make_shared<Gauss>(medium,
-                                                  config_manager,
-                                                  logger);
-        } else if (config_manager.m == 0) {
-            pulsed_beam = std::make_shared<Ring>(medium,
-                                                 config_manager,
-                                                 logger);
-        } else {
-            pulsed_beam = std::make_shared<Vortex>(medium,
-                                                   config_manager,
-                                                   logger);
-        }
-
-        config_manager.dz_0 = pulsed_beam->z_diff / config_manager.n_z;
-
-        /*
-         * propagator
-         */
-
-        propagator = std::make_shared<Propagator>(pulsed_beam,
-                                                  config_manager,
-                                                  dir_manager,
-                                                  postprocessor,
-                                                  logger
-        );
-
+        // propagate!
         propagator->propagate();
-
     }
 
 

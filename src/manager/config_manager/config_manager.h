@@ -13,11 +13,10 @@
 class ConfigManager {
 public:
     ConfigManager();
-    explicit ConfigManager(std::string& _path_to_config);
+    explicit ConfigManager(const std::string& _path_to_config);
 
     ~ConfigManager();
 
-    void parse_and_validate_config();
     void parse_config();
     void print_config();
     void validate_config();
@@ -26,6 +25,7 @@ public:
     std::map<std::string, std::map<std::string, std::string>> config;
 
     // info
+    bool verbose;
     std::string prefix;
     bool multidir;
     std::string path_to_project;

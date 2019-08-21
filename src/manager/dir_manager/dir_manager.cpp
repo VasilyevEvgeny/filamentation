@@ -6,7 +6,7 @@
 #include <ctime>
 
 #include "dir_manager.h"
-
+#include "misc/misc.h"
 
 
 DirManager::DirManager(ConfigManager& _config_manager) {
@@ -15,7 +15,7 @@ DirManager::DirManager(ConfigManager& _config_manager) {
 
         global_results_dir = _config_manager.global_root_dir + "/" + _config_manager.global_results_dir_name;
 
-        current_results_dir_name = _config_manager.prefix + "_" + get_current_datetime();
+        current_results_dir_name = _config_manager.prefix + "_" + get_current_datetime("dir_manager");
     }
     else {
 
@@ -67,16 +67,4 @@ void DirManager::initialize(ConfigManager& config_manager) {
     }
 }
 
-std::string DirManager::get_current_datetime() const {
-    time_t rawtime;
-    struct tm *timeinfo;
-    char buffer[80];
-
-    time(&rawtime);
-    timeinfo = localtime(&rawtime);
-
-    strftime(buffer,sizeof(buffer),"%Y-%m-%d_%H-%M-%S", timeinfo);
-
-    return std::string(buffer);
-}
 

@@ -12,15 +12,15 @@
 
 ConfigManager::ConfigManager() = default;
 
-ConfigManager::ConfigManager(std::string& _path_to_config)
-: path_to_config(_path_to_config) {}
+ConfigManager::ConfigManager(const std::string& _path_to_config)
+: path_to_config(_path_to_config) {
 
-ConfigManager::~ConfigManager() = default;
-
-void ConfigManager::parse_and_validate_config() {
     parse_config();
     validate_config();
 }
+
+ConfigManager::~ConfigManager() = default;
+
 
 void ConfigManager::parse_config() {
 
@@ -75,6 +75,17 @@ void ConfigManager::validate_config() {
         /*
          * INFO
          */
+
+        std::string verbose_str = config.at("info").at("verbose");
+        if (verbose_str == "true") {
+            verbose = true;
+        }
+        else if (verbose_str == "false") {
+            verbose = false;
+        }
+        else {
+            throw std::runtime_error("Wrong verbose!");
+        }
 
         prefix = config.at("info").at("prefix");
         if (prefix.empty()) {

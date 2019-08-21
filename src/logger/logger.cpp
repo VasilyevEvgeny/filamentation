@@ -8,6 +8,7 @@
 #include <iomanip>
 
 #include "logger.h"
+#include "misc/misc.h"
 
 Logger::Logger() = default;
 
@@ -71,7 +72,7 @@ Logger::~Logger() {
 
 void Logger::add_propagation_event(const std::string& event_info) {
 
-    std::string log_string = get_current_datetime() + " " + event_info + "\n";
+    std::string log_string = get_current_datetime("logger") + " " + event_info + "\n";
 
     propagation_log_handler << log_string;
     propagation_log_handler.flush();
@@ -80,19 +81,6 @@ void Logger::add_propagation_event(const std::string& event_info) {
         std::cout << log_string;
     }
 
-}
-
-std::string Logger::get_current_datetime() const {
-    time_t rawtime;
-    struct tm *timeinfo;
-    char buffer[80];
-
-    time(&rawtime);
-    timeinfo = localtime(&rawtime);
-
-    strftime(buffer,sizeof(buffer),"[%Y-%m-%d %H:%M:%S]", timeinfo);
-
-    return std::string(buffer);
 }
 
 double Logger::duration(std::chrono::time_point<std::chrono::high_resolution_clock> t_start,

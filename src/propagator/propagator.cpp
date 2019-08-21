@@ -11,35 +11,101 @@
 Propagator::Propagator() = default;
 
 
-Propagator::Propagator(std::shared_ptr<BasePulsedBeam>& _pulsed_beam,
-                       ConfigManager& _config_manager,
-                       DirManager& _dir_manager,
+Propagator::Propagator(ConfigManager& _config_manager,
+                       std::shared_ptr<Postprocessor>& _postprocessor)
+: config_manager(_config_manager)
+, postprocessor(_postprocessor) {
+
+    /*
+     * dir manager
+     */
+    dir_manager = DirManager(config_manager);
+
+    initialize();
+}
+
+Propagator::Propagator(ConfigManager& _config_manager,
                        std::shared_ptr<Postprocessor>& _postprocessor,
-                       std::shared_ptr<Logger>& _logger)
-: pulsed_beam(_pulsed_beam)
-, config_manager(_config_manager)
-, dir_manager(_dir_manager)
-, postprocessor(_postprocessor)
-, logger(_logger) {
+                       std::string& _multidir_name,
+                       std::string& _current_results_dir_name)
+        : config_manager(_config_manager)
+        , postprocessor(_postprocessor) {
 
-    logger->add_propagation_event(std::string("creating propagator"));
+    /*
+     * dir manager
+     */
+    dir_manager = DirManager(config_manager, _multidir_name, _current_results_dir_name);
 
-    // threads
-    omp_set_num_threads(config_manager.num_threads);
-    logger->add_propagation_event(std::string("number of threads: " + std::to_string(config_manager.num_threads)));
-
-    // executors
-    linear_executor = std::make_shared<LinearExecutor>(pulsed_beam, config_manager, logger);
-    nonlinear_executor = std::make_shared<NonlinearExecutor>(pulsed_beam, config_manager, logger);
-
-    saver = Saver(pulsed_beam, linear_executor, nonlinear_executor, config_manager, dir_manager, logger);
-
-    saver.save_initial_parameters_to_pdf(true, false);
-    saver.save_initial_parameters_to_yml();
+    initialize();
 }
 
 
 Propagator::~Propagator() = default;
+
+void Propagator::initialize() {
+    /*
+     * logger
+     */
+    logger = std::make_shared<Logger>(config_manager, dir_manager, config_manager.verbose);
+    logger->add_propagation_event(std::string("creating propagator"));
+
+    /*
+     * threads
+     */
+    omp_set_num_threads(config_manager.num_threads);
+    logger->add_propagation_event(std::string("number of threads: " + std::to_string(config_manager.num_threads)));
+
+    /*
+     * medium
+     */
+    if (config_manager.medium == "SiO2") {
+        medium = std::make_shared<SiO2>(config_manager,
+                                        logger);
+    } else if (config_manager.medium == "CaF2") {
+        medium = std::make_shared<CaF2>(config_manager,
+                                        logger);
+    } else {
+        medium = std::make_shared<LiF>(config_manager,
+                                       logger);
+    }
+
+    /*
+     * pulsed_beam
+     */
+    if (config_manager.M == 0 && config_manager.m == 0) {
+        pulsed_beam = std::make_shared<Gauss>(medium,
+                                              config_manager,
+                                              logger);
+    } else if (config_manager.m == 0) {
+        pulsed_beam = std::make_shared<Ring>(medium,
+                                             config_manager,
+                                             logger);
+    } else {
+        pulsed_beam = std::make_shared<Vortex>(medium,
+                                               config_manager,
+                                               logger);
+    }
+
+    /*
+     * executor
+     */
+    linear_executor = std::make_shared<LinearExecutor>(pulsed_beam,
+                                                       config_manager,
+                                                       logger);
+    nonlinear_executor = std::make_shared<NonlinearExecutor>(pulsed_beam,
+                                                             config_manager,
+                                                             logger);
+
+    /*
+     * saver
+     */
+    saver = Saver(pulsed_beam, linear_executor, nonlinear_executor, config_manager, dir_manager, logger);
+    saver.save_initial_parameters_to_pdf(true, false);
+    saver.save_initial_parameters_to_yml();
+
+    dz = config_manager.dz_0;
+    n_z = config_manager.n_z;
+}
 
 
 void Propagator::propagate() {
@@ -51,8 +117,7 @@ void Propagator::propagate() {
      */
 
     double z = 0.0;
-    double dz = config_manager.dz_0;
-    for (int step = 0; step < config_manager.n_z + 1; ++step) {
+    for (int step = 0; step < n_z + 1; ++step) {
         if (step) {
 
             /*
@@ -94,7 +159,7 @@ void Propagator::propagate() {
     }
 
     saver.save_states_to_csv();
-    postprocessor->go();
+    postprocessor->go(dir_manager, logger);
 
     logger->add_propagation_event(std::string("end\n"));
 }

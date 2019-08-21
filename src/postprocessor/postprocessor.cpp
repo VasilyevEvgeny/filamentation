@@ -12,14 +12,7 @@
 
 Postprocessor::Postprocessor() = default;
 
-Postprocessor::Postprocessor(ConfigManager& _config_manager,
-                             DirManager& _dir_manager,
-                             std::shared_ptr<Logger>& _logger)
-: dir_manager(_dir_manager)
-, logger(_logger) {
-
-    logger->add_propagation_event(std::string("creating postprocessor"));
-
+Postprocessor::Postprocessor(ConfigManager& _config_manager) {
     path_to_project = _config_manager.path_to_project;
     path_to_python_interpreter = _config_manager.path_to_python_interpreter;
 
@@ -32,7 +25,11 @@ Postprocessor::Postprocessor(ConfigManager& _config_manager,
 Postprocessor::~Postprocessor() = default;
 
 
-void Postprocessor::postprocess(const std::string& module, const std::string& path_to_script, const std::string& log_info) {
+void Postprocessor::postprocess(DirManager& dir_manager,
+                                std::shared_ptr<Logger>& logger,
+                                const std::string& module,
+                                const std::string& path_to_script,
+                                const std::string& log_info) {
     logger->add_propagation_event(log_info);
 
     std::string execute = path_to_python_interpreter + " " + path_to_project + "/" + path_to_script + " " +
@@ -44,23 +41,29 @@ void Postprocessor::postprocess(const std::string& module, const std::string& pa
     logger->term_times[module] += logger->duration(t_start, t_end);
 }
 
-void Postprocessor::go() {
+void Postprocessor::go(DirManager& dir_manager, std::shared_ptr<Logger>& logger) {
 
     logger->add_propagation_event(std::string("postprocessing"));
 
     if (plot_intensity_rt) {
-        postprocess(std::string("plot_intensity_rt"),
+        postprocess(dir_manager,
+                    logger,
+                    std::string("plot_intensity_rt"),
                     std::string("processing/scripts/intensity_rt.py"),
                     std::string("....plotting I(r,t)"));
     }
     if (plot_plasma_rt) {
-        postprocess(std::string("plot_plasma_rt"),
+        postprocess(dir_manager,
+                    logger,
+                    std::string("plot_intensity_rt"),
                     std::string("processing/scripts/plasma_rt.py"),
                     std::string("....plotting N_e(r,t)"));
     }
     if (plot_track) {
-        postprocess(std::string("plot_track"),
+        postprocess(dir_manager,
+                    logger,
+                    std::string("plot_intensity_rt"),
                     std::string("processing/scripts/track.py"),
-                    std::string("....plotting track(r,t)"));
+                    std::string("....plotting track"));
     }
 }
