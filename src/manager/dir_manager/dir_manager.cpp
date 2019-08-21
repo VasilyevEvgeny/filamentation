@@ -18,14 +18,26 @@ DirManager::DirManager(ConfigManager& _config_manager) {
         current_results_dir_name = _config_manager.prefix + "_" + get_current_datetime();
     }
     else {
-        global_results_dir = _config_manager.global_root_dir + "/" + _config_manager.global_results_dir_name + "/" +
-                _config_manager.prefix + "_" + get_current_datetime();
 
-        current_results_dir_name = get_current_datetime();
     }
 
+    initialize(_config_manager);
+}
+
+DirManager::DirManager(ConfigManager& _config_manager, std::string& _multidir_name, std::string& _current_results_dir_name) {
+    global_results_dir = _config_manager.global_root_dir + "/" + _config_manager.global_results_dir_name + "/" +
+            _multidir_name;
+
+    current_results_dir_name = _current_results_dir_name;
+
+    initialize(_config_manager);
+}
+
+DirManager::~DirManager() = default;
+
+void DirManager::initialize(ConfigManager& config_manager) {
     current_results_dir = global_results_dir + "/" + current_results_dir_name;
-    ionization_tables_dir = _config_manager.global_root_dir + "/" + _config_manager.ionization_tables_dir_name;
+    ionization_tables_dir = config_manager.global_root_dir + "/" + config_manager.ionization_tables_dir_name;
 
     field_dir_name = "field";
     field_dir = current_results_dir + "/" + field_dir_name;
@@ -54,8 +66,6 @@ DirManager::DirManager(ConfigManager& _config_manager) {
         exit(-1);
     }
 }
-
-DirManager::~DirManager() = default;
 
 std::string DirManager::get_current_datetime() const {
     time_t rawtime;

@@ -47,13 +47,13 @@ Logger::Logger(ConfigManager& _config_manager,
 
 void Logger::make_time_log() {
 
-    time_log_handler << std::setw(20) << std::setfill(' ');
+    time_log_handler << std::setw(30) << std::setfill(' ');
     time_log_handler << "MODULE";
     time_log_handler << std::setw(30) << std::setfill(' ');
     time_log_handler << "TIME" << std::endl;
 
     for (auto& item : term_times) {
-        time_log_handler << std::setw(20) << std::setfill(' ');
+        time_log_handler << std::setw(30) << std::setfill(' ');
         time_log_handler << item.first;
         time_log_handler << std::setw(30) << std::setfill(' ');
         time_log_handler << convert_seconds_to_time_string(item.second) << std::endl;

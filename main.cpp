@@ -4,7 +4,6 @@
 #include <omp.h>
 #include <map>
 #include <string>
-#include <omp.h>
 #include <memory>
 
 #include "logger/logger.h"
@@ -41,17 +40,10 @@ int main(int argc, char** argv) {
      * postprocessor
      */
 
-    Postprocessor postprocessor(config_manager,
-                                dir_manager,
-                                logger);
+    auto postprocessor = std::make_shared<Postprocessor>(config_manager,
+                                                         dir_manager,
+                                                         logger);
 
-    /*
-     * threads
-     */
-
-    std::string omp_info = "number of threads: " + std::to_string(config_manager.num_threads);
-    logger->add_propagation_event(omp_info);
-    omp_set_num_threads(config_manager.num_threads);
 
     /*
      * medium
@@ -92,13 +84,11 @@ int main(int argc, char** argv) {
      * propagator
      */
 
-    auto propagator = std::make_shared<Propagator>(
-            pulsed_beam,
-            config_manager,
-            dir_manager,
-            postprocessor,
-            logger
-            );
+    auto propagator = std::make_shared<Propagator>(pulsed_beam,
+                                                   config_manager,
+                                                   dir_manager,
+                                                   postprocessor,
+                                                   logger);
 
     propagator->propagate();
 

@@ -22,6 +22,13 @@ include_directories(lib/alglib/src)
 include_directories(src)
 include_directories(test)
 
+
+#########################################
+#
+# FILAMENTATION
+#
+#########################################
+
 add_executable(filamentation
         # filamentation
         main.cpp
@@ -132,26 +139,30 @@ add_executable(filamentation
         lib/alglib/src/solvers.cpp
         lib/alglib/src/specialfunctions.cpp
         lib/alglib/src/statistics.cpp
-            )
-
-target_link_libraries(filamentation gtest gtest_main)
-target_link_libraries(filamentation gmock gmock_main)
+        test/diffraction/postprocessor_diffraction/postprocessor_diffraction.cpp test/diffraction/postprocessor_diffraction/postprocessor_diffraction.h)
 
 
+target_link_libraries(filamentation)
 
-
-
+#target_link_libraries(filamentation gtest gtest_main)
+#target_link_libraries(filamentation gmock gmock_main)
 
 
 
+
+
+#########################################
+#
+# TEST_DIFFRACTION
+#
+#########################################
 
 
 
 add_executable(test_diffraction
 
-        test/diffraction/main.cpp
         test/diffraction/test_diffraction.cpp
-        test/diffraction/test_diffraction.h
+
 
         src/pulsed_beam/base_pulsed_beam.cpp
         src/pulsed_beam/base_pulsed_beam.h
@@ -165,6 +176,9 @@ add_executable(test_diffraction
 
         src/propagator/propagator.cpp
         src/propagator/propagator.h
+
+        src/manager/config_manager/config_manager.cpp
+        src/manager/config_manager/config_manager.h
 
         src/manager/dir_manager/dir_manager.cpp
         src/manager/dir_manager/dir_manager.h
@@ -185,16 +199,17 @@ add_executable(test_diffraction
 
         src/postprocessor/postprocessor.cpp
         src/postprocessor/postprocessor.h
-        test/diffraction/processor_diffraction.cpp
-        test/diffraction/processor_diffraction.h
-        test/dispersion/processor_dispersion.cpp
-        test/dispersion/processor_dispersion.h
+        test/diffraction/postprocessor_diffraction/postprocessor_diffraction.cpp
+        test/diffraction/postprocessor_diffraction/postprocessor_diffraction.h
 
         src/term/base_term.cpp
         src/term/base_term.h
 
         src/executor/linear_executor/fft/fft.cpp
         src/executor/linear_executor/fft/fft.h
+
+        src/term/wave_equation/linear/base_linear_term.cpp
+        src/term/wave_equation/linear/base_linear_term.h
 
         src/term/wave_equation/linear/diffraction/diffraction.cpp
         src/term/wave_equation/linear/diffraction/diffraction.h
@@ -205,6 +220,40 @@ add_executable(test_diffraction
         src/term/wave_equation/linear/dispersion/dispersion_full.h
         src/term/wave_equation/linear/dispersion/dispersion_gvd.cpp
         src/term/wave_equation/linear/dispersion/dispersion_gvd.h
+
+        src/term/wave_equation/nonlinear/base_nonlinear_term.cpp
+        src/term/wave_equation/nonlinear/base_nonlinear_term.h
+        src/term/wave_equation/nonlinear/kerr/kerr.cpp
+        src/term/wave_equation/nonlinear/kerr/kerr.h
+        src/term/wave_equation/nonlinear/plasma/plasma.cpp
+        src/term/wave_equation/nonlinear/plasma/plasma.h
+        src/term/wave_equation/nonlinear/bremsstrahlung/bremsstrahlung.cpp
+        src/term/wave_equation/nonlinear/bremsstrahlung/bremsstrahlung.h
+        src/term/wave_equation/nonlinear/dissipation/dissipation.cpp
+        src/term/wave_equation/nonlinear/dissipation/dissipation.h
+
+        src/term/kinetic_equation/kinetic_equation.cpp
+        src/term/kinetic_equation/kinetic_equation.h
+
+        src/executor/base_executor.cpp
+        src/executor/base_executor.h
+        src/executor/linear_executor/linear_executor.cpp
+        src/executor/linear_executor/linear_executor.h
+        src/executor/nonlinear_executor/nonlinear_executor.cpp
+        src/executor/nonlinear_executor/nonlinear_executor.h
+
+
+        src/medium/ionization/base_ionization.cpp
+        src/medium/ionization/base_ionization.h
+        src/medium/ionization/keldysh/base_keldysh.cpp
+        src/medium/ionization/keldysh/base_keldysh.h
+        src/medium/ionization/keldysh/original_keldysh.cpp
+        src/medium/ionization/keldysh/original_keldysh.h
+        src/medium/ionization/keldysh/smoothed_keldysh.cpp
+        src/medium/ionization/keldysh/smoothed_keldysh.h
+
+        src/logger/logger.cpp
+        src/logger/logger.h
 
         src/misc/misc.cpp
         src/misc/misc.h
@@ -225,9 +274,17 @@ add_executable(test_diffraction
         lib/alglib/src/statistics.cpp
         )
 
+target_link_libraries(test_diffraction)
 
-target_link_libraries(test_diffraction gtest gtest_main)
-target_link_libraries(test_diffraction gmock gmock_main)
+#target_link_libraries(test_diffraction gtest gtest_main)
+#target_link_libraries(test_diffraction gmock gmock_main)
+
+
+
+
+
+
+
 
 
 add_executable(test_dispersion
@@ -270,8 +327,6 @@ add_executable(test_dispersion
 
         src/postprocessor/postprocessor.cpp
         src/postprocessor/postprocessor.h
-        test/diffraction/processor_diffraction.cpp
-        test/diffraction/processor_diffraction.h
         test/dispersion/processor_dispersion.cpp
         test/dispersion/processor_dispersion.h
 

@@ -17,10 +17,9 @@
 class Postprocessor {
 public:
     Postprocessor();
-    explicit Postprocessor(
-            ConfigManager& _config_manager,
-            DirManager& _dir_manager,
-            std::shared_ptr<Logger>& _logger);
+    explicit Postprocessor(ConfigManager& _config_manager,
+                           DirManager& _dir_manager,
+                           std::shared_ptr<Logger>& _logger);
 
     ~Postprocessor();
 

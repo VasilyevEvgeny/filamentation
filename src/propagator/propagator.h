@@ -39,7 +39,7 @@ public:
     explicit Propagator(std::shared_ptr<BasePulsedBeam>& _pulsed_beam,
                         ConfigManager& _config_manager,
                         DirManager& _dir_manager,
-                        Postprocessor& _postprocessor,
+                        std::shared_ptr<Postprocessor>& _postprocessor,
                         std::shared_ptr<Logger>& _logger);
     ~Propagator();
 
@@ -47,7 +47,7 @@ public:
 
     ConfigManager config_manager;
     DirManager dir_manager;
-    Postprocessor postprocessor;
+    std::shared_ptr<Postprocessor> postprocessor;
     std::shared_ptr<Logger> logger;
 
     Saver saver;

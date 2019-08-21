@@ -2,110 +2,113 @@
 // Created by vasilyev on 17.07.2019.
 //
 
-#include <iostream>
-#include <string>
+#include <vector>
+#include <omp.h>
 #include <map>
-#include <chrono>
-#include <thread>
 
-#include "test_diffraction.h"
-
-
-template<template<typename, typename...> class PulsedBeam, typename Medium>
-TestDiffraction<PulsedBeam<Medium>>::TestDiffraction(PulsedBeam<Medium>& _pulsed_beam) :
-pulsed_beam(&_pulsed_beam) {
-
-    auto args = initialize_args(pulsed_beam->info);
-
-    n_z = 1000;
-
-    save_field_every = 100;
-    print_current_state_every = 10;
-
-    dz = pulsed_beam->z_diff / n_z;
-    track_info = {{"n_z", (double)(n_z + 1)},
-                  {"dz", dz}};
-    manager = Manager(args);
-    processor_diffraction = ProcessorDiffraction(args, manager);
-
-    logger = Logger<PulsedBeam<Medium>, ProcessorDiffraction>(args, pulsed_beam, manager,
-                                                               processor_diffraction, track_info);
-    logger.save_initial_parameters_to_pdf(true, true);
-    logger.save_initial_parameters_to_yml();
-
-    fourier_executor = FourierExecutor<PulsedBeam<Medium>>(pulsed_beam);
-    diffraction_executor = DiffractionExecutor<PulsedBeam<Medium>>(pulsed_beam);
-}
-
-template<template<typename, typename...> class PulsedBeam, typename Medium>
-std::map<std::string, std::string> TestDiffraction<PulsedBeam<Medium>>::initialize_args(std::string& info) {
-    std::map<std::string, std::string> args = {
-            {"prefix",                  "test_diffraction_" + info},
-            {"path_to_project",         "C:/Users/vasilyev/Documents/CLion/filamentation"},
-            {"global_root_dir",         "L:/Vasilyev"},
-            {"global_results_dir_name", "Filamentation_results"},
-            {"python_interpreter",      "C:/Users/vasilyev/Documents/venvs/filamentation/Scripts/python.exe"},
-            {"intensity_rt",            "True"},
-            {"track",                   "True"}};
-
-    return args;
-}
+#include "gtest/gtest.h"
+#include "logger/logger.h"
+#include "pulsed_beam/base_pulsed_beam.h"
+#include "manager/config_manager/config_manager.h"
+#include "propagator/propagator.h"
+#include "postprocessor_diffraction/postprocessor_diffraction.h"
 
 
-template<template<typename, typename...> class PulsedBeam, typename Medium>
-void TestDiffraction<PulsedBeam<Medium>>::test() {
 
-    auto t1 = std::chrono::high_resolution_clock::now();
+int main(int argc, char** argv) {
 
-    double z = 0.0;
-    for (int step = 0; step < n_z + 1; ++step) {
-        if (step) {
+    /*
+     * config manager
+     */
 
-            fourier_executor.forward();
+    std::string path_to_config = "test/diffraction/config.yml";
+    ConfigManager config_manager(path_to_config);
+    config_manager.parse_and_validate_config();
 
-            diffraction_executor.process(dz);
+    DirManager dir_manager;
 
-            fourier_executor.backward();
+    std::string multidir_name = config_manager.prefix + "_" + dir_manager.get_current_datetime();
+    std::vector<std::pair<size_t, size_t>> ms = {std::make_pair(0, 0),
+                                                 std::make_pair(1, 1)};
 
+    std::shared_ptr<BasePulsedBeam> pulsed_beam;
+    std::shared_ptr<Propagator> propagator;
+    for (auto& item : ms) {
 
-            z += dz;
+        config_manager.M = item.first;
+        config_manager.m = item.second;
+
+        std::string current_results_dir_name = "M=" + std::to_string(config_manager.M) + "_m=" + std::to_string(config_manager.m);
+
+        /*
+        * dir manager
+        */
+
+        dir_manager = DirManager(config_manager, multidir_name, current_results_dir_name);
+
+        /*
+         * logger
+         */
+
+        auto logger = std::make_shared<Logger>(config_manager, dir_manager, true);
+
+        /*
+         * postprocessor
+         */
+
+        std::shared_ptr<Postprocessor> postprocessor = std::make_shared<PostprocessorDiffraction>(config_manager,
+                                                                                                  dir_manager,
+                                                                                                  logger);
+
+        /*
+         * medium
+         */
+
+        std::shared_ptr<BaseMedium> medium;
+        if (config_manager.medium == "SiO2") {
+            medium = std::make_shared<SiO2>(config_manager, logger);
+        } else if (config_manager.medium == "CaF2") {
+            medium = std::make_shared<CaF2>(config_manager, logger);
+        } else {
+            medium = std::make_shared<LiF>(config_manager, logger);
         }
 
-        if (save_field_every) {
-            if (!(step % save_field_every)) {
-                logger.save_field(step);
-            }
+
+        /*
+         * pulsed_beam
+         */
+
+        if (config_manager.M == 0 && config_manager.m == 0) {
+            pulsed_beam = std::make_shared<Gauss>(medium,
+                                                  config_manager,
+                                                  logger);
+        } else if (config_manager.m == 0) {
+            pulsed_beam = std::make_shared<Ring>(medium,
+                                                 config_manager,
+                                                 logger);
+        } else {
+            pulsed_beam = std::make_shared<Vortex>(medium,
+                                                   config_manager,
+                                                   logger);
         }
 
-        logger.flush_current_state(step, z);
+        config_manager.dz_0 = pulsed_beam->z_diff / config_manager.n_z;
 
-        if (print_current_state_every) {
-            if (!(step % print_current_state_every)) {
-                logger.print_current_state(step, z);
-            }
-        }
+        /*
+         * propagator
+         */
 
+        propagator = std::make_shared<Propagator>(pulsed_beam,
+                                                  config_manager,
+                                                  dir_manager,
+                                                  postprocessor,
+                                                  logger
+        );
+
+        propagator->propagate();
 
     }
 
-    auto t2 = std::chrono::high_resolution_clock::now();
 
-    std::chrono::duration<float> fsec = t2 - t1;
-    std::chrono::milliseconds d = std::chrono::duration_cast<std::chrono::milliseconds>(fsec);
-
-    std::cout << fsec.count() << "s\n";
-
-    logger.save_states_to_csv();
-    logger.processor.go();
+    return 0;
 }
-
-template<template<typename, typename...> class PulsedBeam, typename Medium>
-TestDiffraction<PulsedBeam<Medium>>::~TestDiffraction() = default;
-
-
-template class TestDiffraction<Gauss<SiO2>>;
-template class TestDiffraction<Gauss<CaF2>>;
-template class TestDiffraction<Gauss<LiF>>;
-template class TestDiffraction<Vortex<SiO2>>;
-template class TestDiffraction<Vortex<CaF2>>;
-template class TestDiffraction<Vortex<LiF>>;

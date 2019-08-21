@@ -16,6 +16,7 @@ class DirManager {
 public:
     DirManager() = default;
     explicit DirManager(ConfigManager& config_manager);
+    explicit DirManager(ConfigManager& config_manager, std::string& multidir_name, std::string& _current_results_dir_name);
     ~DirManager();
 
     std::string global_results_dir;
@@ -31,6 +32,8 @@ public:
     std::string plasma_dir;
 
     std::string get_current_datetime() const;
+
+    void initialize(ConfigManager& config_manager);
 
 };
 

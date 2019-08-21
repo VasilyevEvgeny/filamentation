@@ -28,8 +28,9 @@ LiF::LiF(ConfigManager& _config_manager, std::shared_ptr<Logger>& _logger)
 
     delta = 0;
 
-    BaseMedium::initialize_ionization();
-
+    if (!config_manager.active_nonlinear_terms.empty()) {
+        BaseMedium::initialize_ionization();
+    }
 }
 
 LiF::~LiF() = default;

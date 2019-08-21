@@ -21,8 +21,6 @@
 #include "executor/linear_executor/linear_executor.h"
 #include "executor/nonlinear_executor/nonlinear_executor.h"
 
-#include "diffraction/processor_diffraction.h"
-#include "dispersion/processor_dispersion.h"
 
 class Saver {
 public:
@@ -32,7 +30,7 @@ public:
                    std::shared_ptr<NonlinearExecutor>& _nonlinear_executor,
                    ConfigManager& _config_manager,
                    DirManager& _dir_manager,
-                   Postprocessor& _postprocessor,
+                   //std::shared_ptr<Postprocessor>& _postprocessor,
                    std::shared_ptr<Logger>& _logger);
     ~Saver();
 
@@ -43,7 +41,7 @@ public:
 
     ConfigManager config_manager;
     DirManager dir_manager;
-    Postprocessor postprocessor;
+    //std::shared_ptr<Postprocessor> postprocessor;
     std::shared_ptr<Logger> logger;
 
     std::vector<std::string> states_columns;

@@ -3,6 +3,7 @@
 //
 
 #include <vector>
+#include <omp.h>
 
 #include "misc/misc.h"
 #include "propagator.h"
@@ -10,12 +11,11 @@
 Propagator::Propagator() = default;
 
 
-Propagator::Propagator(
-        std::shared_ptr<BasePulsedBeam>& _pulsed_beam,
-        ConfigManager& _config_manager,
-        DirManager& _dir_manager,
-        Postprocessor& _postprocessor,
-        std::shared_ptr<Logger>& _logger)
+Propagator::Propagator(std::shared_ptr<BasePulsedBeam>& _pulsed_beam,
+                       ConfigManager& _config_manager,
+                       DirManager& _dir_manager,
+                       std::shared_ptr<Postprocessor>& _postprocessor,
+                       std::shared_ptr<Logger>& _logger)
 : pulsed_beam(_pulsed_beam)
 , config_manager(_config_manager)
 , dir_manager(_dir_manager)
@@ -24,11 +24,15 @@ Propagator::Propagator(
 
     logger->add_propagation_event(std::string("creating propagator"));
 
+    // threads
+    omp_set_num_threads(config_manager.num_threads);
+    logger->add_propagation_event(std::string("number of threads: " + std::to_string(config_manager.num_threads)));
+
     // executors
     linear_executor = std::make_shared<LinearExecutor>(pulsed_beam, config_manager, logger);
     nonlinear_executor = std::make_shared<NonlinearExecutor>(pulsed_beam, config_manager, logger);
 
-    saver = Saver(pulsed_beam, linear_executor, nonlinear_executor, config_manager, dir_manager, postprocessor, logger);
+    saver = Saver(pulsed_beam, linear_executor, nonlinear_executor, config_manager, dir_manager, logger);
 
     saver.save_initial_parameters_to_pdf(true, false);
     saver.save_initial_parameters_to_yml();
@@ -40,7 +44,7 @@ Propagator::~Propagator() = default;
 
 void Propagator::propagate() {
 
-    logger->add_propagation_event(std::string("starting propagation!\n"));
+    logger->add_propagation_event(std::string("starting propagation!"));
 
     /*
      * Main cycle
@@ -90,7 +94,7 @@ void Propagator::propagate() {
     }
 
     saver.save_states_to_csv();
-    saver.postprocessor.go();
+    postprocessor->go();
 
-    logger->add_propagation_event(std::string("end"));
+    logger->add_propagation_event(std::string("end\n"));
 }
