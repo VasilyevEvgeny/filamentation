@@ -12,11 +12,11 @@
 #define base BaseTerm
 
 
-void Saver::add_start(std::string& tex_file_data) {
+void Saver::add_start(std::string& tex_file_data) const {
 
     tex_file_data += R"(
 \documentclass[10pt]{extarticle}
-\usepackage[left=2cm, right=2cm, top=2cm, bottom=2cm]{geometry}
+\usepackage[left=1cm, right=1cm, top=1cm, bottom=1cm]{geometry}
 
 \usepackage{amsmath}
 
@@ -37,7 +37,7 @@ void Saver::add_start(std::string& tex_file_data) {
 }
 
 
-void Saver::add_end(std::string& tex_file_data) {
+void Saver::add_end(std::string& tex_file_data) const {
     tex_file_data += R"(
 \end{tabular}
 \end{center}
@@ -45,7 +45,7 @@ void Saver::add_end(std::string& tex_file_data) {
 }
 
 
-void Saver::add_to_tex_file_data(std::string& tex_file_data, std::string& str, std::vector<size_t>& params) {
+void Saver::add_to_tex_file_data(std::string& tex_file_data, std::string& str, std::vector<size_t>& params) const {
     char buffer [10000];
     if (params.size() == 1) {
         sprintf(buffer, str.c_str(), params[0]);
@@ -58,7 +58,7 @@ void Saver::add_to_tex_file_data(std::string& tex_file_data, std::string& str, s
 }
 
 
-void Saver::add_to_tex_file_data(std::string& tex_file_data, std::string& str, std::vector<double>& params) {
+void Saver::add_to_tex_file_data(std::string& tex_file_data, std::string& str, std::vector<double>& params) const {
     char buffer [10000];
     if (params.size() == 1) {
         sprintf(buffer, str.c_str(), params[0]);
@@ -87,7 +87,7 @@ void Saver::add_to_tex_file_data(std::string& tex_file_data, std::string& str, s
 }
 
 
-void Saver::add_to_tex_file_data(std::string& tex_file_data, std::string& str, std::vector<std::string>& params) {
+void Saver::add_to_tex_file_data(std::string& tex_file_data, std::string& str, std::vector<std::string>& params) const {
     char buffer [10000];
     if (params.size() == 1) {
         sprintf(buffer, str.c_str(), params[0].c_str());
@@ -207,8 +207,11 @@ void Saver::save_initial_parameters_to_pdf(bool delete_tmp_files, bool delete_te
 \midrule[2pt]
 material & %s & -- \tabularnewline
 \hline
+ionization & %s & -- \tabularnewline
+\hline
 )";
-    std::vector<std::string> medium_params_1 = {pulsed_beam->medium->info};
+    std::vector<std::string> medium_params_1 = {pulsed_beam->medium->formula,
+                                                config_manager.ionization};
     Saver::add_to_tex_file_data(tex_file_data, medium_data_1, medium_params_1);
 
 

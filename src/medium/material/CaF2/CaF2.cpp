@@ -9,8 +9,8 @@ CaF2::CaF2() = default;
 CaF2::CaF2(ConfigManager& _config_manager, std::shared_ptr<Logger>& _logger)
 : BaseMedium(_config_manager, _logger) {
 
-    info = "CaF$_2$";
     name = "CaF2";
+    formula = "CaF$_2$";
 
     lambda_1 = 0.0502636050e-6;
     lambda_2 = 0.1003909000e-6;

@@ -29,8 +29,8 @@ public:
 
     std::shared_ptr<BaseIonization> ionization;
 
-    std::string info;
     std::string name;
+    std::string formula;
 
     // central wavelength
     double lambda_0;

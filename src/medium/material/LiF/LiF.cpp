@@ -9,8 +9,8 @@ LiF::LiF() = default;
 LiF::LiF(ConfigManager& _config_manager, std::shared_ptr<Logger>& _logger)
 : BaseMedium(_config_manager, _logger) {
 
-    info = "LiF";
     name = "LiF";
+    formula = "LiF";
 
     lambda_1 = 0.0737600000e-6;
     lambda_2 = 32.790000000e-6;

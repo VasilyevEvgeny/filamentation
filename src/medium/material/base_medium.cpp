@@ -66,7 +66,8 @@ BaseMedium::BaseMedium(ConfigManager& _config_manager, std::shared_ptr<Logger>& 
     // light speed
     c = constants.c;
 
-    info = "";
+    name = "";
+    formula = "";
 
     // omega_0
     omega_0 = 2 * M_PI * c / lambda_0;

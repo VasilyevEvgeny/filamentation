@@ -7,17 +7,20 @@
 #include "saver/saver.h"
 
 
-void Saver::add_to_yml_file_data(std::string& yml_file_data, std::string& str, std::vector<std::string>& params) {
+void Saver::add_to_yml_file_data(std::string& yml_file_data, std::string& str, std::vector<std::string>& params) const {
     char buffer [10000];
     if (params.size() == 1) {
         sprintf(buffer, str.c_str(), params[0].c_str());
+    }
+    if (params.size() == 3) {
+        sprintf(buffer, str.c_str(), params[0].c_str(), params[1].c_str(), params[2].c_str());
     }
 
     yml_file_data += std::string(buffer);
 }
 
 
-void Saver::add_to_yml_file_data(std::string& yml_file_data, std::string& str, std::vector<double>& params) {
+void Saver::add_to_yml_file_data(std::string& yml_file_data, std::string& str, std::vector<double>& params) const {
     char buffer [10000];
     if (params.size() == 6) {
         sprintf(buffer, str.c_str(), params[0], params[1], params[2], params[3], params[4], params[5]);
@@ -72,8 +75,12 @@ sellmeyer:
 
     std::string data_2 = R"(
 medium:
-    material: %s)";
-    std::vector<std::string> data_2_params = {pulsed_beam->medium->info};
+    name: %s
+    formula: %s
+    ionization: %s)";
+    std::vector<std::string> data_2_params = {pulsed_beam->medium->name,
+                                              pulsed_beam->medium->formula,
+                                              config_manager.ionization};
     Saver::add_to_yml_file_data(yml_file_data, data_2, data_2_params);
 
     std::string data_3 = R"(
