@@ -27,6 +27,7 @@ public:
 
     // info
     std::string prefix;
+    bool multidir;
     std::string path_to_project;
     std::string path_to_python_interpreter;
     std::string global_root_dir;

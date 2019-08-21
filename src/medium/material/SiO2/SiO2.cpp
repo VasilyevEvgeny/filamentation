@@ -14,7 +14,6 @@ SiO2::SiO2(ConfigManager& _config_manager, std::shared_ptr<Logger>& _logger)
     name = "SiO2";
     formula = "SiO$_2$";
 
-
     lambda_1 = 0.0684043000e-6;
     lambda_2 = 0.1162414000e-6;
     lambda_3 = 9.8961610000e-6;

@@ -1,5 +1,6 @@
 info:
   prefix: filament
+  multidir: true
   path_to_project: C:/Users/vasilyev/Documents/CLion/filamentation
   path_to_python_interpreter: C:/Users/vasilyev/Documents/venvs/filamentation/Scripts/python.exe
   global_root_dir: L:/Vasilyev
@@ -8,9 +9,9 @@ info:
 
 equation:
   diffraction: true
-  dispersion_full: false
-  dispersion_gvd: true
-  kerr_instant: false
+  dispersion_full: true
+  dispersion_gvd: false
+  kerr_instant: true
   kerr_inertial: false
   plasma: false
   bremsstrahlung: false
@@ -44,7 +45,7 @@ track:
   dz_0: 1e-5
   constant_dz: true
   print_current_state_every: 10
-  save_every: 50
+  save_every: 10
   save_field: true
   save_plasma: true
 

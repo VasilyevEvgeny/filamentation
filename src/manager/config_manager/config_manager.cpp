@@ -81,6 +81,17 @@ void ConfigManager::validate_config() {
             throw std::runtime_error("Wrong prefix!");
         }
 
+        std::string multidir_str = config.at("info").at("multidir");
+        if (multidir_str == "true") {
+            multidir = true;
+        }
+        else if (multidir_str == "false") {
+            multidir = false;
+        }
+        else {
+            throw std::runtime_error("Wrong multidir!");
+        }
+
         path_to_project = config.at("info").at("path_to_project");
         if (path_to_project.empty()) {
             throw std::runtime_error("Wrong path_to_project!");

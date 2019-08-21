@@ -10,11 +10,22 @@
 
 
 DirManager::DirManager(ConfigManager& _config_manager) {
-    global_results_dir = _config_manager.global_root_dir + "/" + _config_manager.global_results_dir_name;
-    ionization_tables_dir = _config_manager.global_root_dir + "/" + _config_manager.ionization_tables_dir_name;
 
-    current_results_dir_name = _config_manager.prefix + "_" + get_current_datetime();
+    if (!_config_manager.multidir) {
+
+        global_results_dir = _config_manager.global_root_dir + "/" + _config_manager.global_results_dir_name;
+
+        current_results_dir_name = _config_manager.prefix + "_" + get_current_datetime();
+    }
+    else {
+        global_results_dir = _config_manager.global_root_dir + "/" + _config_manager.global_results_dir_name + "/" +
+                _config_manager.prefix + "_" + get_current_datetime();
+
+        current_results_dir_name = get_current_datetime();
+    }
+
     current_results_dir = global_results_dir + "/" + current_results_dir_name;
+    ionization_tables_dir = _config_manager.global_root_dir + "/" + _config_manager.ionization_tables_dir_name;
 
     field_dir_name = "field";
     field_dir = current_results_dir + "/" + field_dir_name;
