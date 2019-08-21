@@ -7,14 +7,20 @@
 
 #include <string>
 #include <fstream>
+#include <chrono>
 
 #include "manager/dir_manager/dir_manager.h"
+#include "manager/config_manager/config_manager.h"
 
 class Logger {
 public:
     Logger();
-    explicit Logger(DirManager& _dir_manager, bool _verbose);
+    explicit Logger(ConfigManager& _config_manager,
+                    DirManager& _dir_manager,
+                    bool _verbose);
     ~Logger();
+
+    std::map<std::string, double> term_times;
 
     bool verbose;
 
@@ -26,6 +32,12 @@ public:
     std::ofstream time_log_handler;
 
     std::string get_current_datetime() const;
+    double duration(std::chrono::time_point<std::chrono::high_resolution_clock> t_start,
+                    std::chrono::time_point<std::chrono::high_resolution_clock> t_end) const;
+
+    std::string convert_seconds_to_time_string(double seconds);
+    void make_time_log();
+
 };
 
 

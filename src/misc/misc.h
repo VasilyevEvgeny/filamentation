@@ -6,6 +6,8 @@
 #define FILAMENTATION_FUNCTIONS_H
 
 #include <complex>
+#include <chrono>
+#include <iostream>
 
 int generate_random_number(int min, int max);
 
@@ -18,6 +20,9 @@ static struct Constants {
     const double mu_0 = 4.0 * M_PI * 1e-7;
     const std::complex<double> M_COMPLEX_I = std::complex<double>(0.0, 1.0);
 } constants;
+
+
+using TIME = std::chrono::high_resolution_clock;
 
 
 #endif //FILAMENTATION_FUNCTIONS_H

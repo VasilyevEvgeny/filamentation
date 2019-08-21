@@ -16,7 +16,6 @@
 #include "manager/config_manager/config_manager.h"
 
 
-//template <typename Medium>
 class BasePulsedBeam {
 public:
     BasePulsedBeam();
@@ -79,8 +78,6 @@ public:
 private:
 
 };
-
-
 
 
 #endif //FILAMENTATION_PULSEDBEAM_H

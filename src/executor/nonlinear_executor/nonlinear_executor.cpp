@@ -44,46 +44,53 @@ NonlinearExecutor::~NonlinearExecutor() = default;
 
 void NonlinearExecutor::execute(double dz) {
 
-    for(size_t k = 0; k < pb->n_r; ++k) {
-        for(size_t s = 1; s < pb->n_t - 1; ++s) {
+    if (!config_manager.active_nonlinear_terms.empty()) {
+        auto t_start = TIME::now();
 
-            // intensity
-            double I = norm(pb->field[k][s]) * pb->i_0;
-            double I_prev = norm(pb->field[k][s - 1]) * pb->i_0;
-            double dI = I - I_prev;
+        for(size_t k = 0; k < pb->n_r; ++k) {
+            for(size_t s = 1; s < pb->n_t - 1; ++s) {
 
-            // ionization rate
-            double R = pb->medium->ionization->R(I);
+                // intensity
+                double I = norm(pb->field[k][s]) * pb->i_0;
+                double I_prev = norm(pb->field[k][s - 1]) * pb->i_0;
+                double dI = I - I_prev;
 
-            // plasma
-            double Ne = pb->plasma[k][s];
-            double Ne_prev = pb->plasma[k][s - 1];
-            double dNe = Ne - Ne_prev;
+                // ionization rate
+                double R = pb->medium->ionization->R(I);
 
-            // dissipation
-            double Ne_increase_field = kinetic_equation->calculate_plasma_increase_field(Ne, R);
-            dissipation->update_R_dissipation(I, Ne_increase_field);
+                // plasma
+                double Ne = pb->plasma[k][s];
+                double Ne_prev = pb->plasma[k][s - 1];
+                double dNe = Ne - Ne_prev;
 
-            std::complex<double> increment = std::complex<double>(0.0, 0.0);
-            for(auto& nonlinear_term_name : config_manager.active_nonlinear_terms) {
+                // dissipation
+                double Ne_increase_field = kinetic_equation->calculate_plasma_increase_field(Ne, R);
+                dissipation->update_R_dissipation(I, Ne_increase_field);
 
-                increment +=   terms_pool[nonlinear_term_name]->R_kerr_instant * I
-                             + terms_pool[nonlinear_term_name]->R_kerr_instant_T * dI / dt
-                             + terms_pool[nonlinear_term_name]->R_plasma * Ne
-                             + terms_pool[nonlinear_term_name]->R_plasma_T * dNe / dt
-                             + terms_pool[nonlinear_term_name]->R_bremsstrahlung * Ne
-                             + terms_pool[nonlinear_term_name]->R_bremsstrahlung_T * dNe / dt
-                             + terms_pool[nonlinear_term_name]->R_dissipation;
+                std::complex<double> increment = std::complex<double>(0.0, 0.0);
+                for(auto& nonlinear_term_name : config_manager.active_nonlinear_terms) {
+
+                    increment +=     terms_pool[nonlinear_term_name]->R_kerr_instant * I
+                                   + terms_pool[nonlinear_term_name]->R_kerr_instant_T * dI / dt
+                                   + terms_pool[nonlinear_term_name]->R_plasma * Ne
+                                   + terms_pool[nonlinear_term_name]->R_plasma_T * dNe / dt
+                                   + terms_pool[nonlinear_term_name]->R_bremsstrahlung * Ne
+                                   + terms_pool[nonlinear_term_name]->R_bremsstrahlung_T * dNe / dt
+                                   + terms_pool[nonlinear_term_name]->R_dissipation;
+                }
+
+                pb->field[k][s] *= exp(increment * dz);
+
+
+
+                // plasma increase
+                double Ne_increase_full = kinetic_equation->calculate_plasma_increase_full(I, Ne, R);
+                pb->plasma[k][s + 1] = Ne + Ne_increase_full;
             }
-
-            pb->field[k][s] *= exp(increment * dz);
-
-
-
-            // plasma increase
-            double Ne_increase_full = kinetic_equation->calculate_plasma_increase_full(I, Ne, R);
-            pb->plasma[k][s + 1] = Ne + Ne_increase_full;
         }
+
+        auto t_end = TIME::now();
+        logger->term_times["nonlinearities"] += logger->duration(t_start, t_end);
     }
 }
 

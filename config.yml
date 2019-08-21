@@ -8,9 +8,9 @@ info:
 
 equation:
   diffraction: true
-  dispersion_full: true
-  dispersion_gvd: false
-  kerr_instant: true
+  dispersion_full: false
+  dispersion_gvd: true
+  kerr_instant: false
   kerr_inertial: false
   plasma: false
   bremsstrahlung: false
@@ -25,7 +25,7 @@ T:
 
 medium:
   material: CaF2
-  ionization: SmoothedKeldysh
+  ionization: OriginalKeldysh
 
 pulsed_beam:
   lambda_0: 1800e-9

@@ -4,7 +4,7 @@
 
 #include <vector>
 
-
+#include "misc/misc.h"
 #include "propagator.h"
 
 Propagator::Propagator() = default;
@@ -46,8 +46,6 @@ void Propagator::propagate() {
      * Main cycle
      */
 
-    auto t1 = std::chrono::high_resolution_clock::now();
-
     double z = 0.0;
     double dz = config_manager.dz_0;
     for (int step = 0; step < config_manager.n_z + 1; ++step) {
@@ -65,8 +63,20 @@ void Propagator::propagate() {
 
         if (config_manager.save_every) {
             if (!(step % config_manager.save_every)) {
-                saver.save_field(step);
-                saver.save_plasma(step);
+
+                if (config_manager.save_field) {
+                    auto t_start = TIME::now();
+                    saver.save_field(step);
+                    auto t_end = TIME::now();
+                    logger->term_times["save_field"] += logger->duration(t_start, t_end);
+                }
+
+                if (config_manager.save_plasma) {
+                    auto t_start = TIME::now();
+                    saver.save_plasma(step);
+                    auto t_end = TIME::now();
+                    logger->term_times["save_plasma"] += logger->duration(t_start, t_end);
+                }
             }
         }
 
@@ -78,13 +88,6 @@ void Propagator::propagate() {
             }
         }
     }
-
-    auto t2 = std::chrono::high_resolution_clock::now();
-
-    std::chrono::duration<float> fsec = t2 - t1;
-    std::chrono::hours d = std::chrono::duration_cast<std::chrono::hours>(fsec);
-
-    std::cout << fsec.count() << "s\n";
 
     saver.save_states_to_csv();
     saver.postprocessor.go();

@@ -35,7 +35,7 @@ int main(int argc, char** argv) {
      */
 
     bool verbose = true;
-    auto logger = std::make_shared<Logger>(dir_manager, verbose);
+    auto logger = std::make_shared<Logger>(config_manager, dir_manager, verbose);
 
     /*
      * postprocessor

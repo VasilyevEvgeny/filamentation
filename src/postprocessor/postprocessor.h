@@ -35,6 +35,7 @@ public:
     bool plot_track;
 
     virtual void go();
+    void postprocess (const std::string& module, const std::string& path_to_script, const std::string& log_info);
 };
 
 

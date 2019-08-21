@@ -14,11 +14,9 @@
 #include "base_pulsed_beam.h"
 #include "logger/logger.h"
 
-//template<typename Medium>
 BasePulsedBeam::BasePulsedBeam() = default;
 
 
-//template <typename Medium>
 BasePulsedBeam::BasePulsedBeam(
         std::shared_ptr<BaseMedium>& _medium,
         ConfigManager& _config_manager,
@@ -90,19 +88,10 @@ BasePulsedBeam::BasePulsedBeam(
 }
 
 
-
-
-
-//template<typename Medium>
 BasePulsedBeam::~BasePulsedBeam() {
     field.erase(field.begin(), field.end());
     spectrum.erase(spectrum.begin(), spectrum.end());
     plasma.erase(plasma.begin(), plasma.end());
 }
 
-//template class BasePulsedBeam<SiO2>;
-//template class BasePulsedBeam<CaF2>;
-//template class BasePulsedBeam<LiF>;
-//
-//template class BasePulsedBeam<BaseMedium>;
 
