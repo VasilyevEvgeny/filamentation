@@ -13,14 +13,20 @@ DispersionGVD::DispersionGVD() = default;
 
 DispersionGVD::DispersionGVD(std::shared_ptr<BasePulsedBeam>& _pulsed_beam)
 : BaseDispersion(_pulsed_beam, false){
-    mode = "sweep";
+    set_mode(std::string("fft"));
 
-    base::name = "dispersion_gvd";
+    base::name = "dispersion_gvd_" + mode;
     base::formula = R"( -k_0 k_2 \frac{\partial^2 A(r,t,z)}{\partial t^2} )";
 }
 
 DispersionGVD::~DispersionGVD() = default;
 
+
+void DispersionGVD::set_mode(const std::string& _mode) {
+    mode = _mode;
+
+    base::name = "dispersion_gvd_" + mode;
+}
 
 void DispersionGVD::process(double dz) {
     if (mode == "fft") {

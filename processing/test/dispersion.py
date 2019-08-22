@@ -12,7 +12,7 @@ sys.path.insert(0, '/'.join((sys.path[0].replace('\\', '/')).split('/')[:-2]))
 from processing.core import parse_args, IntensityRT, Track
 
 
-class TestDiffraction(TestCase):
+class TestDispersion(TestCase):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
@@ -52,7 +52,6 @@ class TestDiffraction(TestCase):
 
     def __add_analytics_to_df(self):
         t_0 = self.__parameters['pulsed_beam']['t_0']
-        k_0 = self.__parameters['medium']['k_0']
 
         self.__df_propagation['analytics'] = 0.0
         n = len(self.__df_propagation)
@@ -119,5 +118,5 @@ class TestDiffraction(TestCase):
         self.__check()
 
 
-test_diffraction = TestDiffraction()
-test_diffraction.process()
+test_dispersion = TestDispersion()
+test_dispersion.process()

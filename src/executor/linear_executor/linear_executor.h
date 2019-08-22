@@ -32,8 +32,11 @@ public:
     // linear terms
     std::shared_ptr<Diffraction> diffraction;
     std::shared_ptr<DispersionFull> dispersion_full;
-    std::shared_ptr<DispersionGVD> dispersion_gvd;
+    std::shared_ptr<DispersionGVD> dispersion_gvd_sweep;
+    std::shared_ptr<DispersionGVD> dispersion_gvd_fft;
 
+    void preprocess_active_linear_terms();
+    std::vector<std::string> active_linear_terms_upd;
     std::map<std::string, std::shared_ptr<BaseLinearTerm>> terms_pool;
 
     void execute(double dz) override;

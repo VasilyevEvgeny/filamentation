@@ -11,7 +11,8 @@ info:
 equation:
   diffraction: true
   dispersion_full: true
-  dispersion_gvd: false
+  dispersion_gvd_sweep: false
+  dispersion_gvd_fft: false
   kerr_instant: true
   kerr_inertial: false
   plasma: false

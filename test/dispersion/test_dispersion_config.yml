@@ -1,6 +1,6 @@
 info:
   verbose: true
-  prefix: test_diffraction
+  prefix: test_dispersion
   multidir: true
   path_to_project: C:/Users/vasilyev/Documents/CLion/filamentation
   path_to_python_interpreter: C:/Users/vasilyev/Documents/venvs/filamentation/Scripts/python.exe
@@ -9,7 +9,7 @@ info:
   ionization_tables_dir_name: Filamentation_ionization_tables
 
 equation:
-  diffraction: true
+  diffraction: false
   dispersion_full: false
   dispersion_gvd_sweep: false
   dispersion_gvd_fft: false

@@ -21,6 +21,8 @@ public:
     void process_fft(double dz);
     void process_sweep(double dz);
 
+    void set_mode(const std::string& _mode);
+
 
 };
 

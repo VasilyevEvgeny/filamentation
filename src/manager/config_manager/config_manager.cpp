@@ -162,16 +162,22 @@ void ConfigManager::validate_config() {
 
         // dispersion
         bool dispersion_full = readout_bool(std::string("equation"), std::string("dispersion_full"));
-        bool dispersion_gvd = readout_bool(std::string("equation"), std::string("dispersion_gvd"));
+        dispersion_gvd_sweep = readout_bool(std::string("equation"), std::string("dispersion_gvd_sweep"));
+        bool dispersion_gvd_fft = readout_bool(std::string("equation"), std::string("dispersion_gvd_fft"));
 
-        if (dispersion_full && !dispersion_gvd) {
+        if (dispersion_full && !dispersion_gvd_sweep && !dispersion_gvd_fft) {
             active_linear_terms.emplace_back("dispersion_full");
         }
-        else if (!dispersion_full && dispersion_gvd) {
+        else if (!dispersion_full && dispersion_gvd_sweep && !dispersion_gvd_fft) {
             active_linear_terms.emplace_back("dispersion_gvd");
         }
-        else if (dispersion_full && dispersion_gvd) {
-            throw std::runtime_error("Two dispersions in wave equation!");
+        else if (!dispersion_full && !dispersion_gvd_sweep && dispersion_gvd_fft) {
+            active_linear_terms.emplace_back("dispersion_gvd_fft");
+        }
+        else if ((dispersion_full && dispersion_gvd_sweep) ||
+                 (dispersion_full && dispersion_gvd_fft) ||
+                 (dispersion_gvd_sweep && dispersion_gvd_fft)) {
+            throw std::runtime_error(">1 dispersions in wave equation!");
         }
 
         // kerr_instant

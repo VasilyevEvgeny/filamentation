@@ -16,14 +16,12 @@ Saver::Saver(std::shared_ptr<BasePulsedBeam>& _pulsed_beam,
              std::shared_ptr<NonlinearExecutor>& _nonlinear_executor,
              ConfigManager& _config_manager,
              DirManager& _dir_manager,
-             //std::shared_ptr<Postprocessor>& _postprocessor,
              std::shared_ptr<Logger>& _logger)
 : pulsed_beam(_pulsed_beam)
 , linear_executor(_linear_executor)
 , nonlinear_executor(_nonlinear_executor)
 , config_manager(_config_manager)
 , dir_manager(_dir_manager)
-//, postprocessor(_postprocessor)
 , logger(_logger) {
 
     logger->add_propagation_event(std::string("creating saver"));

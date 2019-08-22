@@ -44,6 +44,7 @@ public:
     // equation
     std::vector<std::string> active_linear_terms;
     std::vector<std::string> active_nonlinear_terms;
+    bool dispersion_gvd_sweep;
     std::map<std::string, bool> T;
     std::map<std::string, bool> kerr_info;
 
