@@ -24,6 +24,13 @@ public:
     std::string path_to_config;
     std::map<std::string, std::map<std::string, std::string>> config;
 
+    // readout
+    std::string readout_string(const std::string& global_key, const std::string& local_key);
+    std::string readout_string(const std::string& global_key, const std::string& local_key, const std::vector<std::string>& valid);
+    bool readout_bool(const std::string& global_key, const std::string& local_key);
+    double readout_double(const std::string& global_key, const std::string& local_key, const std::vector<double>& minmax);
+    size_t readout_int(const std::string& global_key, const std::string& local_key, const std::vector<size_t>& minmax);
+
     // info
     bool verbose;
     std::string prefix;

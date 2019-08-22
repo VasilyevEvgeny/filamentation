@@ -7,6 +7,7 @@
 #include <sstream>
 #include <fstream>
 #include <omp.h>
+#include <algorithm>
 
 
 
@@ -68,6 +69,72 @@ void ConfigManager::print_config() {
     }
 }
 
+std::string ConfigManager::readout_string(const std::string& global_key,
+                                          const std::string& local_key) {
+
+    std::string value = config.at(global_key).at(local_key);
+    if (value.empty()) {
+        throw std::runtime_error("Wrong " + local_key + "!");
+    }
+
+    return value;
+}
+
+std::string ConfigManager::readout_string(const std::string& global_key,
+                                          const std::string& local_key,
+                                          const std::vector<std::string>& valid) {
+
+    std::string value = readout_string(global_key, local_key);
+    if (std::find(valid.begin(), valid.end(), value) != valid.end()) {
+        return value;
+    }
+    else {
+        throw std::runtime_error("Wrong " + local_key + "!");
+    }
+
+    return value;
+}
+
+bool ConfigManager::readout_bool(const std::string& global_key,
+                                 const std::string& local_key) {
+
+    std::string value = config.at(global_key).at(local_key);
+    if (value == "true") {
+        return true;
+    }
+    else if (value == "false") {
+        return false;
+    }
+    else {
+        throw std::runtime_error("Wrong " + local_key + "!");
+    }
+}
+
+double ConfigManager::readout_double(const std::string& global_key,
+                                     const std::string& local_key,
+                                     const std::vector<double>& minmax) {
+
+    double value = std::stod(config.at(global_key).at(local_key));
+    if (value < minmax[0] || value > minmax[1]) {
+        throw std::runtime_error("Wrong " + local_key + "!");
+    }
+
+    return value;
+}
+
+size_t ConfigManager::readout_int(const std::string& global_key,
+                                     const std::string& local_key,
+                                     const std::vector<size_t>& minmax) {
+
+    size_t value = std::stoi(config.at(global_key).at(local_key));
+    if (value < minmax[0] || value > minmax[1]) {
+        throw std::runtime_error("Wrong " + local_key + "!");
+    }
+
+    return value;
+}
+
+
 void ConfigManager::validate_config() {
 
     try {
@@ -76,99 +143,26 @@ void ConfigManager::validate_config() {
          * INFO
          */
 
-        std::string verbose_str = config.at("info").at("verbose");
-        if (verbose_str == "true") {
-            verbose = true;
-        }
-        else if (verbose_str == "false") {
-            verbose = false;
-        }
-        else {
-            throw std::runtime_error("Wrong verbose!");
-        }
-
-        prefix = config.at("info").at("prefix");
-        if (prefix.empty()) {
-            throw std::runtime_error("Wrong prefix!");
-        }
-
-        std::string multidir_str = config.at("info").at("multidir");
-        if (multidir_str == "true") {
-            multidir = true;
-        }
-        else if (multidir_str == "false") {
-            multidir = false;
-        }
-        else {
-            throw std::runtime_error("Wrong multidir!");
-        }
-
-        path_to_project = config.at("info").at("path_to_project");
-        if (path_to_project.empty()) {
-            throw std::runtime_error("Wrong path_to_project!");
-        }
-
-        path_to_python_interpreter = config.at("info").at("path_to_python_interpreter");
-        if (path_to_python_interpreter.empty()) {
-            throw std::runtime_error("Wrong path_to_python_interpreter!");
-        }
-
-        global_root_dir = config.at("info").at("global_root_dir");
-        if (global_root_dir.empty()) {
-            throw std::runtime_error("Wrong global_root_dir!");
-        }
-
-        global_results_dir_name = config.at("info").at("global_results_dir_name");
-        if (global_results_dir_name.empty()) {
-            throw std::runtime_error("Wrong global_results_dir_name!");
-        }
-
-        ionization_tables_dir_name = config.at("info").at("ionization_tables_dir_name");
-        if (ionization_tables_dir_name.empty()) {
-            throw std::runtime_error("Wrong ionization_tables_dir_name!");
-        }
+        verbose = readout_bool(std::string("info"), std::string("verbose"));
+        prefix = readout_string(std::string("info"), std::string("prefix"));
+        multidir = readout_bool(std::string("info"), std::string("multidir"));
+        path_to_project = readout_string(std::string("info"), std::string("path_to_project"));
+        path_to_python_interpreter = readout_string(std::string("info"), std::string("path_to_python_interpreter"));
+        global_root_dir = readout_string(std::string("info"), std::string("global_root_dir"));
+        global_results_dir_name = readout_string(std::string("info"), std::string("global_results_dir_name"));
+        ionization_tables_dir_name = readout_string(std::string("info"), std::string("ionization_tables_dir_name"));
 
         /*
          * EQUATION
          */
 
         // diffraction
-        bool diffraction;
-        if (config.at("equation").at("diffraction") == "true") {
-            diffraction = true;
-        }
-        else if (config.at("equation").at("diffraction") == "false") {
-            diffraction = false;
-        }
-        else {
-            throw std::runtime_error("Wrong diffraction!");
-        }
-        if (diffraction) {
-            active_linear_terms.emplace_back("diffraction");
-        }
+        bool diffraction = readout_bool(std::string("equation"), std::string("diffraction"));
+        if (diffraction) { active_linear_terms.emplace_back("diffraction"); }
 
         // dispersion
-        bool dispersion_full;
-        if (config.at("equation").at("dispersion_full") == "true") {
-            dispersion_full = true;
-        }
-        else if (config.at("equation").at("dispersion_full") == "false") {
-            dispersion_full = false;
-        }
-        else {
-            throw std::runtime_error("Wrong dispersion_full!");
-        }
-
-        bool dispersion_gvd;
-        if (config.at("equation").at("dispersion_gvd") == "true") {
-            dispersion_gvd = true;
-        }
-        else if (config.at("equation").at("dispersion_gvd") == "false") {
-            dispersion_gvd = false;
-        }
-        else {
-            throw std::runtime_error("Wrong dispersion_gvd!");
-        }
+        bool dispersion_full = readout_bool(std::string("equation"), std::string("dispersion_full"));
+        bool dispersion_gvd = readout_bool(std::string("equation"), std::string("dispersion_gvd"));
 
         if (dispersion_full && !dispersion_gvd) {
             active_linear_terms.emplace_back("dispersion_full");
@@ -181,79 +175,24 @@ void ConfigManager::validate_config() {
         }
 
         // kerr_instant
-        bool kerr_instant;
-        if (config.at("equation").at("kerr_instant") == "true") {
-            kerr_instant = true;
-        }
-        else if (config.at("equation").at("kerr_instant") == "false") {
-            kerr_instant = false;
-        }
-        else {
-            throw std::runtime_error("Wrong kerr_instant!");
-        }
-
-        // kerr_inertial
-        bool kerr_inertial;
-        if (config.at("equation").at("kerr_inertial") == "true") {
-            kerr_inertial = true;
-        }
-        else if (config.at("equation").at("kerr_inertial") == "false") {
-            kerr_inertial = false;
-        }
-        else {
-            throw std::runtime_error("Wrong kerr_inertial!");
-        }
+        bool kerr_instant = readout_bool(std::string("equation"), std::string("kerr_instant"));
+        bool kerr_inertial = readout_bool(std::string("equation"), std::string("kerr_inertial"));
 
         kerr_info.insert({"instant", kerr_instant});
         kerr_info.insert({"inertial", kerr_inertial});
-        if (kerr_instant || kerr_inertial) {
-            active_nonlinear_terms.emplace_back("kerr");
-        }
+        if (kerr_instant || kerr_inertial) { active_nonlinear_terms.emplace_back("kerr"); }
 
         // plasma
-        bool plasma;
-        if (config.at("equation").at("plasma") == "true") {
-            plasma = true;
-        }
-        else if (config.at("equation").at("plasma") == "false") {
-            plasma = false;
-        }
-        else {
-            throw std::runtime_error("Wrong plasma!");
-        }
-        if (plasma) {
-            active_nonlinear_terms.emplace_back("plasma");
-        }
+        bool plasma = readout_bool(std::string("equation"), std::string("plasma"));
+        if (plasma) { active_nonlinear_terms.emplace_back("plasma"); }
 
         // bremsstrahlung
-        bool bremsstrahlung;
-        if (config.at("equation").at("bremsstrahlung") == "true") {
-            bremsstrahlung = true;
-        }
-        else if (config.at("equation").at("bremsstrahlung") == "false") {
-            bremsstrahlung = false;
-        }
-        else {
-            throw std::runtime_error("Wrong bremsstrahlung!");
-        }
-        if (bremsstrahlung) {
-            active_nonlinear_terms.emplace_back("bremsstrahlung");
-        }
+        bool bremsstrahlung = readout_bool(std::string("equation"), std::string("bremsstrahlung"));
+        if (bremsstrahlung) { active_nonlinear_terms.emplace_back("bremsstrahlung"); }
 
         // dissipation
-        bool dissipation;
-        if (config.at("equation").at("dissipation") == "true") {
-            dissipation = true;
-        }
-        else if (config.at("equation").at("dissipation") == "false") {
-            dissipation = false;
-        }
-        else {
-            throw std::runtime_error("Wrong dissipation!");
-        }
-        if (dissipation) {
-            active_nonlinear_terms.emplace_back("dissipation");
-        }
+        bool dissipation = readout_bool(std::string("equation"), std::string("dissipation"));
+        if (dissipation) { active_nonlinear_terms.emplace_back("dissipation"); }
 
 
         /*
@@ -261,229 +200,77 @@ void ConfigManager::validate_config() {
          */
 
         // diffraction
-        bool T_diffraction;
-        if (config.at("T").at("diffraction") == "true") {
-            T_diffraction = true;
-        }
-        else if (config.at("T").at("diffraction") == "false") {
-            T_diffraction = false;
-        }
-        else {
-            throw std::runtime_error("Wrong T_diffraction!");
-        }
+        bool T_diffraction = readout_bool(std::string("T"), std::string("diffraction"));
         T.insert({"diffraction", T_diffraction});
 
         // dispersion
-        bool T_dispersion;
-        if (config.at("T").at("dispersion") == "true") {
-            T_dispersion = true;
-        }
-        else if (config.at("T").at("dispersion") == "false") {
-            T_dispersion = false;
-        }
-        else {
-            throw std::runtime_error("Wrong T_dispersion!");
-        }
+        bool T_dispersion = readout_bool(std::string("T"), std::string("dispersion"));
         T.insert({"dispersion", T_dispersion});
 
         // kerr
-        bool T_kerr;
-        if (config.at("T").at("kerr") == "true") {
-            T_kerr = true;
-        }
-        else if (config.at("T").at("kerr") == "false") {
-            T_kerr = false;
-        }
-        else {
-            throw std::runtime_error("Wrong T_kerr!");
-        }
+        bool T_kerr = readout_bool(std::string("T"), std::string("kerr"));
         T.insert({"kerr", T_kerr});
 
         // plasma
-        bool T_plasma;
-        if (config.at("T").at("plasma") == "true") {
-            T_plasma = true;
-        }
-        else if (config.at("T").at("plasma") == "false") {
-            T_plasma = false;
-        }
-        else {
-            throw std::runtime_error("Wrong T_plasma!");
-        }
+        bool T_plasma = readout_bool(std::string("T"), std::string("plasma"));
         T.insert({"plasma", T_plasma});
 
         // bremsstrahlung
-        bool T_bremsstrahlung;
-        if (config.at("T").at("bremsstrahlung") == "true") {
-            T_bremsstrahlung = true;
-        }
-        else if (config.at("T").at("bremsstrahlung") == "false") {
-            T_bremsstrahlung = false;
-        }
-        else {
-            throw std::runtime_error("Wrong T_plasma!");
-        }
+        bool T_bremsstrahlung = readout_bool(std::string("T"), std::string("bremsstrahlung"));
         T.insert({"bremsstrahlung", T_bremsstrahlung});
 
         /*
          * MEDIUM
          */
 
-        medium = config.at("medium").at("material");
-        if (medium != "SiO2" && medium != "CaF2" && medium != "LiF") {
-            throw std::runtime_error("Wrong medium!");
-        }
-
-        ionization = config.at("medium").at("ionization");
-        if (ionization != "OriginalKeldysh" && ionization != "SmoothedKeldysh") {
-            throw std::runtime_error("Wrong ionization!");
-        }
-
+        medium = readout_string(std::string("medium"), std::string("name"), {"SiO2", "CaF2", "LiF"});
+        ionization = readout_string(std::string("medium"), std::string("ionization"), {"OriginalKeldysh", "SmoothedKeldysh"});
 
         /*
          * PULSED_BEAM
          */
-
-        lambda_0 = std::stod(config.at("pulsed_beam").at("lambda_0"));
-        if (lambda_0 < 300e-9 || lambda_0 > 5e-6) {
-            throw std::runtime_error("Wrong lambda_0!");
-        }
-
-        r_0 = std::stod(config.at("pulsed_beam").at("r_0"));
-        if (r_0 < 10e-6 || r_0 > 500e-6) {
-            throw std::runtime_error("Wrong r_0!");
-        }
-
-        t_0 = std::stod(config.at("pulsed_beam").at("t_0"));
-        if (t_0 < 10e-15 || t_0 > 200e-15) {
-            throw std::runtime_error("Wrong t_0!");
-        }
-
-        M = std::stoi(config.at("pulsed_beam").at("M"));
-        if (M < 0 || M > 5) {
-            throw std::runtime_error("Wrong M!");
-        }
-
-        m = std::stoi(config.at("pulsed_beam").at("m"));
-        if (m < 0 || m > 5) {
-            throw std::runtime_error("Wrong m!");
-        }
-
-        p_0_to_p_cr = std::stod(config.at("pulsed_beam").at("p_0_to_p_cr"));
-        if (p_0_to_p_cr < 0.1 || p_0_to_p_cr > 500) {
-            throw std::runtime_error("Wrong p_0_to_p_cr!");
-        }
+        lambda_0 = readout_double(std::string("pulsed_beam"), std::string("lambda_0"), {300e-9, 5e-6});
+        r_0 = readout_double(std::string("pulsed_beam"), std::string("r_0"), {10e-6, 500e-6});
+        t_0 = readout_double(std::string("pulsed_beam"), std::string("t_0"), {10e-15, 200e-15});
+        M = readout_int(std::string("pulsed_beam"), std::string("M"), {0, 5});
+        m = readout_int(std::string("pulsed_beam"), std::string("m"), {0, 5});
+        p_0_to_p_cr = readout_double(std::string("pulsed_beam"), std::string("p_0_to_p_cr"), {0.1, 500});
 
         /*
          * GRID
          */
 
-        n_r = std::stoi(config.at("grid").at("n_r"));
-        if (n_r < 1 || n_r > 16000) {
-            throw std::runtime_error("Wrong n_r!");
-        }
-
-        n_t = std::stoi(config.at("grid").at("n_t"));
-        if (n_t < 1 || n_t > 32000) {
-            throw std::runtime_error("Wrong n_t!");
-        }
+        n_r = readout_int(std::string("grid"), std::string("n_r"), {128, 16000});
+        n_t = readout_int(std::string("grid"), std::string("n_t"), {128, 32000});
 
         /*
          * TRACK
          */
 
-        n_z = std::stoi(config.at("track").at("n_z"));
-        if (n_z < 1 || n_z > 100000) {
-            throw std::runtime_error("Wrong n_z!");
-        }
-
-        dz_0 = std::stod(config.at("track").at("dz_0"));
-        if (dz_0 < 1e-10 || dz_0 > 1) {
-            throw std::runtime_error("Wrong dz_0!");
-        }
-
-        print_current_state_every = std::stoi(config.at("track").at("print_current_state_every"));
-        if (print_current_state_every < 0) {
-            throw std::runtime_error("Wrong print_current_state_every!");
-        }
-
-        save_every = std::stoi(config.at("track").at("save_every"));
-        if (save_every < 0) {
-            throw std::runtime_error("Wrong save_every!");
-        }
-
-        if (config.at("track").at("save_field") == "true") {
-            save_field = true;
-        }
-        else if (config.at("track").at("save_field") == "false") {
-            save_field = false;
-        }
-        else {
-            throw std::runtime_error("Wrong save_field!");
-        }
-
-        if (config.at("track").at("save_plasma") == "true") {
-            save_plasma = true;
-        }
-        else if (config.at("track").at("save_plasma") == "false") {
-            save_plasma = false;
-        }
-        else {
-            throw std::runtime_error("Wrong save_plasma!");
-        }
+        n_z = readout_int(std::string("track"), std::string("n_z"), {1, 100000});
+        dz_0 = readout_double(std::string("track"), std::string("dz_0"), {1e-10, 1});
+        print_current_state_every = readout_int(std::string("track"), std::string("print_current_state_every"), {0, 100000});
+        save_every = readout_int(std::string("track"), std::string("save_every"), {0, 100000});
+        save_field = readout_bool(std::string("track"), std::string("save_field"));
+        save_plasma = readout_bool(std::string("track"), std::string("save_plasma"));
 
         /*
          * PLOT
          */
 
-        if (config.at("plot").at("plot_intensity_rt") == "true") {
-            plot_intensity_rt = true;
-        }
-        else if (config.at("plot").at("plot_intensity_rt") == "false") {
-            plot_intensity_rt = false;
-        }
-        else {
-            throw std::runtime_error("Wrong plot_intensity_rt!");
-        }
-
-        if (config.at("plot").at("plot_plasma_rt") == "true") {
-            plot_plasma_rt = true;
-        }
-        else if (config.at("plot").at("plot_plasma_rt") == "false") {
-            plot_plasma_rt = false;
-        }
-        else {
-            throw std::runtime_error("Wrong plot_plasma_rt!");
-        }
-
-        if (config.at("plot").at("plot_track") == "true") {
-            plot_track = true;
-        }
-        else if (config.at("plot").at("plot_track") == "false") {
-            plot_track = false;
-        }
-        else {
-            throw std::runtime_error("Wrong plot_track!");
-        }
+        plot_intensity_rt = readout_bool(std::string("plot"), std::string("plot_intensity_rt"));
+        plot_plasma_rt = readout_bool(std::string("plot"), std::string("plot_plasma_rt"));
+        plot_track = readout_bool(std::string("plot"), std::string("plot_track"));
 
         /*
          * OTHER
          */
-
-        num_threads = std::stoi(config.at("other").at("num_threads"));
-        if (num_threads < 1 or num_threads > omp_get_num_procs()) {
-            throw std::runtime_error("Wrong num_threads!");
-        }
-
+        num_threads = readout_int(std::string("other"), std::string("num_threads"), {1, (size_t)omp_get_num_procs()});
 
     }
     catch (std::runtime_error &e) {
         std::cerr << "Exception: " << e.what() << std::endl;
         exit(-1);
     }
-
-
-
-
 
 }
