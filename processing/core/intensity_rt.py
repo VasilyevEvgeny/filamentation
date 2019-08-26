@@ -27,9 +27,9 @@ class IntensityRT(BaseReadout):
 
         # parameters
         self.__n_r = self._parameters['grid']['n_r']
-        self.__h_r = self._parameters['grid']['h_r']
+        self.__dr = self._parameters['grid']['dr']
         self.__n_t = self._parameters['grid']['n_t']
-        self.__h_t = self._parameters['grid']['h_t']
+        self.__dt = self._parameters['grid']['dt']
         self.__i_0 = self._parameters['pulsed_beam']['i_0']
 
         # mode -> flat or volume
@@ -50,8 +50,8 @@ class IntensityRT(BaseReadout):
                 raise Exception('Wrong normalize value!')
 
         # processing
-        self.__ts = [(self.__n_t / 2 - s) * self.__h_t for s in range(self.__n_t)]
-        self.__rs = [k * self.__h_r for k in range(self.__n_r)]
+        self.__ts = [(self.__n_t / 2 - s) * self.__dt for s in range(self.__n_t)]
+        self.__rs = [k * self.__dr for k in range(self.__n_r)]
         self.__ts_cropped, self.__rs_cropped = None, None
         self.__t_left = kwargs['t_left']
         self.__t_right = kwargs['t_right']

@@ -56,12 +56,12 @@ void Saver::save_initial_parameters_to_yml() {
 
     std::string data_1 = R"(
 sellmeyer:
-    C_1: %g
-    C_2: %g
-    C_3: %g
-    lambda_1: %g
-    lambda_2: %g
-    lambda_3: %g
+    C_1: %e
+    C_2: %e
+    C_3: %e
+    lambda_1: %e
+    lambda_2: %e
+    lambda_3: %e
 )";
     std::vector<double> data_1_params = {pulsed_beam->medium->C_1,
                                          pulsed_beam->medium->C_2,
@@ -84,21 +84,21 @@ medium:
     Saver::add_to_yml_file_data(yml_file_data, data_2, data_2_params);
 
     std::string data_3 = R"(
-    n_0: %g
-    k_0: %g
-    k_1: %g
-    k_2: %g
-    n_2: %g
-    g: %g
-    Omega_R: %g
-    tau_k: %g
-    Delta_t: %g
-    N_0: %g
-    v_ei: %g
-    beta: %g
-    U_i_in_eV: %g
-    K: %g
-    delta: %g
+    n_0: %e
+    k_0: %e
+    k_1: %e
+    k_2: %e
+    n_2: %e
+    g: %e
+    Omega_R: %e
+    tau_k: %e
+    Delta_t: %e
+    N_0: %e
+    v_ei: %e
+    beta: %e
+    U_i_in_eV: %e
+    K: %e
+    delta: %e
 )";
 
     std::vector<double> data_3_params = {pulsed_beam->medium->n_0,
@@ -131,30 +131,30 @@ pulsed_beam:
     std::string data_5 = R"(
     M: %.0f
     m: %.0f
-    r_0: %g
-    t_0: %g
-    lambda_0: %g
-    z_diff: %g
-    z_disp: %g
-    p_0_to_p_cr: %g
-    p_cr_to_p_g: %g
-    p_g: %g
-    p_0: %g
-    i_max_to_i_0: %g
-    i_0: %g
-    e_0: %g
+    r_0: %e
+    t_0: %e
+    lambda_0: %e
+    z_diff: %e
+    z_disp: %e
+    p_0_to_p_cr: %e
+    p_cr_to_p_g: %e
+    p_g: %e
+    p_0: %e
+    i_max_to_i_0: %e
+    i_0: %e
+    e_0: %e
 
 grid:
-    r_max: %g
+    r_max: %e
     n_r: %.0f
-    h_r: %g
-    t_max: %g
+    dr: %e
+    t_max: %e
     n_t: %.0f
-    h_t: %g
+    dt: %g
 
 track:
     n_z: %0.f
-    h_z_0: %g)";
+    dz_0: %e)";
     std::vector<double> data_5_params = {(double)pulsed_beam->M,
                                          (double)pulsed_beam->m,
                                          pulsed_beam->r_0,

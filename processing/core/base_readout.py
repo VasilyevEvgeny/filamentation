@@ -6,7 +6,9 @@ from time import sleep
 from yaml import safe_load
 from numba import jit
 from numpy import zeros, copy, append
+from numpy import float64, int64
 from pandas import read_csv
+from cerberus import Validator
 
 
 def parse_args():
@@ -29,6 +31,81 @@ class BaseReadout:
         self._field_paths = []
         self._plasma_paths = []
         self._parameters = None
+        self.__schema = {
+            'sellmeyer': {
+                'type': 'dict',
+                'schema': {
+                    'C_1': {'type': 'float', 'required': True},
+                    'C_2': {'type': 'float', 'required': True},
+                    'C_3': {'type': 'float', 'required': True},
+                    'lambda_1': {'type': 'float', 'required': True},
+                    'lambda_2': {'type': 'float', 'required': True},
+                    'lambda_3': {'type': 'float', 'required': True}
+                }
+            },
+            'medium': {
+                'type': 'dict',
+                'schema': {
+                    'name': {'type': 'string', 'required': True},
+                    'formula': {'type': 'string', 'required': True},
+                    'ionization': {'type': 'string', 'required': True},
+                    'n_0': {'type': 'float', 'required': True},
+                    'k_0': {'type': 'float', 'required': True},
+                    'k_1': {'type': 'float', 'required': True},
+                    'k_2': {'type': 'float', 'required': True},
+                    'n_2': {'type': 'float', 'required': True},
+                    'g': {'type': 'float', 'required': True},
+                    'Omega_R': {'type': 'float', 'required': True},
+                    'tau_k': {'type': 'float', 'required': True},
+                    'Delta_t': {'type': 'float', 'required': True},
+                    'N_0': {'type': 'float', 'required': True},
+                    'v_ei': {'type': 'float', 'required': True},
+                    'beta': {'type': 'float', 'required': True},
+                    'U_i_in_eV': {'type': 'float', 'required': True},
+                    'K': {'type': 'float', 'required': True},
+                    'delta': {'type': 'float', 'required': True}
+                }
+            },
+            'pulsed_beam': {
+                'type': 'dict',
+                'schema': {
+                    'space_distribution': {'type': 'string', 'required': True},
+                    'M': {'type': 'integer', 'required': True},
+                    'm': {'type': 'integer', 'required': True},
+                    'r_0': {'type': 'float', 'required': True},
+                    't_0': {'type': 'float', 'required': True},
+                    'lambda_0': {'type': 'float', 'required': True},
+                    'z_diff': {'type': 'float', 'required': True},
+                    'z_disp': {'type': 'float', 'required': True},
+                    'p_0_to_p_cr': {'type': 'float', 'required': True},
+                    'p_cr_to_p_g': {'type': 'float', 'required': True},
+                    'p_g': {'type': 'float', 'required': True},
+                    'p_0': {'type': 'float', 'required': True},
+                    'i_max_to_i_0': {'type': 'float', 'required': True},
+                    'i_0': {'type': 'float', 'required': True},
+                    'e_0': {'type': 'float', 'required': True}
+                }
+            },
+            'grid': {
+                'type': 'dict',
+                'schema': {
+                    'r_max': {'type': 'float', 'required': True},
+                    'n_r': {'type': 'integer', 'required': True},
+                    'dr': {'type': 'float', 'required': True},
+                    't_max': {'type': 'float', 'required': True},
+                    'n_t': {'type': 'integer', 'required': True},
+                    'dt': {'type': 'float', 'required': True}
+                }
+            },
+            'track': {
+                'type': 'dict',
+                'schema': {
+                    'n_z': {'type': 'integer', 'required': True},
+                    'dz_0': {'type': 'float', 'required': True}
+                }
+            }
+        }
+
         self._df_propagation = None
 
         self._language = kwargs['language']
@@ -60,6 +137,7 @@ class BaseReadout:
 
     def _readout_propagation(self):
         self._df_propagation = read_csv(self._args.current_results_dir + '/propagation.csv', sep='|')
+
         self._df_propagation.columns = [name.lstrip() for name in self._df_propagation.columns]
 
         # add z_normalized
@@ -77,9 +155,18 @@ class BaseReadout:
         # add i_max_normalized
         self._df_propagation['i_max, [TW/cm^2]'] = self._df_propagation['i_max, [W/m^2]'] / 1e16
 
+        self._df_propagation = self._df_propagation.astype(float64)
+        self._df_propagation['step'] = self._df_propagation['step'].astype(int64)
+
+        print(self._df_propagation.dtypes)
+
     def _readout_parameters(self):
         with open(self._args.current_results_dir + '/parameters.yml', 'r') as f:
             self._parameters = safe_load(f)
+
+        validator = Validator(self.__schema)
+        if not validator.validate(self._parameters):
+            raise Exception(validator.errors)
 
     def _readout_field_paths(self):
         for path in glob(self._field_dir + '/*'):

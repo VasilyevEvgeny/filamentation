@@ -35,11 +35,6 @@ int main(int argc, char** argv) {
 
         std::string current_results_dir_name = term_name;
 
-        for (auto& term : config_manager.active_linear_terms) {
-            std::cout << term << std::endl;
-        }
-
-        std::cout << config_manager.dispersion_gvd_sweep << std::endl;
 
         // postprocessor
         std::shared_ptr<Postprocessor> postprocessor = std::make_shared<PostprocessorDispersion>(config_manager);
