@@ -10,7 +10,7 @@ info:
 
 equation:
   diffraction: true
-  dispersion_full: true
+  dispersion_full: false
   dispersion_gvd_sweep: false
   dispersion_gvd_fft: false
   kerr_instant: true
@@ -34,7 +34,7 @@ pulsed_beam:
   lambda_0: 1800e-9
   r_0: 100e-6
   t_0: 50e-15
-  M: 1
+  M: 0
   m: 0
   P_0_to_P_cr: 5
 

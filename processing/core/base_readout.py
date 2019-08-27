@@ -77,13 +77,13 @@ class BaseReadout:
                     'lambda_0': {'type': 'float', 'required': True},
                     'z_diff': {'type': 'float', 'required': True},
                     'z_disp': {'type': 'float', 'required': True},
-                    'p_0_to_p_cr': {'type': 'float', 'required': True},
-                    'p_cr_to_p_g': {'type': 'float', 'required': True},
-                    'p_g': {'type': 'float', 'required': True},
-                    'p_0': {'type': 'float', 'required': True},
-                    'i_max_to_i_0': {'type': 'float', 'required': True},
-                    'i_0': {'type': 'float', 'required': True},
-                    'e_0': {'type': 'float', 'required': True}
+                    'P_0_to_P_cr': {'type': 'float', 'required': True},
+                    'P_cr_to_P_G': {'type': 'float', 'required': True},
+                    'P_G': {'type': 'float', 'required': True},
+                    'P_0': {'type': 'float', 'required': True},
+                    'I_max_to_I_0': {'type': 'float', 'required': True},
+                    'I_0': {'type': 'float', 'required': True},
+                    'E_0': {'type': 'float', 'required': True}
                 }
             },
             'grid': {
@@ -119,7 +119,7 @@ class BaseReadout:
 
     def _find_i_max(self, filename):
         step = int(filename)
-        return self._df_propagation['i_max, [TW/cm^2]'][step]
+        return self._df_propagation['I_max, [TW/cm^2]'][step]
 
     def _create_dir(self, **kwargs):
         """Creates dir with default name dir_name deleting the existing directory"""
@@ -151,10 +151,10 @@ class BaseReadout:
         self._df_propagation['|z / z_disp|'] = self._df_propagation['z, [m]'] / abs(self._parameters['pulsed_beam']['z_disp'])
 
         # add i_max / i_0
-        self._df_propagation['i_max / i_0'] = self._df_propagation['i_max, [W/m^2]'] / self._parameters['pulsed_beam']['i_0']
+        self._df_propagation['I_max / I_0'] = self._df_propagation['I_max, [W/m^2]'] / self._parameters['pulsed_beam']['I_0']
 
         # add i_max_normalized
-        self._df_propagation['i_max, [TW/cm^2]'] = self._df_propagation['i_max, [W/m^2]'] / 1e16
+        self._df_propagation['I_max, [TW/cm^2]'] = self._df_propagation['I_max, [W/m^2]'] / 1e16
 
         self._df_propagation = self._df_propagation.astype(float64)
         self._df_propagation['step'] = self._df_propagation['step'].astype(int64)

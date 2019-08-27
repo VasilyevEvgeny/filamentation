@@ -136,13 +136,13 @@ pulsed_beam:
     lambda_0: %e
     z_diff: %e
     z_disp: %e
-    p_0_to_p_cr: %e
-    p_cr_to_p_g: %e
-    p_g: %e
-    p_0: %e
-    i_max_to_i_0: %e
-    i_0: %e
-    e_0: %e
+    P_0_to_P_cr: %e
+    P_cr_to_P_G: %e
+    P_G: %e
+    P_0: %e
+    I_max_to_I_0: %e
+    I_0: %e
+    E_0: %e
 
 grid:
     r_max: %e

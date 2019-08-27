@@ -30,7 +30,7 @@ SiO2::SiO2(ConfigManager& _config_manager, std::shared_ptr<Logger>& _logger)
 
     delta = 0;
 
-    if (!config_manager.active_nonlinear_terms.empty()) {
+    if (config_manager.with_plasma) {
         BaseMedium::initialize_ionization();
     }
 }

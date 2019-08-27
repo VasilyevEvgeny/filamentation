@@ -26,7 +26,7 @@ Saver::Saver(std::shared_ptr<BasePulsedBeam>& _pulsed_beam,
 
     logger->add_propagation_event(std::string("creating saver"));
 
-    states_columns = {"step", "z, [m]", "h_z, [m]", "i_max, [W/m^2]"};
+    states_columns = {"step", "z, [m]", "h_z, [m]", "I_max, [W/m^2]"};
     states = std::vector<std::vector<double>>(config_manager.n_z + 1,
             std::vector<double>(states_columns.size(), 0.0));
 
@@ -48,8 +48,8 @@ void Saver::print_current_state(size_t step, double z, double dz) {
         std::cout << std::setw(w1) << "step";
         std::cout << std::setw(w2) << "z, [m]";
         std::cout << std::setw(w3) << "dz, [m]";
-        std::cout << std::setw(w4) << "i_max / i_0";
-        std::cout << std::setw(w5) << "i_max, [W/m^2]";
+        std::cout << std::setw(w4) << "I_max / I_0";
+        std::cout << std::setw(w5) << "I_max, [W/m^2]";
         std::cout << std::endl;
     }
 

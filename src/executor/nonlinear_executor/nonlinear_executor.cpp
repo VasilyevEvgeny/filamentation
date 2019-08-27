@@ -58,22 +58,26 @@ void NonlinearExecutor::execute(double dz) {
                     double I_prev = norm(pb->field[k][s - 1]) * pb->I_0;
                     double dI = I - I_prev;
 
-                    // ionization rate
-                    double R = pb->medium->ionization->R(I);
-
                     // plasma
                     double Ne = pb->plasma[k][s];
                     double Ne_prev = pb->plasma[k][s - 1];
                     double dNe = Ne - Ne_prev;
 
-                    // dissipation
-                    double Ne_increase_field = kinetic_equation->calculate_plasma_increase_field(Ne, R);
-                    dissipation->update_R_dissipation(I, Ne_increase_field);
+                    double R = 0.0;
+                    
+                    if (config_manager.with_plasma) {
+                        // ionization rate
+                        R = pb->medium->ionization->R(I);
+
+                        // dissipation
+                        double Ne_increase_field = kinetic_equation->calculate_plasma_increase_field(Ne, R);
+                        dissipation->update_R_dissipation(I, Ne_increase_field);
+                    }
 
                     std::complex<double> increment = std::complex<double>(0.0, 0.0);
                     for(auto& nonlinear_term_name : config_manager.active_nonlinear_terms) {
 
-                        increment +=     terms_pool[nonlinear_term_name]->R_kerr_instant * I
+                        increment +=       terms_pool[nonlinear_term_name]->R_kerr_instant * I
                                          + terms_pool[nonlinear_term_name]->R_kerr_instant_T * dI / dt
                                          + terms_pool[nonlinear_term_name]->R_plasma * Ne
                                          + terms_pool[nonlinear_term_name]->R_plasma_T * dNe / dt
@@ -85,10 +89,12 @@ void NonlinearExecutor::execute(double dz) {
                     pb->field[k][s] *= exp(increment * dz);
 
 
-
-                    // plasma increase
-                    double Ne_increase_full = kinetic_equation->calculate_plasma_increase_full(I, Ne, R);
-                    pb->plasma[k][s + 1] = Ne + Ne_increase_full;
+                    if (config_manager.with_plasma) {
+                        // plasma increase
+                        double Ne_increase_full = kinetic_equation->calculate_plasma_increase_full(I, Ne, R);
+                        pb->plasma[k][s + 1] = Ne + Ne_increase_full;
+                    }
+                    
                 }
             }
         };

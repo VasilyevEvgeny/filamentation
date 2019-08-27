@@ -47,25 +47,26 @@ class Track(BaseReadout):
             i_abs_rus, i_rel_rus = '$\mathbf{I_{макс}}$, ТВт/см$\mathbf{^2}$', '$\mathbf{I_{макс} \ / \ I_0}$'
             i_abs_eng, i_rel_eng = '$\mathbf{I_{max}}$, TW/cm$\mathbf{^2}$', '$\mathbf{I_{max} \ / \ I_0}$'
 
-            pool = [{'filename': 'i_max_abs(z_abs)', 'z': 'z, [cm]', 'i': 'i_max, [TW/cm^2]',
+            pool = [{'filename': 'i_max_abs(z_abs)', 'z': 'z, [cm]', 'I': 'I_max, [TW/cm^2]',
                      'xlabel_rus': z_abs_rus, 'xlabel_eng': z_abs_eng,
                      'ylabel_rus': i_abs_rus, 'ylabel_eng': i_abs_eng},
 
-                    {'filename': 'i_max_abs(z_rel)', 'z': 'z / z_diff', 'i': 'i_max, [TW/cm^2]',
-                     'xlabel_rus': z_rel_rus, 'xlabel_eng': z_rel_eng,
-                     'ylabel_rus': i_abs_rus, 'ylabel_eng': i_abs_eng},
+                    # {'filename': 'i_max_abs(z_rel)', 'z': 'z / z_diff', 'i': 'i_max, [TW/cm^2]',
+                    #  'xlabel_rus': z_rel_rus, 'xlabel_eng': z_rel_eng,
+                    #  'ylabel_rus': i_abs_rus, 'ylabel_eng': i_abs_eng},
 
-                    {'filename': 'i_max_rel(z_abs)', 'z': 'z, [cm]', 'i': 'i_max / i_0',
+                    {'filename': 'i_max_rel(z_abs)', 'z': 'z, [cm]', 'I': 'I_max / I_0',
                      'xlabel_rus': z_abs_rus, 'xlabel_eng': z_abs_eng,
                      'ylabel_rus': i_rel_rus, 'ylabel_eng': i_rel_eng},
 
-                    {'filename': 'i_max_rel(z_rel)', 'z': 'z / z_diff', 'i': 'i_max / i_0',
-                     'xlabel_rus': z_rel_rus, 'xlabel_eng': z_rel_eng,
-                     'ylabel_rus': i_rel_rus, 'ylabel_eng': i_rel_eng}]
+                    # {'filename': 'i_max_rel(z_rel)', 'z': 'z / z_diff', 'i': 'i_max / i_0',
+                    #  'xlabel_rus': z_rel_rus, 'xlabel_eng': z_rel_eng,
+                    #  'ylabel_rus': i_rel_rus, 'ylabel_eng': i_rel_eng}
+                    ]
 
             for info in pool:
                 plt.figure(figsize=(15, 5))
-                plt.plot(self._df_propagation[info['z']], self._df_propagation[info['i']], color=color,
+                plt.plot(self._df_propagation[info['z']], self._df_propagation[info['I']], color=color,
                          linewidth=linewidth, alpha=alpha, linestyle=linestyle)
 
                 xlabel = self._initialize_label(self._language, info['xlabel_rus'], info['xlabel_eng'])

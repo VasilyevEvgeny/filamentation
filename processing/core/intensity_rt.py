@@ -30,7 +30,7 @@ class IntensityRT(BaseReadout):
         self.__dr = self._parameters['grid']['dr']
         self.__n_t = self._parameters['grid']['n_t']
         self.__dt = self._parameters['grid']['dt']
-        self.__i_0 = self._parameters['pulsed_beam']['i_0']
+        self.__I_0 = self._parameters['pulsed_beam']['I_0']
 
         # mode -> flat or volume
         self.__mode = kwargs['mode']
@@ -46,7 +46,7 @@ class IntensityRT(BaseReadout):
                     raise Exception('Wrong maximum intensty!')
 
             self.__normalize_to = kwargs['normalize_to']
-            if self.__normalize_to not in (1, 'i_0'):
+            if self.__normalize_to not in (1, 'I_0'):
                 raise Exception('Wrong normalize value!')
 
         # processing
@@ -84,7 +84,7 @@ class IntensityRT(BaseReadout):
 
     def __create_res_dir(self):
         datetime_string = datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
-        dir_name = 'procesing_i(r,t)_' + datetime_string
+        dir_name = 'procesing_I(r,t)_' + datetime_string
         return self._create_dir(dir_name=dir_name)
 
     def __crop_r(self, arr):
@@ -146,12 +146,12 @@ class IntensityRT(BaseReadout):
         if isinstance(self.__maximum_intensity, int) or isinstance(self.__maximum_intensity, float):
             max_intensity = self.__maximum_intensity
         else:
-            max_intensity = maximum(arr) * self.__i_0
+            max_intensity = maximum(arr) * self.__I_0
 
-        if self.__normalize_to == 'i_0':
-            max_intensity /= self.__i_0
+        if self.__normalize_to == 'I_0':
+            max_intensity /= self.__I_0
         else:
-            arr *= self.__i_0 / 10**16
+            arr *= self.__I_0 / 10**16
             max_intensity /= 10**16
 
         return max_intensity
