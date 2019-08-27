@@ -36,7 +36,7 @@ pulsed_beam:
   t_0: 50e-15
   M: 0
   m: 0
-  p_0_to_p_cr: 5
+  P_0_to_P_cr: 5
 
 grid:
   n_r: 1024
@@ -46,6 +46,7 @@ track:
   n_z: 100
   dz_0: 1e-5
   constant_dz: true
+  max_intensity_to_stop: 5e18
   print_current_state_every: 10
   save_every: 50
   save_field: true

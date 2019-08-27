@@ -29,10 +29,10 @@ void Saver::add_to_yml_file_data(std::string& yml_file_data, std::string& str, s
         sprintf(buffer, str.c_str(), params[0], params[1], params[2], params[3], params[4], params[5], params[6],
                 params[7], params[8], params[9], params[10], params[11], params[12], params[13], params[14]);
     }
-    else if (params.size() == 22) {
+    else if (params.size() == 23) {
         sprintf(buffer, str.c_str(), params[0], params[1], params[2], params[3], params[4], params[5], params[6],
                 params[7], params[8], params[9], params[10], params[11], params[12], params[13], params[14],
-                params[15], params[16], params[17], params[18], params[19], params[20], params[21]);
+                params[15], params[16], params[17], params[18], params[19], params[20], params[21], params[22]);
     }
 
 
@@ -154,7 +154,8 @@ grid:
 
 track:
     n_z: %0.f
-    dz_0: %e)";
+    dz_0: %e
+    max_intensity_to_stop: %e)";
     std::vector<double> data_5_params = {(double)pulsed_beam->M,
                                          (double)pulsed_beam->m,
                                          pulsed_beam->r_0,
@@ -162,13 +163,13 @@ track:
                                          pulsed_beam->lambda_0,
                                          pulsed_beam->z_diff,
                                          pulsed_beam->z_disp,
-                                         pulsed_beam->p_0_to_p_cr,
-                                         pulsed_beam->p_cr_to_p_g,
-                                         pulsed_beam->p_g,
-                                         pulsed_beam->p_0,
-                                         pulsed_beam->max_intensity(pulsed_beam->i_0),
-                                         pulsed_beam->i_0,
-                                         pulsed_beam->e_0,
+                                         pulsed_beam->P_0_to_P_cr,
+                                         pulsed_beam->P_cr_to_P_G,
+                                         pulsed_beam->P_G,
+                                         pulsed_beam->P_0,
+                                         pulsed_beam->max_intensity(pulsed_beam->I_0),
+                                         pulsed_beam->I_0,
+                                         pulsed_beam->E_0,
                                          pulsed_beam->r_max,
                                          (double)pulsed_beam->n_r,
                                          pulsed_beam->dr,
@@ -176,7 +177,8 @@ track:
                                          (double)pulsed_beam->n_t,
                                          pulsed_beam->dt,
                                          (double)config_manager.n_z,
-                                         config_manager.dz_0};
+                                         config_manager.dz_0,
+                                         config_manager.max_intensity_to_stop};
     Saver::add_to_yml_file_data(yml_file_data, data_5, data_5_params);
 
 

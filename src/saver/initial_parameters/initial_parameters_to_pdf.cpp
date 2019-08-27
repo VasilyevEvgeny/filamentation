@@ -131,9 +131,13 @@ void Saver::save_initial_parameters_to_pdf(bool delete_tmp_files, bool delete_te
         equation += "&" + nonlinear_executor->terms_pool.at(term_name)->formula + R"(\\)";
     }
 
-    equation += nonlinear_executor->kinetic_equation->formula;
+    if (config_manager.with_plasma) {
+        equation += nonlinear_executor->kinetic_equation->formula;
+    }
 
-    std::string equation_data = R"(
+    std::string equation_data;
+    if (config_manager.with_plasma) {
+        equation_data = R"(
 \midrule[2pt]
 \textbf{EQUATION} \tabularnewline
 \midrule[2pt]
@@ -149,6 +153,23 @@ void Saver::save_initial_parameters_to_pdf(bool delete_tmp_files, bool delete_te
 \tabularnewline
 \midrule[2pt]
 )";
+    } else {
+        equation_data = R"(
+\midrule[2pt]
+\textbf{EQUATION} \tabularnewline
+\midrule[2pt]
+\parbox{\linewidth}{
+\begin{equation*}
+\begin{aligned}
+%s
+\end{aligned}
+\end{equation*}
+}
+\tabularnewline
+\midrule[2pt]
+)";
+    }
+
     std::vector<std::string> equation_params = {equation};
 
     Saver::add_to_tex_file_data(tex_file_data, equation_data, equation_params);
@@ -325,13 +346,13 @@ $E_0$ & %.2f & $\mu$J \tabularnewline
                                                 pulsed_beam->lambda_0 * 1e9,
                                                 pulsed_beam->z_diff * 1e2,
                                                 pulsed_beam->z_disp * 1e2,
-                                                pulsed_beam->p_0_to_p_cr,
-                                                pulsed_beam->p_cr_to_p_g,
-                                                pulsed_beam->p_g * 1e-6,
-                                                pulsed_beam->p_0 * 1e-6,
-                                                pulsed_beam->max_intensity(pulsed_beam->i_0),
-                                                pulsed_beam->i_0 * 1e-16,
-                                                pulsed_beam->e_0 * 1e6};
+                                                pulsed_beam->P_0_to_P_cr,
+                                                pulsed_beam->P_cr_to_P_G,
+                                                pulsed_beam->P_G * 1e-6,
+                                                pulsed_beam->P_0 * 1e-6,
+                                                pulsed_beam->max_intensity(pulsed_beam->I_0),
+                                                pulsed_beam->I_0 * 1e-16,
+                                                pulsed_beam->E_0 * 1e6};
 
     Saver::add_to_tex_file_data(tex_file_data, pulsed_beam_data_3, pulsed_beam_params_3);
 

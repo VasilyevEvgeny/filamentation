@@ -31,7 +31,7 @@ class BaseReadout:
         self._field_paths = []
         self._plasma_paths = []
         self._parameters = None
-        self.__schema = {
+        self._schema = {
             'sellmeyer': {
                 'type': 'dict',
                 'schema': {
@@ -101,7 +101,8 @@ class BaseReadout:
                 'type': 'dict',
                 'schema': {
                     'n_z': {'type': 'integer', 'required': True},
-                    'dz_0': {'type': 'float', 'required': True}
+                    'dz_0': {'type': 'float', 'required': True},
+                    'max_intensity_to_stop': {'type': 'float', 'required': True}
                 }
             }
         }
@@ -158,13 +159,11 @@ class BaseReadout:
         self._df_propagation = self._df_propagation.astype(float64)
         self._df_propagation['step'] = self._df_propagation['step'].astype(int64)
 
-        print(self._df_propagation.dtypes)
-
     def _readout_parameters(self):
         with open(self._args.current_results_dir + '/parameters.yml', 'r') as f:
             self._parameters = safe_load(f)
 
-        validator = Validator(self.__schema)
+        validator = Validator(self._schema)
         if not validator.validate(self._parameters):
             raise Exception(validator.errors)
 

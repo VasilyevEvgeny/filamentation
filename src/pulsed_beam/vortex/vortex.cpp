@@ -21,10 +21,10 @@ Vortex::Vortex(std::shared_ptr<BaseMedium>& _medium,
     m = _config_manager.m;
 
     logger->add_propagation_event(std::string("....calculating initial parameters in pulsed_beam"));
-    p_cr_to_p_g = calculate_p_cr_to_p_g();
-    p_0 = calculate_p_0();
-    i_0 = calculate_i_0();
-    e_0 = calculate_e_0();
+    P_cr_to_P_G = calculate_P_cr_to_P_G();
+    P_0 = calculate_P_0();
+    I_0 = calculate_I_0();
+    E_0 = calculate_E_0();
 
     logger->add_propagation_event(std::string("....initialization of field in pulsed_beam"));
     initialize_field();
@@ -34,8 +34,8 @@ Vortex::Vortex(std::shared_ptr<BaseMedium>& _medium,
 Vortex::~Vortex() = default;
 
 
-double Vortex::calculate_p_cr_to_p_g() {
-    return pow(2, 2 * Vortex::M + 1) * alglib::gammafunction(Vortex::M + 1) *
-           alglib::gammafunction(Vortex::M + 2) / (2 * alglib::gammafunction(2 * Vortex::M + 1));
+double Vortex::calculate_P_cr_to_P_G() {
+    return pow(2, 2 * M + 1) * alglib::gammafunction(M + 1) *
+           alglib::gammafunction(M + 2) / (2 * alglib::gammafunction(2 * M + 1));
 }
 

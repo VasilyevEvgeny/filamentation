@@ -35,7 +35,6 @@ int main(int argc, char** argv) {
 
         std::string current_results_dir_name = term_name;
 
-
         // postprocessor
         std::shared_ptr<Postprocessor> postprocessor = std::make_shared<PostprocessorDispersion>(config_manager);
 

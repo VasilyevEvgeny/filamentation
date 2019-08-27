@@ -60,7 +60,7 @@ public:
 
     void print_current_state(size_t step, double z, double dz);
     void flush_current_state(size_t step, double z, double dz);
-    void save_states_to_csv();
+    void save_states_to_csv(size_t max_step);
     void save_field(int step);
     void save_plasma(int step);
 

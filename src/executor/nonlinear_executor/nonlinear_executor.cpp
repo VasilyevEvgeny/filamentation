@@ -54,8 +54,8 @@ void NonlinearExecutor::execute(double dz) {
                 for(size_t s = 1; s < pb->n_t - 1; ++s) {
 
                     // intensity
-                    double I = norm(pb->field[k][s]) * pb->i_0;
-                    double I_prev = norm(pb->field[k][s - 1]) * pb->i_0;
+                    double I = norm(pb->field[k][s]) * pb->I_0;
+                    double I_prev = norm(pb->field[k][s - 1]) * pb->I_0;
                     double dI = I - I_prev;
 
                     // ionization rate

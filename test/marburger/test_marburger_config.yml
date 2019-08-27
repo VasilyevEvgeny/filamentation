@@ -1,7 +1,7 @@
 info:
   verbose: true
-  prefix: filament
-  multidir: false
+  prefix: test_marburger
+  multidir: true
   path_to_project: C:/Users/vasilyev/Documents/CLion/filamentation
   path_to_python_interpreter: C:/Users/vasilyev/Documents/venvs/filamentation/Scripts/python.exe
   global_root_dir: L:/Vasilyev
@@ -10,7 +10,7 @@ info:
 
 equation:
   diffraction: true
-  dispersion_full: true
+  dispersion_full: false
   dispersion_gvd_sweep: false
   dispersion_gvd_fft: false
   kerr_instant: true
@@ -27,34 +27,34 @@ T:
   bremsstrahlung: false
 
 medium:
-  name: CaF2
+  name: SiO2
   ionization: OriginalKeldysh
 
 pulsed_beam:
   lambda_0: 1800e-9
   r_0: 100e-6
   t_0: 50e-15
-  M: 1
+  M: 0
   m: 0
   P_0_to_P_cr: 5
 
 grid:
-  n_r: 1024
-  n_t: 512
+  n_r: 2048
+  n_t: 128
 
 track:
-  n_z: 100
+  n_z: 5000
   dz_0: 1e-5
   constant_dz: true
   max_intensity_to_stop: 2e18
   print_current_state_every: 10
-  save_every: 10
-  save_field: true
-  save_plasma: true
+  save_every: 50
+  save_field: false
+  save_plasma: false
 
 plot:
-  plot_intensity_rt: true
-  plot_plasma_rt: true
+  plot_intensity_rt: false
+  plot_plasma_rt: false
   plot_track: true
 
 other:

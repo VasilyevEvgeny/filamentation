@@ -54,18 +54,18 @@ public:
     double z_diff;
     double z_disp;
 
-    double p_0_to_p_cr;
-    double p_cr_to_p_g;
-    double p_g;
-    double p_0;
-    double i_0;
-    double e_0;
+    double P_0_to_P_cr;
+    double P_cr_to_P_G;
+    double P_G;
+    double P_0;
+    double I_0;
+    double E_0;
 
-    double calculate_p_g();
-    virtual double calculate_p_cr_to_p_g() = 0;
-    double calculate_p_0();
-    double calculate_i_0();
-    double calculate_e_0();
+    double calculate_P_G();
+    virtual double calculate_P_cr_to_P_G() = 0;
+    double calculate_P_0();
+    double calculate_I_0();
+    double calculate_E_0();
 
     double max_intensity(double normalize_to);
     double energy(double normalize_to);
@@ -74,6 +74,8 @@ public:
     std::vector<std::vector<std::complex<double>>> spectrum;
 
     std::vector<std::vector<double>> plasma;
+
+    void update();
 
 private:
 

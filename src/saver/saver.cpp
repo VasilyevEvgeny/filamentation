@@ -56,7 +56,7 @@ void Saver::print_current_state(size_t step, double z, double dz) {
     std::cout << std::setw(w1) << std::setfill('0') << std::fixed << std::setprecision(0) << step;
     std::cout << std::setw(w2) << std::setfill(' ') << std::scientific << std::setprecision(5) << z;
     std::cout << std::setw(w3) << std::setfill(' ') << std::scientific << std::setprecision(5) << dz;
-    std::cout << std::setw(w4) << std::setfill(' ') << std::scientific << std::setprecision(5) << pulsed_beam->max_intensity(pulsed_beam->i_0);
+    std::cout << std::setw(w4) << std::setfill(' ') << std::scientific << std::setprecision(5) << pulsed_beam->max_intensity(pulsed_beam->I_0);
     std::cout << std::setw(w5) << std::setfill(' ') << std::scientific << std::setprecision(5) << pulsed_beam->max_intensity(1);
     std::cout << std::endl;
 }
@@ -113,7 +113,7 @@ void Saver::save_plasma(int step) {
     f.close();
 }
 
-void Saver::save_states_to_csv() {
+void Saver::save_states_to_csv(size_t max_step) {
 
     logger->add_propagation_event(std::string("saving states to csv"));
 
@@ -133,7 +133,7 @@ void Saver::save_states_to_csv() {
     f << std::setw(w4) << std::setfill(' ') << states_columns[3] << std::endl;
 
 
-    for (size_t step = 0; step < config_manager.n_z + 1; ++step) {
+    for (size_t step = 0; step < max_step; ++step) {
         f << std::setw(w1) << std::setfill('0') << std::fixed << std::setprecision(0) << states[step][0] << sep;
         f << std::setw(w2) << std::setfill(' ') << std::scientific << std::setprecision(5) << states[step][1] << sep;
         f << std::setw(w3) << std::setfill(' ') << std::scientific << std::setprecision(5) << states[step][2] << sep;

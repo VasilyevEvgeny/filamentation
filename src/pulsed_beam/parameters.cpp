@@ -18,11 +18,11 @@ double BasePulsedBeam::max_intensity(double normalize_to) {
         }
     }
 
-    return max_intensity * i_0 / normalize_to;
+    return max_intensity * I_0 / normalize_to;
 }
 
-double BasePulsedBeam::calculate_e_0() {
-    return p_0 * sqrt(M_PI) * t_0;
+double BasePulsedBeam::calculate_E_0() {
+    return P_0 * sqrt(M_PI) * t_0;
 }
 
 
@@ -34,7 +34,7 @@ double BasePulsedBeam::energy(double normalize_to) {
         }
     }
 
-    return sum * i_0 * 2 * M_PI * dr * dt / normalize_to;
+    return sum * I_0 * 2 * M_PI * dr * dt / normalize_to;
 }
 
 
@@ -47,17 +47,16 @@ void BasePulsedBeam::initialize_field() {
 }
 
 
-double BasePulsedBeam::calculate_p_g() {
+double BasePulsedBeam::calculate_P_G() {
     return 3.77 * pow(lambda_0, 2) / (8 * M_PI * medium->n_0 * medium->n_2);
 }
 
 
-double BasePulsedBeam::calculate_p_0() {
-    return BasePulsedBeam::p_0_to_p_cr * BasePulsedBeam::p_cr_to_p_g * BasePulsedBeam::p_g;
+double BasePulsedBeam::calculate_P_0() {
+    return P_0_to_P_cr * P_cr_to_P_G * P_G;
 }
 
 
-double BasePulsedBeam::calculate_i_0() {
-    return BasePulsedBeam::p_0 / (M_PI * pow(BasePulsedBeam::r_0, 2) *
-                                          alglib::gammafunction(BasePulsedBeam::M + 1));
+double BasePulsedBeam::calculate_I_0() {
+    return P_0 / (M_PI * pow(r_0, 2) * alglib::gammafunction(M + 1));
 }

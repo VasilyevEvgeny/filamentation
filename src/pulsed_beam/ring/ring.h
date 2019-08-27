@@ -19,7 +19,7 @@ public:
     ~Ring() override;
 
 
-    double calculate_p_cr_to_p_g() override;
+    double calculate_P_cr_to_P_G() override;
 };
 
 

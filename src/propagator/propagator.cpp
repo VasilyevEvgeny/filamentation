@@ -117,7 +117,8 @@ void Propagator::propagate() {
      */
 
     double z = 0.0;
-    for (int step = 0; step < n_z + 1; ++step) {
+    size_t step;
+    for (step = 0; step < n_z + 1; ++step) {
         if (step) {
 
             /*
@@ -156,9 +157,13 @@ void Propagator::propagate() {
                 saver.print_current_state(step, z, dz);
             }
         }
+
+        if (pulsed_beam->max_intensity(1) > config_manager.max_intensity_to_stop) {
+            break;
+        }
     }
 
-    saver.save_states_to_csv();
+    saver.save_states_to_csv(step);
     postprocessor->go(dir_manager, logger);
 
     logger->add_propagation_event(std::string("end\n"));

@@ -200,6 +200,7 @@ void ConfigManager::validate_config() {
         bool dissipation = readout_bool(std::string("equation"), std::string("dissipation"));
         if (dissipation) { active_nonlinear_terms.emplace_back("dissipation"); }
 
+        with_plasma = plasma || bremsstrahlung || dissipation;
 
         /*
          * T
@@ -240,7 +241,7 @@ void ConfigManager::validate_config() {
         t_0 = readout_double(std::string("pulsed_beam"), std::string("t_0"), {10e-15, 200e-15});
         M = readout_int(std::string("pulsed_beam"), std::string("M"), {0, 5});
         m = readout_int(std::string("pulsed_beam"), std::string("m"), {0, 5});
-        p_0_to_p_cr = readout_double(std::string("pulsed_beam"), std::string("p_0_to_p_cr"), {0.1, 500});
+        P_0_to_P_cr = readout_double(std::string("pulsed_beam"), std::string("P_0_to_P_cr"), {0.1, 500});
 
         /*
          * GRID
@@ -255,6 +256,7 @@ void ConfigManager::validate_config() {
 
         n_z = readout_int(std::string("track"), std::string("n_z"), {1, 100000});
         dz_0 = readout_double(std::string("track"), std::string("dz_0"), {1e-10, 1});
+        max_intensity_to_stop = readout_double(std::string("track"), std::string("max_intensity_to_stop"), {1e17, 1e19});
         print_current_state_every = readout_int(std::string("track"), std::string("print_current_state_every"), {0, 100000});
         save_every = readout_int(std::string("track"), std::string("save_every"), {0, 100000});
         save_field = readout_bool(std::string("track"), std::string("save_field"));

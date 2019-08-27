@@ -47,6 +47,7 @@ public:
     bool dispersion_gvd_sweep;
     std::map<std::string, bool> T;
     std::map<std::string, bool> kerr_info;
+    bool with_plasma;
 
     //medium
     std::string medium;
@@ -58,7 +59,7 @@ public:
     double t_0;
     size_t M;
     size_t m;
-    double p_0_to_p_cr;
+    double P_0_to_P_cr;
 
     // grid
     size_t n_r;
@@ -67,6 +68,7 @@ public:
     // track
     size_t n_z;
     double dz_0;
+    double max_intensity_to_stop;
     size_t print_current_state_every;
     size_t save_every;
     bool save_field;

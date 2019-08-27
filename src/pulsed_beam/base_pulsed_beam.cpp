@@ -27,7 +27,7 @@ BasePulsedBeam::BasePulsedBeam(
 , n_r(_config_manager.n_r)
 , t_0(_config_manager.t_0)
 , n_t(_config_manager.n_t)
-, p_0_to_p_cr(_config_manager.p_0_to_p_cr)
+, P_0_to_P_cr(_config_manager.P_0_to_P_cr)
 , logger(_logger) {
 
     logger->add_propagation_event(std::string("creating pulsed_beam"));
@@ -71,11 +71,11 @@ BasePulsedBeam::BasePulsedBeam(
     z_diff = medium->k_0 * pow(r_0, 2);
     z_disp = pow(t_0, 2) / medium->k_2;
 
-    p_cr_to_p_g = 0;
-    p_g = calculate_p_g();
-    p_0 = 0;
-    i_0 = 0;
-    e_0 = 0;
+    P_cr_to_P_G = 0;
+    P_G = calculate_P_G();
+    P_0 = 0;
+    I_0 = 0;
+    E_0 = 0;
 
     // field
     field = std::vector<std::vector<std::complex<double>>>(n_r, std::vector<std::complex<double>>(n_t, 0.0));
@@ -85,6 +85,7 @@ BasePulsedBeam::BasePulsedBeam(
 
     // plasma
     plasma = std::vector<std::vector<double>>(n_r, std::vector<double>(n_t, 0.0));
+
 }
 
 
@@ -93,5 +94,4 @@ BasePulsedBeam::~BasePulsedBeam() {
     spectrum.erase(spectrum.begin(), spectrum.end());
     plasma.erase(plasma.begin(), plasma.end());
 }
-
 

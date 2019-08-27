@@ -55,14 +55,14 @@ void Postprocessor::go(DirManager& dir_manager, std::shared_ptr<Logger>& logger)
     if (plot_plasma_rt) {
         postprocess(dir_manager,
                     logger,
-                    std::string("plot_intensity_rt"),
+                    std::string("plot_plasma_rt"),
                     std::string("processing/scripts/plasma_rt.py"),
                     std::string("....plotting N_e(r,t)"));
     }
     if (plot_track) {
         postprocess(dir_manager,
                     logger,
-                    std::string("plot_intensity_rt"),
+                    std::string("plot_track"),
                     std::string("processing/scripts/track.py"),
                     std::string("....plotting track"));
     }

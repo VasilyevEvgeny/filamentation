@@ -11,15 +11,8 @@
 
 DirManager::DirManager(ConfigManager& _config_manager) {
 
-    if (!_config_manager.multidir) {
-
-        global_results_dir = _config_manager.global_root_dir + "/" + _config_manager.global_results_dir_name;
-
-        current_results_dir_name = _config_manager.prefix + "_" + get_current_datetime("dir_manager");
-    }
-    else {
-
-    }
+    global_results_dir = _config_manager.global_root_dir + "/" + _config_manager.global_results_dir_name;
+    current_results_dir_name = _config_manager.prefix + "_" + get_current_datetime("dir_manager");
 
     initialize(_config_manager);
 }
