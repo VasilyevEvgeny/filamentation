@@ -68,6 +68,7 @@ public:
     double calculate_E_0();
 
     double max_intensity(double normalize_to);
+    double max_plasma(double normalize_to);
     double energy(double normalize_to);
 
     std::vector<std::vector<std::complex<double>>> field;
@@ -75,7 +76,6 @@ public:
 
     std::vector<std::vector<double>> plasma;
 
-    void update();
 
 private:
 

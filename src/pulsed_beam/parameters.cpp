@@ -21,6 +21,20 @@ double BasePulsedBeam::max_intensity(double normalize_to) {
     return max_intensity * I_0 / normalize_to;
 }
 
+double BasePulsedBeam::max_plasma(double normalize_to) {
+    double max_plasma = 0.0;
+    for (size_t k = 0; k < n_r; ++k) {
+        for (size_t s = 0; s < n_t; ++s) {
+            double current_plasma = plasma[k][s];
+            if (max_plasma < current_plasma) {
+                max_plasma = current_plasma;
+            }
+        }
+    }
+
+    return max_plasma / normalize_to;
+}
+
 double BasePulsedBeam::calculate_E_0() {
     return P_0 * sqrt(M_PI) * t_0;
 }

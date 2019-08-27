@@ -26,7 +26,7 @@ Saver::Saver(std::shared_ptr<BasePulsedBeam>& _pulsed_beam,
 
     logger->add_propagation_event(std::string("creating saver"));
 
-    states_columns = {"step", "z, [m]", "h_z, [m]", "I_max, [W/m^2]"};
+    states_columns = {"step", "z, [m]", "dz, [m]", "I_max, [W/m^2]", "N_e_max, [m^-3]"};
     states = std::vector<std::vector<double>>(config_manager.n_z + 1,
             std::vector<double>(states_columns.size(), 0.0));
 
@@ -38,26 +38,27 @@ Saver::~Saver() {
 
 
 void Saver::print_current_state(size_t step, double z, double dz) {
-    size_t w1 = 7;
-    size_t w2 = 20;
-    size_t w3 = 20;
-    size_t w4 = 20;
-    size_t w5 = 20;
+    size_t w0 = 7;
+    size_t w1 = 17;
 
     if (!step) {
-        std::cout << std::setw(w1) << "step";
-        std::cout << std::setw(w2) << "z, [m]";
-        std::cout << std::setw(w3) << "dz, [m]";
-        std::cout << std::setw(w4) << "I_max / I_0";
-        std::cout << std::setw(w5) << "I_max, [W/m^2]";
+        std::cout << std::setw(w0) << "step";
+        std::cout << std::setw(w1) << "z, [m]";
+        std::cout << std::setw(w1) << "dz, [m]";
+        std::cout << std::setw(w1) << "I_max / I_0";
+        std::cout << std::setw(w1) << "I_max, [W/m^2]";
+        std::cout << std::setw(w1) << "N_e_max / N_0";
+        std::cout << std::setw(w1) << "N_e_max, [m^-3]";
         std::cout << std::endl;
     }
 
-    std::cout << std::setw(w1) << std::setfill('0') << std::fixed << std::setprecision(0) << step;
-    std::cout << std::setw(w2) << std::setfill(' ') << std::scientific << std::setprecision(5) << z;
-    std::cout << std::setw(w3) << std::setfill(' ') << std::scientific << std::setprecision(5) << dz;
-    std::cout << std::setw(w4) << std::setfill(' ') << std::scientific << std::setprecision(5) << pulsed_beam->max_intensity(pulsed_beam->I_0);
-    std::cout << std::setw(w5) << std::setfill(' ') << std::scientific << std::setprecision(5) << pulsed_beam->max_intensity(1);
+    std::cout << std::setw(w0) << std::setfill('0') << std::fixed << std::setprecision(0) << step;
+    std::cout << std::setw(w1) << std::setfill(' ') << std::scientific << std::setprecision(5) << z;
+    std::cout << std::setw(w1) << std::setfill(' ') << std::scientific << std::setprecision(5) << dz;
+    std::cout << std::setw(w1) << std::setfill(' ') << std::scientific << std::setprecision(5) << pulsed_beam->max_intensity(pulsed_beam->I_0);
+    std::cout << std::setw(w1) << std::setfill(' ') << std::scientific << std::setprecision(5) << pulsed_beam->max_intensity(1);
+    std::cout << std::setw(w1) << std::setfill(' ') << std::scientific << std::setprecision(5) << pulsed_beam->max_plasma(pulsed_beam->medium->N_0);
+    std::cout << std::setw(w1) << std::setfill(' ') << std::scientific << std::setprecision(5) << pulsed_beam->max_plasma(1);
     std::cout << std::endl;
 }
 
@@ -67,8 +68,8 @@ void Saver::flush_current_state(size_t step, double z, double dz) {
     states[step][1] = z;
     states[step][2] = dz;
     states[step][3] = pulsed_beam->max_intensity(1);
+    states[step][4] = pulsed_beam->max_plasma(1);
 }
-
 
 void Saver::save_field(int step) {
     std::stringstream ss;
@@ -90,7 +91,6 @@ void Saver::save_field(int step) {
 
     f.close();
 }
-
 
 void Saver::save_plasma(int step) {
     std::stringstream ss;
@@ -121,23 +121,22 @@ void Saver::save_states_to_csv(size_t max_step) {
     std::string path_to_save = dir_manager.current_results_dir + "/" + filename;
     std::ofstream f(path_to_save);
 
-    size_t w1 = 7;
-    size_t w2 = 20;
-    size_t w3 = 20;
-    size_t w4 = 20;
+    size_t w0 = 7;
+    size_t w1 = 20;
     std::string sep = "|";
 
-    f << std::setw(w1) << std::setfill(' ') << states_columns[0] << sep;
-    f << std::setw(w2) << std::setfill(' ') << states_columns[1] << sep;
-    f << std::setw(w3) << std::setfill(' ') << states_columns[2] << sep;
-    f << std::setw(w4) << std::setfill(' ') << states_columns[3] << std::endl;
-
+    f << std::setw(w0) << std::setfill(' ') << states_columns[0] << sep;
+    f << std::setw(w1) << std::setfill(' ') << states_columns[1] << sep;
+    f << std::setw(w1) << std::setfill(' ') << states_columns[2] << sep;
+    f << std::setw(w1) << std::setfill(' ') << states_columns[3] << sep;
+    f << std::setw(w1) << std::setfill(' ') << states_columns[4] << std::endl;
 
     for (size_t step = 0; step < max_step; ++step) {
-        f << std::setw(w1) << std::setfill('0') << std::fixed << std::setprecision(0) << states[step][0] << sep;
-        f << std::setw(w2) << std::setfill(' ') << std::scientific << std::setprecision(5) << states[step][1] << sep;
-        f << std::setw(w3) << std::setfill(' ') << std::scientific << std::setprecision(5) << states[step][2] << sep;
-        f << std::setw(w4) << std::setfill(' ') << std::scientific << std::setprecision(5) << states[step][3] << std::endl;
+        f << std::setw(w0) << std::setfill('0') << std::fixed << std::setprecision(0) << states[step][0] << sep;
+        f << std::setw(w1) << std::setfill(' ') << std::scientific << std::setprecision(5) << states[step][1] << sep;
+        f << std::setw(w1) << std::setfill(' ') << std::scientific << std::setprecision(5) << states[step][2] << sep;
+        f << std::setw(w1) << std::setfill(' ') << std::scientific << std::setprecision(5) << states[step][3] << sep;
+        f << std::setw(w1) << std::setfill(' ') << std::scientific << std::setprecision(5) << states[step][4] << std::endl;
     }
 
     f.close();

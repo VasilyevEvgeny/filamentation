@@ -10,12 +10,12 @@ info:
 
 equation:
   diffraction: true
-  dispersion_full: false
+  dispersion_full: true
   dispersion_gvd_sweep: false
   dispersion_gvd_fft: false
   kerr_instant: true
   kerr_inertial: false
-  plasma: false
+  plasma: true
   bremsstrahlung: false
   dissipation: false
 
