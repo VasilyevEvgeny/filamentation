@@ -4,6 +4,7 @@
 
 #include <fstream>
 #include <iomanip>
+#include <omp.h>
 
 #include "saver.h"
 
@@ -62,7 +63,6 @@ void Saver::print_current_state(size_t step, double z, double dz) {
     std::cout << std::endl;
 }
 
-
 void Saver::flush_current_state(size_t step, double z, double dz) {
     states[step][0] = (double)step;
     states[step][1] = z;
@@ -72,46 +72,112 @@ void Saver::flush_current_state(size_t step, double z, double dz) {
 }
 
 void Saver::save_field(int step) {
-    std::stringstream ss;
-    ss << std::setw(5) << std::setfill('0') << step;
-    std::string filename = dir_manager.field_dir + "/" + ss.str();
-
+    std::ostringstream filename_ss;
+    filename_ss << std::setw(5) << std::setfill('0') << step;
+    std::string filename = dir_manager.field_dir + "/" + filename_ss.str();
     std::ofstream f(filename);
-    f << std::scientific;
+
+    size_t dn_r = pulsed_beam->n_r / config_manager.num_threads + 1;
+    size_t n = 0;
+
+#pragma omp parallel shared(f, n)
+{
+    std::ostringstream thread_ss;
+    thread_ss << std::scientific;
     std::string space = "    ";
-    for (int k = 0; k < pulsed_beam->n_r; ++k) {
-        for (int s = 0; s < pulsed_beam->n_t; ++s) {
-            if (s) {
-                f << space;
+
+    size_t n_r_min = omp_get_thread_num() * dn_r;
+    size_t n_r_max = std::min((omp_get_thread_num() + 1) * dn_r, pulsed_beam->n_r);
+    for (size_t k = n_r_min; k < n_r_max; ++k) {
+        for (int s = pulsed_beam->n_t - 1; s >= 0; --s) {
+            if (s < pulsed_beam->n_t - 1) {
+                thread_ss << space;
             }
-            f << pulsed_beam->field[k][s].real() << space << pulsed_beam->field[k][s].imag();
+            thread_ss << pulsed_beam->field[k][s].real() << space << pulsed_beam->field[k][s].imag();
         }
-        f << "\n";
+        thread_ss << "\n";
     }
+
+    bool done = false;
+    while (!done) {
+#pragma omp critical
+        {
+            if (omp_get_thread_num() == n) {
+                    f << thread_ss.str();
+                    n++;
+                    done = true;
+            }
+        }
+    }
+};
 
     f.close();
 }
 
 void Saver::save_plasma(int step) {
-    std::stringstream ss;
-    ss << std::setw(5) << std::setfill('0') << step;
-    std::string filename = dir_manager.plasma_dir + "/" + ss.str();
-
+    std::ostringstream filename_ss;
+    filename_ss << std::setw(5) << std::setfill('0') << step;
+    std::string filename = dir_manager.plasma_dir + "/" + filename_ss.str();
     std::ofstream f(filename);
-    f << std::scientific;
-    std::string space = "    ";
-    for (int k = 0; k < pulsed_beam->n_r; ++k) {
-        for (int s = 0; s < pulsed_beam->n_t; ++s) {
-            if (s) {
-                f << space;
+
+    size_t dn_r = pulsed_beam->n_r / config_manager.num_threads + 1;
+    size_t n = 0;
+
+#pragma omp parallel shared(f, n)
+    {
+        std::ostringstream thread_ss;
+        thread_ss << std::scientific;
+        std::string space = "    ";
+
+        size_t n_r_min = omp_get_thread_num() * dn_r;
+        size_t n_r_max = std::min((omp_get_thread_num() + 1) * dn_r, pulsed_beam->n_r);
+        for (size_t k = n_r_min; k < n_r_max; ++k) {
+            for (int s = pulsed_beam->n_t - 1; s >= 0; --s) {
+                if (s < pulsed_beam->n_t - 1) {
+                    thread_ss << space;
+                }
+                thread_ss << pulsed_beam->plasma[k][s];
             }
-            f << pulsed_beam->plasma[k][s];
+            thread_ss << "\n";
         }
-        f << "\n";
-    }
+
+        bool done = false;
+        while (!done) {
+#pragma omp critical
+            {
+                if (omp_get_thread_num() == n) {
+
+                    f << thread_ss.str();
+                    n++;
+                    done = true;
+                }
+            }
+        }
+    };
 
     f.close();
 }
+//
+//void Saver::save_plasma(int step) {
+//    std::stringstream ss;
+//    ss << std::setw(5) << std::setfill('0') << step;
+//    std::string filename = dir_manager.plasma_dir + "/" + ss.str();
+//
+//    std::ofstream f(filename);
+//    f << std::scientific;
+//    std::string space = "    ";
+//    for (int k = 0; k < pulsed_beam->n_r; ++k) {
+//        for (int s = 0; s < pulsed_beam->n_t; ++s) {
+//            if (s) {
+//                f << space;
+//            }
+//            f << pulsed_beam->plasma[k][s];
+//        }
+//        f << "\n";
+//    }
+//
+//    f.close();
+//}
 
 void Saver::save_states_to_csv(size_t max_step) {
 
