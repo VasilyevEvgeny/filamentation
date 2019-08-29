@@ -24,6 +24,7 @@ def parse_args():
 class BaseReadout:
     def __init__(self, **kwargs):
         self._args = kwargs['args']
+        self._n_jobs = 3
 
         self._field_dir = self._args.current_results_dir + '/field'
         self._plasma_dir = self._args.current_results_dir + '/plasma'
@@ -166,6 +167,17 @@ class BaseReadout:
         validator = Validator(self._schema)
         if not validator.validate(self._parameters):
             raise Exception(validator.errors)
+
+    def _make_pool(self, paths):
+        pool = []
+        for i in range(self._n_jobs):
+            pool.append([])
+
+        for idx, path in enumerate(paths):
+            pool_num = idx % self._n_jobs
+            pool[pool_num].append(path)
+
+        return pool
 
     def _readout_field_paths(self):
         for path in glob(self._field_dir + '/*'):

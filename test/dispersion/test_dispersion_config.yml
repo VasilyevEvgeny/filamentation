@@ -39,8 +39,8 @@ pulsed_beam:
   P_0_to_P_cr: 5
 
 grid:
-  n_r: 1024
-  n_t: 512
+  n_r: 512
+  n_t: 1024
 
 track:
   n_z: 100

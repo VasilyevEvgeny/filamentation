@@ -29,7 +29,7 @@ public:
 
     std::shared_ptr<Logger> logger;
 
-    virtual void execute(double dz) = 0;
+    virtual void execute(double& dz) = 0;
 };
 
 

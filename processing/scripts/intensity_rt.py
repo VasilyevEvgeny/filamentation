@@ -19,4 +19,8 @@ intensity_rt = IntensityRT(args=args,
                            r_right=200 * 10**-6,
                            r_labels=['-150', '0', '+150'])
 
+from multiprocessing import freeze_support
+
+# if __name__ == '__main__':
+#     freeze_support()
 intensity_rt.process()

@@ -6,7 +6,6 @@ from matplotlib import colors as mcolors
 from pylab import contourf
 from mpl_toolkits.mplot3d import Axes3D
 
-
 import sys
 sys.path.insert(0, '/'.join((sys.path[0].replace('\\', '/')).split('/')[:-2]))
 
@@ -36,6 +35,7 @@ class IntensityRT(BaseReadout):
         self.__mode = kwargs['mode']
         if self.__mode not in ('flat', 'volume'):
             raise Exception('Wrong plot mode!')
+        self.__cmap = plt.get_cmap('jet')
 
         # logarithmization
         self.__log = kwargs.get('log', True)
@@ -61,7 +61,7 @@ class IntensityRT(BaseReadout):
         # plot
         self.__font_size = {'title': 40,  'plot_ticks': 40, 'plot_labels': 50, 'colorbar_ticks': 40, 'colorbar_label': 50}
         self.__font_weight = {'title': 'bold', 'plot_ticks': 'normal', 'plot_labels': 'bold', 'colorbar_ticks': 'bold', 'colorbar_label': 'bold'}
-        self.__cmap = plt.get_cmap('jet')
+
         self.__t_labels = kwargs['t_labels']
         self.__r_labels = kwargs['r_labels']
         self.__t_label = self._initialize_label(self._language, 't, фс', 't, fs')
@@ -171,6 +171,7 @@ class IntensityRT(BaseReadout):
         return levels_plot, max_intensity
 
     def __plot_flat(self, arr, filename):
+
         fig, ax = plt.subplots(figsize=(9, 7))
 
         # plot
@@ -235,7 +236,7 @@ class IntensityRT(BaseReadout):
         # bbox
         bbox = fig.bbox_inches.from_bounds(-0.8, -1.0, self.__bbox_width, self.__bbox_height)
 
-        plt.savefig(self.__res_dir + '/' + filename + '.png', bbox_inches=bbox, dpi=self.__dpi)
+        fig.savefig(self.__res_dir + '/' + filename + '.png', bbox_inches=bbox, dpi=self.__dpi)
         plt.close()
 
     def __plot_volume(self, arr, filename):
@@ -312,8 +313,8 @@ class IntensityRT(BaseReadout):
         # bbox
         bbox = fig.bbox_inches.from_bounds(1.1, 0.3, self.__bbox_width, self.__bbox_height)
 
-        plt.savefig(self.__res_dir + '/' + filename + '.png', bbox_inches=bbox, dpi=self.__dpi)
-        plt.close()
+        fig.savefig(self.__res_dir + '/' + filename + '.png', bbox_inches=bbox, dpi=self.__dpi)
+        #fig.close()
 
     def process(self):
         s_min, s_max, k_max = None, None, None

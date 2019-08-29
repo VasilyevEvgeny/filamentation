@@ -23,7 +23,8 @@ public:
     NonlinearExecutor();
     explicit NonlinearExecutor(std::shared_ptr<BasePulsedBeam>& _pulsed_beam,
                                ConfigManager& _config_manager,
-                               std::shared_ptr<Logger>& logger);
+                               std::shared_ptr<Logger>& _logger,
+                               double& _dz);
     ~NonlinearExecutor() override;
 
     ConfigManager config_manager;
@@ -39,7 +40,11 @@ public:
     // kinetic equation
     std::shared_ptr<KineticEquation> kinetic_equation;
 
-    void execute(double dz) override;
+    void execute(double& dz) override;
+
+    double* dz;
+    void update_dz(double phase_increment, double& dz);
+
 };
 
 

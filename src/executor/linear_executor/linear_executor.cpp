@@ -4,6 +4,7 @@
 
 #include <chrono>
 #include <algorithm>
+#include <memory>
 
 #include "linear_executor.h"
 #include "misc/misc.h"
@@ -54,7 +55,7 @@ void LinearExecutor::preprocess_active_linear_terms() {
 }
 
 
-void LinearExecutor::execute(double dz) {
+void LinearExecutor::execute(double& dz) {
 
     auto t_start = TIME::now();
     fft.forward();

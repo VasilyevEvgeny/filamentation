@@ -86,6 +86,9 @@ void Propagator::initialize() {
                                                logger);
     }
 
+    dz = config_manager.dz_0;
+    n_z = config_manager.n_z;
+
     /*
      * executor
      */
@@ -94,7 +97,8 @@ void Propagator::initialize() {
                                                        logger);
     nonlinear_executor = std::make_shared<NonlinearExecutor>(pulsed_beam,
                                                              config_manager,
-                                                             logger);
+                                                             logger,
+                                                             dz);
 
     /*
      * saver
@@ -103,9 +107,9 @@ void Propagator::initialize() {
     saver.save_initial_parameters_to_pdf(true, false);
     saver.save_initial_parameters_to_yml();
 
-    dz = config_manager.dz_0;
-    n_z = config_manager.n_z;
+
 }
+
 
 
 void Propagator::propagate() {

@@ -39,7 +39,7 @@ public:
     std::vector<std::string> active_linear_terms_upd;
     std::map<std::string, std::shared_ptr<BaseLinearTerm>> terms_pool;
 
-    void execute(double dz) override;
+    void execute(double& dz) override;
 };
 
 

@@ -19,13 +19,13 @@
 int main(int argc, char** argv) {
 
     // config_manager
-    ConfigManager config_manager(std::string("test/marburger/test_marburger_config.yml"));
+    ConfigManager config_manager(std::string("test/marburger/test_plasma_config.yml"));
 
     // multidir_name
     std::string multidir_name = config_manager.prefix + "_" + get_current_datetime("dir_manager");
 
     // p_rels
-    std::vector<double> p_rels = {2.0, 4.0, 6.0, 8.0, 10.0};
+    std::vector<double> p_rels = {10.0};
 
     // main cycle
     for (auto& p_rel : p_rels) {

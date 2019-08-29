@@ -69,6 +69,8 @@ public:
     size_t n_z;
     double dz_0;
     double max_intensity_to_stop;
+    double phase_increment_min;
+    double phase_increment_max;
     size_t print_current_state_every;
     size_t save_every;
     bool save_field;

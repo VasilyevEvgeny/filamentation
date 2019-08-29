@@ -17,6 +17,7 @@ ConfigManager::ConfigManager(const std::string& _path_to_config)
 : path_to_config(_path_to_config) {
 
     parse_config();
+    //print_config();
     validate_config();
 }
 
@@ -256,6 +257,8 @@ void ConfigManager::validate_config() {
 
         n_z = readout_int(std::string("track"), std::string("n_z"), {1, 100000});
         dz_0 = readout_double(std::string("track"), std::string("dz_0"), {1e-10, 1});
+        phase_increment_min = readout_double(std::string("track"), std::string("phase_increment_min"), {-1.0, -0.01});
+        phase_increment_max = readout_double(std::string("track"), std::string("phase_increment_max"), {-0.5, 1.0});
         max_intensity_to_stop = readout_double(std::string("track"), std::string("max_intensity_to_stop"), {1e17, 1e19});
         print_current_state_every = readout_int(std::string("track"), std::string("print_current_state_every"), {0, 100000});
         save_every = readout_int(std::string("track"), std::string("save_every"), {0, 100000});
