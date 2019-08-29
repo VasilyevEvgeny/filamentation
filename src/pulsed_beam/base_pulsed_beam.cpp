@@ -47,7 +47,7 @@ BasePulsedBeam::BasePulsedBeam(
     }
 
     // time
-    t_max = 10.0 * t_0;
+    t_max = 20.0 * t_0;
     dt = t_max / n_t;
 
     ts = std::vector<double>(n_t, 0.0);

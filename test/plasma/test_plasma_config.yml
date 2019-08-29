@@ -43,8 +43,8 @@ grid:
   n_t: 1024
 
 track:
-  n_z: 8000
-  dz_0: 1e-5
+  n_z: 2000
+  dz_0: 1e-4
   constant_dz: false
   phase_increment_min: -0.1
   phase_increment_max: -0.05

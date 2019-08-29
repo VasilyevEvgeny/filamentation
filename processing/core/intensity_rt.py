@@ -32,8 +32,8 @@ class IntensityRT(BaseReadout):
         self.__I_0 = self._parameters['pulsed_beam']['I_0']
 
         # mode -> flat or volume
-        self.__mode = kwargs['mode']
-        if self.__mode not in ('flat', 'volume'):
+        self.__projection_mode = kwargs['projection_mode']
+        if self.__projection_mode not in ('flat', 'volume'):
             raise Exception('Wrong plot mode!')
         self.__cmap = plt.get_cmap('jet')
 
@@ -57,29 +57,40 @@ class IntensityRT(BaseReadout):
         self.__t_right = kwargs['t_right']
         self.__r_right = kwargs['r_right']
 
-
         # plot
-        self.__font_size = {'title': 40,  'plot_ticks': 40, 'plot_labels': 50, 'colorbar_ticks': 40, 'colorbar_label': 50}
-        self.__font_weight = {'title': 'bold', 'plot_ticks': 'normal', 'plot_labels': 'bold', 'colorbar_ticks': 'bold', 'colorbar_label': 'bold'}
+        self.__style_mode = kwargs['style_mode']
+        if self.__style_mode == 'analysis':
+            self.__font_size = {'title': 40,  'plot_ticks': 20, 'plot_labels': 40, 'colorbar_ticks': 20, 'colorbar_label': 40}
+            self.__font_weight = {'title': 'bold', 'plot_ticks': 'normal', 'plot_labels': 'bold', 'colorbar_ticks': 'bold', 'colorbar_label': 'bold'}
+
+        elif self.__style_mode == 'multimedia':
+            self.__font_size = {'title': 40,  'plot_ticks': 40, 'plot_labels': 50, 'colorbar_ticks': 40, 'colorbar_label': 50}
+            self.__font_weight = {'title': 'bold', 'plot_ticks': 'normal', 'plot_labels': 'bold', 'colorbar_ticks': 'bold', 'colorbar_label': 'bold'}
 
         self.__t_labels = kwargs['t_labels']
         self.__r_labels = kwargs['r_labels']
         self.__t_label = self._initialize_label(self._language, 't, фс', 't, fs')
         self.__r_label = self._initialize_label(self._language, 'r, мкм', 'r, $\mathbf{\mu}$m')
-        self.__bbox_width, self.__bbox_height = 10.3, 10.0
+
         self.__default_title_string = self._initialize_label(self._language,
                                                              'z = %05.2f см\nI$_{макс}$ = %05.2f ТВт/см$^2$\n',
                                                              'z = %05.2f cm\nI$_{max}$ = %05.2f TW/cm$^2$\n')
-        self.__log_ticks = [-1.0, 0.0, +1.0]
-        self.__log_ticklabels = ['+' + str(round(e)) if e > 0 else '$-$' + str(abs(round(e))) if e != 0 else '  0'
-                      for e in self.__log_ticks]
+        if self.__style_mode == 'analysis':
+            self.__log_ticks = [-1.0, -0.5, 0.0, +0.5, +1.0]
+            self.__log_ticklabels = ['+' + str(round(e, 1)) if e > 0 else '$-$' + str(abs(round(e, 1))) if e != 0 else '  0.0'
+                                     for e in self.__log_ticks]
+        elif self.__style_mode == 'multimedia':
+            self.__log_ticks = [-1.0, 0.0, +1.0]
+            self.__log_ticklabels = ['+' + str(round(e)) if e > 0 else '$-$' + str(abs(round(e))) if e != 0 else '  0'
+                                     for e in self.__log_ticks]
+
         self.__dpi = 100
 
         # flags
         self.__ticks = True
         self.__title = True
         self.__labels = True
-        if self.__mode == 'flat':
+        if self.__projection_mode == 'flat':
             self.__colorbar = kwargs.get('colorbar', True)
 
     def __create_res_dir(self):
@@ -172,7 +183,13 @@ class IntensityRT(BaseReadout):
 
     def __plot_flat(self, arr, filename):
 
-        fig, ax = plt.subplots(figsize=(9, 7))
+        fig_size = None
+        if self.__style_mode == 'analysis':
+            fig_size = (25, 20)
+        elif self.__style_mode == 'multimedia':
+            fig_size = (9, 7)
+
+        fig, ax = plt.subplots(figsize=fig_size)
 
         # plot
         levels_plot, max_intensity = self.__calculate_levels_plot_and_max_intensity(arr)
@@ -205,8 +222,16 @@ class IntensityRT(BaseReadout):
         # colorbar
         if self.__colorbar:
             if self.__log:
+                label_pad, y = None, None
+                if self.__style_mode == 'analysis':
+                    label_pad = -105
+                    y = 1.07
+                elif self.__style_mode == 'multimedia':
+                    label_pad = -90
+                    y = 1.2
+
                 colorbar = fig.colorbar(plot, ticks=self.__log_ticks, orientation='vertical', aspect=10, pad=0.05)
-                colorbar.set_label('lg(I/I$\mathbf{_0}$)', labelpad=-90, y=1.2, rotation=0,
+                colorbar.set_label('lg(I/I$\mathbf{_0}$)', labelpad=label_pad, y=y, rotation=0,
                                    fontsize=self.__font_size['colorbar_label'], fontweight=self.__font_weight['colorbar_label'])
                 colorbar.ax.set_yticklabels(self.__log_ticklabels)
                 colorbar.ax.tick_params(labelsize=self.__font_size['colorbar_ticks'])
@@ -215,16 +240,33 @@ class IntensityRT(BaseReadout):
                 dcb = max_intensity / n_ticks_colorbar_levels
                 levels_ticks_colorbar = [i * dcb for i in range(n_ticks_colorbar_levels + 1)]
                 colorbar = fig.colorbar(plot, ticks=levels_ticks_colorbar, orientation='vertical', aspect=10, pad=0.05)
-                if self.__normalize_to == 'i_0':
+
+                label_pad, y = None, None
+                if self.__style_mode == 'analysis':
+                    if self.__normalize_to == 'I_0':
+                        label_pad = -120
+                        y = 1.07
+                    else:
+                        label_pad = -120
+                        y = 1.1
+                elif self.__style_mode == 'multimedia':
+                    if self.__normalize_to == 'I_0':
+                        label_pad = -60
+                        y = 1.25
+                    else:
+                        label_pad = -100
+                        y = 1.4
+
+                if self.__normalize_to == 'I_0':
                     colorbar_label = 'I/I$\mathbf{_0}$'
-                    colorbar.set_label(colorbar_label, labelpad=-60, y=1.25, rotation=0,
+                    colorbar.set_label(colorbar_label, labelpad=label_pad, y=y, rotation=0,
                                        fontsize=self.__font_size['colorbar_label'],
                                        fontweight=self.__font_weight['colorbar_label'])
                 else:
                     colorbar_label = self._initialize_label(self._language,
                                                             'I,\nТВт/см$\mathbf{^2}$',
                                                             'I,\nTW/cm$\mathbf{^2}$')
-                    colorbar.set_label(colorbar_label, labelpad=-100, y=1.4, rotation=0,
+                    colorbar.set_label(colorbar_label, labelpad=label_pad, y=y, rotation=0,
                                        fontsize=self.__font_size['colorbar_label'],
                                        fontweight=self.__font_weight['colorbar_label'])
 
@@ -233,8 +275,18 @@ class IntensityRT(BaseReadout):
                 colorbar.ax.set_yticklabels(ticks_cbar)
                 colorbar.ax.tick_params(labelsize=self.__font_size['colorbar_ticks'])
 
+        # aspect
+        if self.__style_mode == 'analysis':
+            ax.set_aspect(1)
+        elif self.__style_mode == 'multimedia':
+            ax.set_aspect('auto')
+
         # bbox
-        bbox = fig.bbox_inches.from_bounds(-0.8, -1.0, self.__bbox_width, self.__bbox_height)
+        bbox = None
+        if self.__style_mode == 'analysis':
+            bbox = 'tight'
+        elif self.__style_mode == 'multimedia':
+            bbox = fig.bbox_inches.from_bounds(-0.8, -1.0, 10.3, 10.0)
 
         fig.savefig(self.__res_dir + '/' + filename + '.png', bbox_inches=bbox, dpi=self.__dpi)
         plt.close()
@@ -310,11 +362,21 @@ class IntensityRT(BaseReadout):
         ax.w_yaxis.set_pane_color(mcolors.to_rgba('white'))
         ax.w_zaxis.set_pane_color(mcolors.to_rgba('white'))
 
+        # # aspect
+        # if self.__style_mode == 'analysis':
+        #     ax.set_aspect(1)
+        # elif self.__style_mode == 'multimedia':
+        #     ax.set_aspect('auto')
+
         # bbox
-        bbox = fig.bbox_inches.from_bounds(1.1, 0.3, self.__bbox_width, self.__bbox_height)
+        bbox = None
+        if self.__style_mode == 'analysis':
+            bbox = 'tight'
+        elif self.__style_mode == 'multimedia':
+            bbox = fig.bbox_inches.from_bounds(1.1, 0.3, 10.3, 10.0)
 
         fig.savefig(self.__res_dir + '/' + filename + '.png', bbox_inches=bbox, dpi=self.__dpi)
-        #fig.close()
+        plt.close()
 
     def process(self):
         s_min, s_max, k_max = None, None, None
@@ -336,9 +398,9 @@ class IntensityRT(BaseReadout):
             if self.__log:
                 arr = self.__filter_and_log_arr(arr)
 
-            if self.__mode == 'flat':
+            if self.__projection_mode == 'flat':
                 self.__plot_flat(arr, filename)
-            elif self.__mode == 'volume':
+            elif self.__projection_mode == 'volume':
                 self.__plot_volume(arr, filename)
             else:
                 raise Exception('Wrong plot mode!')

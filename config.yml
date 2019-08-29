@@ -39,16 +39,18 @@ pulsed_beam:
   P_0_to_P_cr: 5
 
 grid:
-  n_r: 1024
-  n_t: 512
+  n_r: 512
+  n_t: 1024
 
 track:
-  n_z: 100
-  dz_0: 1e-5
+  n_z: 1
+  dz_0: 1e-4
   constant_dz: true
+  phase_increment_min: -0.1
+  phase_increment_max: -0.05
   max_intensity_to_stop: 2e18
-  print_current_state_every: 10
-  save_every: 10
+  print_current_state_every: 1
+  save_every: 50
   save_field: true
   save_plasma: true
 

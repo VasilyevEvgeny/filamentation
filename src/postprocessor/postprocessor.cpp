@@ -49,7 +49,7 @@ void Postprocessor::go(DirManager& dir_manager, std::shared_ptr<Logger>& logger)
         postprocess(dir_manager,
                     logger,
                     std::string("plot_intensity_rt"),
-                    std::string("processing/scripts/intensity_rt.py"),
+                    std::string("processing/scripts/intensity_rt/analysis.py"),
                     std::string("....plotting I(r,t)"));
     }
     if (plot_plasma_rt) {

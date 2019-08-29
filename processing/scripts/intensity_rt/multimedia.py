@@ -1,16 +1,17 @@
 
 
 import sys
-sys.path.insert(0, '/'.join((sys.path[0].replace('\\', '/')).split('/')[:-2]))
+sys.path.insert(0, '/'.join((sys.path[0].replace('\\', '/')).split('/')[:-3]))
 
 from processing.core import parse_args, IntensityRT
 
 args = parse_args()
 
 intensity_rt = IntensityRT(args=args,
-                           mode='flat',
-                           log=True,
-                           maximum_intensity='local',
+                           projection_mode='flat',
+                           style_mode='multimedia',
+                           #log=True,
+                           #maximum_intensity='local',
                            normalize_to='i_0',
                            language='english',
                            t_left=150 * 10**-15,
