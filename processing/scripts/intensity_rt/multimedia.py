@@ -5,23 +5,16 @@ sys.path.insert(0, '/'.join((sys.path[0].replace('\\', '/')).split('/')[:-3]))
 
 from processing.core import parse_args, IntensityRT
 
+STYLE_MODE = 'multimedia'
+
 args = parse_args()
 
 intensity_rt = IntensityRT(args=args,
-                           projection_mode='flat',
-                           style_mode='multimedia',
-                           #log=True,
-                           #maximum_intensity='local',
-                           normalize_to='i_0',
-                           language='english',
-                           t_left=150 * 10**-15,
-                           t_right=-150 * 10**-15,
-                           t_labels=['+100', '0', '-100'],
-                           r_right=200 * 10**-6,
-                           r_labels=['-150', '0', '+150'])
+                           projection_mode='2D',
+                           style_mode=STYLE_MODE,
+                           log=False,
+                           maximum_intensity='local',
+                           normalize_to=1,
+                           language='english')
 
-from multiprocessing import freeze_support
-
-# if __name__ == '__main__':
-#     freeze_support()
 intensity_rt.process()

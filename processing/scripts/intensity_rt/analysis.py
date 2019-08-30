@@ -5,19 +5,17 @@ sys.path.insert(0, '/'.join((sys.path[0].replace('\\', '/')).split('/')[:-3]))
 
 from processing.core import parse_args, IntensityRT
 
+PROJECTION_MODE = '2D'
+STYLE_MODE = 'analysis'
+
 args = parse_args()
 
 intensity_rt = IntensityRT(args=args,
-                           projection_mode='flat',
-                           style_mode='analysis',
-                           log=False,
-                           maximum_intensity=1e16,
-                           normalize_to=1,
-                           language='english',
-                           t_left=150 * 10**-15,
-                           t_right=-150 * 10**-15,
-                           t_labels=['+100', '+50', '0', '-50', '-100'],
-                           r_right=300 * 10**-6,
-                           r_labels=['-200', '-100', '0', '+100', '+200'])
+                           projection_mode=PROJECTION_MODE,
+                           style_mode=STYLE_MODE,
+                           log=True,
+                           #maximum_intensity=1e16,
+                           #normalize_to=1,
+                           language='english')
 
 intensity_rt.process()

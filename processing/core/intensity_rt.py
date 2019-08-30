@@ -33,7 +33,7 @@ class IntensityRT(BaseReadout):
 
         # mode -> flat or volume
         self.__projection_mode = kwargs['projection_mode']
-        if self.__projection_mode not in ('flat', 'volume'):
+        if self.__projection_mode not in ('2D', '3D'):
             raise Exception('Wrong plot mode!')
         self.__cmap = plt.get_cmap('jet')
 
@@ -53,36 +53,41 @@ class IntensityRT(BaseReadout):
         self.__ts = [(self.__n_t / 2 - s) * self.__dt for s in range(self.__n_t)]
         self.__rs = [k * self.__dr for k in range(self.__n_r)]
         self.__ts_cropped, self.__rs_cropped = None, None
-        self.__t_left = kwargs['t_left']
-        self.__t_right = kwargs['t_right']
-        self.__r_right = kwargs['r_right']
 
         # plot
         self.__style_mode = kwargs['style_mode']
+        if self.__style_mode == 'analysis' and self.__projection_mode == '3D':
+            raise Exception('Analysis style mode is incompatible with 3D projection mode!')
+
         if self.__style_mode == 'analysis':
+            self.__t_left = 150 * 10**-15
+            self.__t_right = -150 * 10**-15
+            self.__t_labels = ['+100', '+50', '0', '-50', '-100']
+            self.__r_right = 300 * 10**-6
+            self.__r_labels = ['-200', '-100', '0', '+100', '+200']
             self.__font_size = {'title': 40,  'plot_ticks': 20, 'plot_labels': 40, 'colorbar_ticks': 20, 'colorbar_label': 40}
             self.__font_weight = {'title': 'bold', 'plot_ticks': 'normal', 'plot_labels': 'bold', 'colorbar_ticks': 'bold', 'colorbar_label': 'bold'}
-
+            self.__log_ticks = [-1.0, -0.5, 0.0, +0.5, +1.0]
+            self.__log_ticklabels = ['+' + str(round(e, 1)) if e > 0 else '$-$' + str(abs(round(e, 1))) if e != 0 else '  0.0'
+                                     for e in self.__log_ticks]
         elif self.__style_mode == 'multimedia':
+            self.__t_left = 150 * 10**-15
+            self.__t_right = -150 * 10**-15
+            self.__t_labels = ['+100', '0', '-100']
+            self.__r_right = 200 * 10**-6
+            self.__r_labels = ['-150', '0', '+150']
             self.__font_size = {'title': 40,  'plot_ticks': 40, 'plot_labels': 50, 'colorbar_ticks': 40, 'colorbar_label': 50}
             self.__font_weight = {'title': 'bold', 'plot_ticks': 'normal', 'plot_labels': 'bold', 'colorbar_ticks': 'bold', 'colorbar_label': 'bold'}
+            self.__log_ticks = [-1.0, 0.0, +1.0]
+            self.__log_ticklabels = ['+' + str(round(e)) if e > 0 else '$-$' + str(abs(round(e))) if e != 0 else '  0'
+                                     for e in self.__log_ticks]
 
-        self.__t_labels = kwargs['t_labels']
-        self.__r_labels = kwargs['r_labels']
         self.__t_label = self._initialize_label(self._language, 't, фс', 't, fs')
         self.__r_label = self._initialize_label(self._language, 'r, мкм', 'r, $\mathbf{\mu}$m')
 
         self.__default_title_string = self._initialize_label(self._language,
                                                              'z = %05.2f см\nI$_{макс}$ = %05.2f ТВт/см$^2$\n',
                                                              'z = %05.2f cm\nI$_{max}$ = %05.2f TW/cm$^2$\n')
-        if self.__style_mode == 'analysis':
-            self.__log_ticks = [-1.0, -0.5, 0.0, +0.5, +1.0]
-            self.__log_ticklabels = ['+' + str(round(e, 1)) if e > 0 else '$-$' + str(abs(round(e, 1))) if e != 0 else '  0.0'
-                                     for e in self.__log_ticks]
-        elif self.__style_mode == 'multimedia':
-            self.__log_ticks = [-1.0, 0.0, +1.0]
-            self.__log_ticklabels = ['+' + str(round(e)) if e > 0 else '$-$' + str(abs(round(e))) if e != 0 else '  0'
-                                     for e in self.__log_ticks]
 
         self.__dpi = 100
 
@@ -90,7 +95,7 @@ class IntensityRT(BaseReadout):
         self.__ticks = True
         self.__title = True
         self.__labels = True
-        if self.__projection_mode == 'flat':
+        if self.__projection_mode == '2D':
             self.__colorbar = kwargs.get('colorbar', True)
 
     def __create_res_dir(self):
@@ -362,12 +367,6 @@ class IntensityRT(BaseReadout):
         ax.w_yaxis.set_pane_color(mcolors.to_rgba('white'))
         ax.w_zaxis.set_pane_color(mcolors.to_rgba('white'))
 
-        # # aspect
-        # if self.__style_mode == 'analysis':
-        #     ax.set_aspect(1)
-        # elif self.__style_mode == 'multimedia':
-        #     ax.set_aspect('auto')
-
         # bbox
         bbox = None
         if self.__style_mode == 'analysis':
@@ -398,9 +397,9 @@ class IntensityRT(BaseReadout):
             if self.__log:
                 arr = self.__filter_and_log_arr(arr)
 
-            if self.__projection_mode == 'flat':
+            if self.__projection_mode == '2D':
                 self.__plot_flat(arr, filename)
-            elif self.__projection_mode == 'volume':
+            elif self.__projection_mode == '3D':
                 self.__plot_volume(arr, filename)
             else:
                 raise Exception('Wrong plot mode!')
