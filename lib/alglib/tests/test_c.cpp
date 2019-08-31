@@ -38992,7 +38992,7 @@ ae_bool testidwint(ae_bool silent, ae_state *_state)
     
     /*
      * Another simple test:
-     * * five points in 2D - (0,0), (0,1), (1,0), (-1,0) (0,-1)
+     * * five points in flat - (0,0), (0,1), (1,0), (-1,0) (0,-1)
      * * F is random
      * * D = -1, 0, 1, 2
      */
@@ -45759,7 +45759,7 @@ ae_bool testpspline(ae_bool silent, ae_state *_state)
         pspline3build(&xyz, n, 2, 0, &p3, _state);
         
         /*
-         * Test 2D/3D spline:
+         * Test flat/volume spline:
          * * build non-parametric cubic spline from T and X/Y
          * * calculate its value and derivatives at V0
          * * compare with Spline2Calc/Spline2Diff/Spline2Diff2
@@ -45775,7 +45775,7 @@ ae_bool testpspline(ae_bool silent, ae_state *_state)
         spline1ddiff(&s, v0, &vz2, &vdz2, &vd2z2, _state);
         
         /*
-         * 2D test
+         * flat test
          */
         pspline2calc(&p2, v0, &vx, &vy, _state);
         p2errors = p2errors||ae_fp_greater(ae_fabs(vx-vx2, _state),threshold);
@@ -45794,7 +45794,7 @@ ae_bool testpspline(ae_bool silent, ae_state *_state)
         p2errors = p2errors||ae_fp_greater(ae_fabs(vd2y-vd2y2, _state),threshold);
         
         /*
-         * 3D test
+         * volume test
          */
         pspline3calc(&p3, v0, &vx, &vy, &vz, _state);
         p3errors = p3errors||ae_fp_greater(ae_fabs(vx-vx2, _state),threshold);
@@ -45819,7 +45819,7 @@ ae_bool testpspline(ae_bool silent, ae_state *_state)
         p3errors = p3errors||ae_fp_greater(ae_fabs(vd2z-vd2z2, _state),threshold);
         
         /*
-         * Test tangents for 2D/3D
+         * Test tangents for flat/volume
          */
         pspline2tangent(&p2, v0, &vx, &vy, _state);
         p2errors = p2errors||ae_fp_greater(ae_fabs(vx-vdx2/safepythag2(vdx2, vdy2, _state), _state),threshold);
@@ -45867,7 +45867,7 @@ ae_bool testpspline(ae_bool silent, ae_state *_state)
         /*
          * Normal tests
          */
-        printf("2D TEST:                                 ");
+        printf("flat TEST:                                 ");
         if( p2errors )
         {
             printf("FAILED\n");
@@ -45876,7 +45876,7 @@ ae_bool testpspline(ae_bool silent, ae_state *_state)
         {
             printf("OK\n");
         }
-        printf("3D TEST:                                 ");
+        printf("volume TEST:                                 ");
         if( p3errors )
         {
             printf("FAILED\n");
@@ -46429,7 +46429,7 @@ ae_bool testspline2d(ae_bool silent, ae_state *_state)
     waserrors = (((((((blerrors||bcerrors)||dserrors)||cperrors)||uperrors)||lterrors)||syerrors)||rlerrors)||rcerrors;
     if( !silent )
     {
-        printf("TESTING 2D INTERPOLATION\n");
+        printf("TESTING flat INTERPOLATION\n");
         
         /*
          * Normal tests

@@ -4315,7 +4315,7 @@ std::string JsonUnitTestResultPrinter::TestPropertiesAsJson(
 
 // Checks if str contains '=', '&', '%' or '\n' characters. If yes,
 // replaces them by "%xx" where xx is their hexadecimal value. For
-// example, replaces "=" with "%3D".  This algorithm is O(strlen(str))
+// example, replaces "=" with "%volume".  This algorithm is O(strlen(str))
 // in both time and space -- important as the input str may contain an
 // arbitrarily long test failure message and stack trace.
 std::string StreamingListener::UrlEncode(const char* str) {

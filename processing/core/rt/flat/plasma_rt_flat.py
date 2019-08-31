@@ -13,12 +13,12 @@ sys.path.insert(0, '/'.join((sys.path[0].replace('\\', '/')).split('/')[:-2]))
 from processing.core import BaseReadout
 
 
-class PlasmaRT(BaseReadout):
+class PlasmaRT2D(BaseReadout):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
         # res_dir
-        self.__res_dir = self.__create_res_dir()
+        self.__res_dir = self.__create_res_dir('procesing_Ne(r,t)')
 
         # readout
         self._readout_plasma_paths()
@@ -53,16 +53,20 @@ class PlasmaRT(BaseReadout):
         self.__ts = [(self.__n_t / 2 - s) * self.__dt for s in range(self.__n_t)]
         self.__rs = [k * self.__dr for k in range(self.__n_r)]
         self.__ts_cropped, self.__rs_cropped = None, None
-        self.__t_left = kwargs['t_left']
-        self.__t_right = kwargs['t_right']
-        self.__r_right = kwargs['r_right']
 
         # plot
-        self.__font_size = {'title': 40,  'plot_ticks': 40, 'plot_labels': 50, 'colorbar_ticks': 40, 'colorbar_label': 50}
-        self.__font_weight = {'title': 'bold', 'plot_ticks': 'normal', 'plot_labels': 'bold', 'colorbar_ticks': 'bold', 'colorbar_label': 'bold'}
+        self.__style_mode = kwargs['style_mode']
+        if self.__style_mode == 'analysis':
+            self.__t_left = 150 * 10**-15
+            self.__t_right = -150 * 10**-15
+            self.__t_labels = ['+100', '+50', '0', '-50', '-100']
+            self.__r_right = 300 * 10**-6
+            self.__r_labels = ['-200', '-100', '0', '+100', '+200']
+            self.__font_size = {'title': 40,  'plot_ticks': 20, 'plot_labels': 40, 'colorbar_ticks': 20, 'colorbar_label': 40}
+            self.__font_weight = {'title': 'bold', 'plot_ticks': 'normal', 'plot_labels': 'bold', 'colorbar_ticks': 'bold', 'colorbar_label': 'bold'}
+
         self.__cmap = plt.get_cmap('jet')
-        self.__t_labels = kwargs['t_labels']
-        self.__r_labels = kwargs['r_labels']
+
         self.__t_label = self._initialize_label(self._language, 't, фс', 't, fs')
         self.__r_label = self._initialize_label(self._language, 'r, мкм', 'r, $\mathbf{\mu}$m')
         self.__bbox_width, self.__bbox_height = 10.3, 10.0
@@ -81,10 +85,10 @@ class PlasmaRT(BaseReadout):
         if self.__mode == 'flat':
             self.__colorbar = kwargs.get('colorbar', False)
 
-    def __create_res_dir(self):
+    def __create_res_dir(self, dir_name):
         datetime_string = datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
-        dir_name = 'procesing_Ne(r,t)_' + datetime_string
-        return self._create_dir(dir_name=dir_name)
+        dir_name_full = dir_name + '_' + datetime_string
+        return self._create_dir(dir_name=dir_name_full)
 
     def __crop_r(self, arr):
         k_max = 0
@@ -232,7 +236,11 @@ class PlasmaRT(BaseReadout):
         #         colorbar.ax.tick_params(labelsize=self.__font_size['colorbar_ticks'])
 
         # bbox
-        bbox = fig.bbox_inches.from_bounds(-0.8, -1.0, self.__bbox_width, self.__bbox_height)
+        bbox = None
+        if self.__style_mode == 'analysis':
+            bbox = 'tight'
+        elif self.__style_mode == 'multimedia':
+            bbox = fig.bbox_inches.from_bounds(-0.8, -1.0, 10.3, 10.0)
 
         plt.savefig(self.__res_dir + '/' + filename + '.png', bbox_inches=bbox, dpi=self.__dpi)
         plt.close()
