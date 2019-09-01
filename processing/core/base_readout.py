@@ -123,9 +123,13 @@ class BaseReadout:
         step = int(filename)
         return self._df_propagation['z, [cm]'][step]
 
-    def _find_i_max(self, filename):
+    def _find_I_max(self, filename):
         step = int(filename)
         return self._df_propagation['I_max, [TW/cm^2]'][step]
+
+    def _find_Ne_max(self, filename):
+        step = int(filename)
+        return self._df_propagation['N_e_max, [m^-3]'][step]
 
     def _readout_parameters(self):
         with open(self._args.current_results_dir + '/parameters.yml', 'r') as f:

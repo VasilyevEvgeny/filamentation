@@ -1,5 +1,3 @@
-
-
 import sys
 sys.path.insert(0, '/'.join((sys.path[0].replace('\\', '/')).split('/')[:-3]))
 
@@ -9,24 +7,37 @@ from processing.core.functions import parse_args
 
 args = parse_args()
 
+res_dir_name = 'analysis_I(r,t)_flat'
+
 t_left = 150 * 10**-15
 t_right = -150 * 10**-15
 t_labels = ['+100', '+50', '0', '-50', '-100']
 r_right = 300 * 10**-6
 r_labels = ['-200', '-100', '0', '+100', '+200']
-font_size = {'title': 40,  'plot_ticks': 20, 'plot_labels': 40, 'colorbar_ticks': 20, 'colorbar_label': 40}
-font_weight = {'title': 'bold', 'plot_ticks': 'normal', 'plot_labels': 'bold', 'colorbar_ticks': 'bold', 'colorbar_label': 'bold'}
+font_size = {'title': 40,
+             'plot_ticks': 20,
+             'plot_labels': 40,
+             'colorbar_ticks': 20,
+             'colorbar_label': 40}
+font_weight = {'title': 'bold',
+               'plot_ticks': 'normal',
+               'plot_labels': 'bold',
+               'colorbar_ticks': 'bold',
+               'colorbar_label': 'bold'}
+
 fig_size = (25, 20)
 aspect = 1
 bbox = 'tight'
 log_ticks = [-1.0, -0.5, 0.0, +0.5, +1.0]
 log_ticks_prec = 1
+
 ticks = True
 title = True
 labels = True
 colorbar = True
+
 dpi = 100
-res_dir_name = 'analysis_I(r,t)_flat'
+
 
 
 intensity_rt_flat = IntensityRTFlat(args=args,

@@ -169,3 +169,5 @@ class BaseRT(BaseReadout):
         self._plot(arr, filename)
 
         del arr
+
+        return s_min, s_max, k_max

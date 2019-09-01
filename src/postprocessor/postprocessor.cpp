@@ -52,13 +52,13 @@ void Postprocessor::go(DirManager& dir_manager, std::shared_ptr<Logger>& logger)
                     std::string("processing/scripts/analysis/intensity_rt_flat.py"),
                     std::string("....plotting I(r,t)"));
     }
-//    if (plot_plasma_rt) {
-//        postprocess(dir_manager,
-//                    logger,
-//                    std::string("plot_plasma_rt"),
-//                    std::string("processing/scripts/intensity_rt_flat.py"),
-//                    std::string("....plotting N_e(r,t)"));
-//    }
+    if (plot_plasma_rt) {
+        postprocess(dir_manager,
+                    logger,
+                    std::string("plot_plasma_rt"),
+                    std::string("processing/scripts/analysis/plasma_rt_flat.py"),
+                    std::string("....plotting N_e(r,t)"));
+    }
 //    if (plot_track) {
 //        postprocess(dir_manager,
 //                    logger,

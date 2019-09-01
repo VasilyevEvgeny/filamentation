@@ -83,7 +83,7 @@ class IntensityRTFlat(BaseIntensityRT, BaseRTFlat):
         # title
         if self._title:
             z = self._find_z(filename)
-            i_max = self._find_i_max(filename)
+            i_max = self._find_I_max(filename)
             plt.title((self._default_title_string + '\n') % (z, i_max), fontsize=self._font_size['title'])
 
         # colorbar
@@ -187,4 +187,4 @@ class IntensityRTFlat(BaseIntensityRT, BaseRTFlat):
             arr = loadtxt(path, skiprows=0)
             arr = self._a_to_i(arr)
 
-            self._process_iteration(idx, filename, arr, s_min, s_max, k_max)
+            s_min, s_max, k_max = self._process_iteration(idx, filename, arr, s_min, s_max, k_max)
