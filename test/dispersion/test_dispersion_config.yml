@@ -1,0 +1,61 @@
+info:
+  verbose: true
+  prefix: test_dispersion
+  multidir: true
+  path_to_project: C:/Users/vasilyev/Documents/CLion/filamentation
+  path_to_python_interpreter: C:/Users/vasilyev/Documents/venvs/filamentation/Scripts/python.exe
+  global_root_dir: L:/Vasilyev
+  global_results_dir_name: Filamentation_results
+  ionization_tables_dir_name: Filamentation_ionization_tables
+
+equation:
+  diffraction: false
+  dispersion_full: false
+  dispersion_gvd_sweep: false
+  dispersion_gvd_fft: false
+  kerr_instant: false
+  kerr_inertial: false
+  plasma: false
+  bremsstrahlung: false
+  dissipation: false
+
+T:
+  diffraction: false
+  dispersion: false
+  kerr: false
+  plasma: false
+  bremsstrahlung: false
+
+medium:
+  name: SiO2
+  ionization: OriginalKeldysh
+
+pulsed_beam:
+  lambda_0: 1800e-9
+  r_0: 100e-6
+  t_0: 50e-15
+  M: 0
+  m: 0
+  P_0_to_P_cr: 5
+
+grid:
+  n_r: 512
+  n_t: 1024
+
+track:
+  n_z: 100
+  dz_0: 1e-5
+  constant_dz: true
+  max_intensity_to_stop: 5e18
+  print_current_state_every: 10
+  save_every: 50
+  save_field: true
+  save_plasma: false
+
+plot:
+  plot_intensity_rt: true
+  plot_plasma_rt: false
+  plot_track: true
+
+other:
+  num_threads: 12

@@ -1,0 +1,63 @@
+info:
+  verbose: true
+  prefix: filament
+  multidir: false
+  path_to_project: L:/programs/filamentation
+  path_to_python_interpreter: L:/programs/filamentation/processing/.venv/Scripts/python.exe
+  global_root_dir: R:/Filamentation
+  global_results_dir_name: Results
+  ionization_tables_dir_name: Ionization_tables
+
+equation:
+  diffraction: true
+  dispersion_full: true
+  dispersion_gvd_sweep: false
+  dispersion_gvd_fft: false
+  kerr_instant: true
+  kerr_inertial: false
+  plasma: true
+  bremsstrahlung: false
+  dissipation: false
+
+T:
+  diffraction: false
+  dispersion: false
+  kerr: false
+  plasma: false
+  bremsstrahlung: false
+
+medium:
+  name: CaF2
+  ionization: OriginalKeldysh
+
+pulsed_beam:
+  lambda_0: 1800e-9
+  r_0: 100e-6
+  t_0: 50e-15
+  M: 0
+  m: 0
+  P_0_to_P_cr: 5
+
+grid:
+  n_r: 512
+  n_t: 1024
+
+track:
+  n_z: 10
+  dz_0: 1e-4
+  constant_dz: true
+  phase_increment_min: -0.1
+  phase_increment_max: -0.05
+  max_intensity_to_stop: 2e18
+  print_current_state_every: 1
+  save_every: 50
+  save_field: true
+  save_plasma: true
+
+plot:
+  plot_intensity_rt: true
+  plot_plasma_rt: true
+  plot_track: true
+
+other:
+  num_threads: 8

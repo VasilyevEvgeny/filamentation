@@ -1,0 +1,1 @@
+-isystem L:/programs/filamentation/lib/googletest-master/googlemock/include -isystem L:/programs/filamentation/lib/googletest-master/googlemock -isystem L:/programs/filamentation/lib/googletest-master/googletest/include -isystem L:/programs/filamentation/lib/googletest-master/googletest 
