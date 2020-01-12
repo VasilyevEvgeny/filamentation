@@ -2,11 +2,11 @@ info:
   verbose: true
   prefix: test_diffraction
   multidir: true
-  path_to_project: C:/Users/vasilyev/Documents/CLion/filamentation
-  path_to_python_interpreter: C:/Users/vasilyev/Documents/venvs/filamentation/Scripts/python.exe
-  global_root_dir: L:/Vasilyev
-  global_results_dir_name: Filamentation_results
-  ionization_tables_dir_name: Filamentation_ionization_tables
+  path_to_project: L:/programs/filamentation
+  path_to_python_interpreter: L:/programs/filamentation/processing/.venv/Scripts/python.exe
+  global_root_dir: R:/Filamentation
+  global_results_dir_name: Results
+  ionization_tables_dir_name: Ionization_tables
 
 equation:
   diffraction: true
@@ -58,4 +58,4 @@ plot:
   plot_track: true
 
 other:
-  num_threads: 12
+  num_threads: 8
